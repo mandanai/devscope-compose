@@ -7,6 +7,7 @@ import dev.journeyscope.core.JourneyScope
 import dev.journeyscope.core.expectation.ExpectedSequence
 import dev.journeyscope.diagnostics.DiagnosticAnalyzer
 import dev.journeyscope.diagnostics.DiagnosticConfig
+import dev.journeyscope.export.JourneyExportController
 import dev.journeyscope.ui.mapping.InspectorThresholds
 import dev.journeyscope.ui.mapping.MetadataDisplayPolicy
 import dev.journeyscope.ui.mapping.TraceMapper
@@ -14,6 +15,7 @@ import dev.journeyscope.ui.screen.JourneyInspectorScreen
 import dev.journeyscope.ui.state.InspectorPresenter
 import dev.journeyscope.ui.state.JourneyTraceSource
 import dev.journeyscope.ui.state.asTraceSource
+import dev.journeyscope.ui.state.withExport
 import dev.journeyscope.ui.theme.JourneyColors
 import dev.journeyscope.ui.theme.JourneyScopeTheme
 import dev.journeyscope.ui.theme.defaultJourneyColors
@@ -28,15 +30,16 @@ public fun JourneyScopeInspector(
     colors: JourneyColors = defaultJourneyColors(),
     expectedSequences: List<ExpectedSequence> = emptyList(),
     onClose: (() -> Unit)? = null,
+    exportController: JourneyExportController? = null,
 ) {
-    val presenter = remember(source, thresholds, analyzer, metadataPolicy, expectedSequences) {
+    val presenter = remember(source, thresholds, analyzer, metadataPolicy, expectedSequences, exportController) {
         val resolved = analyzer ?: DiagnosticAnalyzer(
             DiagnosticConfig(slowJourney = thresholds.slowJourney, expectedSequences = expectedSequences),
         )
-        InspectorPresenter(source, TraceMapper(thresholds, metadataPolicy, resolved, expectedSequences))
+        InspectorPresenter(exportController?.let { source.withExport(it) } ?: source, TraceMapper(thresholds, metadataPolicy, resolved, expectedSequences))
     }
     JourneyScopeTheme(colors = colors) {
-        JourneyInspectorScreen(presenter = presenter, onClose = onClose, modifier = modifier)
+        JourneyInspectorScreen(presenter = presenter, onClose = onClose, modifier = modifier, exportController = exportController)
     }
 }
 

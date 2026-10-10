@@ -14,7 +14,7 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew :devscope-core:testAndroidHostTest :devscope-flow:testAndroidHostTest :devscope-navigation:testAndroidHostTest :devscope-network-ktor:testAndroidHostTest :devscope-network-okhttp:testAndroidHostTest :devscope-ui-compose:testAndroidHostTest :samples:composeApp:testAndroidHostTest :devscope-core:compileCommonMainKotlinMetadata :devscope-flow:compileCommonMainKotlinMetadata :devscope-navigation:compileCommonMainKotlinMetadata :devscope-network-ktor:compileCommonMainKotlinMetadata :devscope-ui-compose:compileCommonMainKotlinMetadata :samples:androidApp:assembleDebug
+      - run: ./gradlew :devscope-core:testAndroidHostTest :devscope-flow:testAndroidHostTest :devscope-navigation:testAndroidHostTest :devscope-network-ktor:testAndroidHostTest :devscope-network-okhttp:testAndroidHostTest :devscope-ui-compose:testAndroidHostTest :devscope-export:testAndroidHostTest :devscope-core-noop:testAndroidHostTest :samples:composeApp:testAndroidHostTest :devscope-core:compileCommonMainKotlinMetadata :devscope-flow:compileCommonMainKotlinMetadata :devscope-navigation:compileCommonMainKotlinMetadata :devscope-network-ktor:compileCommonMainKotlinMetadata :devscope-ui-compose:compileCommonMainKotlinMetadata :devscope-export:compileCommonMainKotlinMetadata :samples:androidApp:assembleDebug
 
   apple:
     runs-on: macos-latest
@@ -25,4 +25,4 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew :devscope-core:iosSimulatorArm64Test :devscope-flow:iosSimulatorArm64Test :devscope-navigation:iosSimulatorArm64Test :devscope-network-ktor:iosSimulatorArm64Test :samples:composeApp:linkDebugFrameworkIosSimulatorArm64
+      - run: ./gradlew :devscope-core:iosSimulatorArm64Test :devscope-flow:iosSimulatorArm64Test :devscope-navigation:iosSimulatorArm64Test :devscope-network-ktor:iosSimulatorArm64Test :devscope-export:iosSimulatorArm64Test :samples:composeApp:linkDebugFrameworkIosSimulatorArm64

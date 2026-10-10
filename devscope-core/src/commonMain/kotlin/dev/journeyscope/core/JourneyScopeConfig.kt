@@ -33,6 +33,7 @@ public data class JourneyScopeConfig(
     val samplingRate: Double = 1.0,
     val maxMetadataSize: Int = 1024,
     val redactionPolicy: RedactionPolicy = RedactionPolicy.Default,
+    val maxEventsPerSecond: Int? = null,
 ) {
     init {
         require(maxTraces > 0) { "maxTraces must be positive" }
@@ -40,6 +41,7 @@ public data class JourneyScopeConfig(
         require(maxMetadataSize >= 0) { "maxMetadataSize must not be negative" }
         require(samplingRate in 0.0..1.0) { "samplingRate must be within 0.0..1.0" }
         require(slowJourneyThreshold.isPositive()) { "slowJourneyThreshold must be positive" }
+        require(maxEventsPerSecond == null || maxEventsPerSecond > 0) { "maxEventsPerSecond must be positive" }
     }
 
     public companion object {

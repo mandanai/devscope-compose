@@ -47,4 +47,5 @@ See [api.md](api.md) for usage. Layers: `JourneyScope` (facade) -> `JourneyTrace
 - A span failure does not fail its journey (the app may handle the exception); call `fail` or use `withJourney`.
 - `withContext` checks cancellation on return, so a block that finished just as its job was cancelled is recorded as CANCELLED.
 - Evicted running journeys stop recording; late writes after a terminal state are dropped and counted in `droppedItems`.
-- Exporters, stores and processors are interfaces only (`spi` package); no persistence or lifecycle observers yet.
+- Persistence lives in `devscope-export` and is opt-in; core only offers the `spi` interfaces. Lifecycle observers are still the host's job (call `JourneyScope.interruptActive` when the app is backgrounded).
+- `maxEventsPerSecond` (default off) drops events above a per-trace rate within a one-second window and counts them in `droppedItems`.

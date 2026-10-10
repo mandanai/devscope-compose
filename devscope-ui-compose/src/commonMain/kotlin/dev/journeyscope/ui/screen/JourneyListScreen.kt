@@ -31,6 +31,7 @@ import dev.journeyscope.ui.components.JourneyDurationBreakdown
 import dev.journeyscope.ui.components.JourneyEmptyState
 import dev.journeyscope.ui.components.JourneyStatusBadge
 import dev.journeyscope.ui.model.JourneyListItemUi
+import dev.journeyscope.ui.state.ExportUiState
 import dev.journeyscope.ui.theme.JourneyTheme
 
 @Composable
@@ -40,6 +41,7 @@ internal fun JourneyListScreen(
     onOpen: (String) -> Unit,
     onClose: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    export: ExportUiState? = null,
 ) {
     val colors = JourneyTheme.colors
     Column(modifier = modifier.fillMaxSize()) {
@@ -59,6 +61,7 @@ internal fun JourneyListScreen(
             }
             if (onClose != null) TextButton(onClick = onClose) { Text("Close") }
         }
+        if (export != null) ExportActionRow(export, items.map { it.id })
         if (items.isEmpty()) {
             JourneyEmptyState(
                 title = "No journeys yet",
@@ -71,7 +74,12 @@ internal fun JourneyListScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 items(items, key = { it.id }, contentType = { "journey" }) { item ->
-                    JourneyListItem(item, selected = item.id == selectedId, onClick = { onOpen(item.id) })
+                    JourneyListItem(
+                        item,
+                        selected = item.id == selectedId,
+                        onClick = { if (export?.selecting == true) export.toggle(item.id) else onOpen(item.id) },
+                        checked = export?.takeIf { it.selecting }?.let { item.id in it.selection },
+                    )
                 }
             }
         }
@@ -79,13 +87,19 @@ internal fun JourneyListScreen(
 }
 
 @Composable
-internal fun JourneyListItem(item: JourneyListItemUi, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+internal fun JourneyListItem(
+    item: JourneyListItemUi,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    checked: Boolean? = null,
+) {
     val colors = JourneyTheme.colors
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
-            .clickable(onClickLabel = "Open journey details", role = Role.Button, onClick = onClick)
+            .clickable(onClickLabel = if (checked != null) "Toggle selection" else "Open journey details", role = Role.Button, onClick = onClick)
             .clearAndSetSemantics { contentDescription = item.spokenDescription },
         shape = RoundedCornerShape(20.dp),
         color = colors.surface,
@@ -94,8 +108,13 @@ internal fun JourneyListItem(item: JourneyListItemUi, selected: Boolean, onClick
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(item.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
-                    Text(item.subtitle, style = MaterialTheme.typography.bodySmall, color = colors.textSecondary)
+                    Text(
+                        (if (checked != null) (if (checked) "☑ " else "☐ ") else "") + item.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = colors.textPrimary,
+                    )
+                    Text((if (item.imported) "Imported · " else "") + item.subtitle, style = MaterialTheme.typography.bodySmall, color = colors.textSecondary)
                 }
                 Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(item.breakdown.totalLabel, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = colors.textPrimary)
@@ -103,6 +122,22 @@ internal fun JourneyListItem(item: JourneyListItemUi, selected: Boolean, onClick
                 }
             }
             JourneyDurationBreakdown(item.breakdown, onCategoryClick = null, showLegend = false)
+        }
+    }
+}
+
+@Composable
+private fun ExportActionRow(export: ExportUiState, visibleIds: List<String>) {
+    Row(Modifier.fillMaxWidth().padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        if (export.selecting) {
+            TextButton(onClick = { export.review(export.selection) }, enabled = export.selection.isNotEmpty()) {
+                Text("Export (${export.selection.size})")
+            }
+            TextButton(onClick = export::stopSelecting) { Text("Cancel") }
+        } else {
+            TextButton(onClick = export::startSelecting, enabled = visibleIds.isNotEmpty()) { Text("Select") }
+            TextButton(onClick = export::openImport) { Text("Import") }
+            TextButton(onClick = export::requestClear, enabled = visibleIds.isNotEmpty()) { Text("Clear") }
         }
     }
 }

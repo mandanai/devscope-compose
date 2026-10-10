@@ -29,6 +29,7 @@ kotlin {
             implementation(projects.devscopeNetworkKtor)
             implementation(projects.devscopeDatabaseSqldelight)
             implementation(projects.devscopeDiagnostics)
+            implementation(projects.devscopeExport)
             implementation(libs.ktor.client.mock)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)

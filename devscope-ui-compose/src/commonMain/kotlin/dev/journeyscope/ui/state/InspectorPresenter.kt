@@ -30,7 +30,9 @@ internal class InspectorPresenter(
 ) {
     fun list(): Flow<ListState> = source.observe()
         .map<TraceBatch, ListState> { batch ->
-            ListState.Ready(batch.traces.asReversed().map { mapper.listItem(it, batch.nowNanos) })
+            ListState.Ready(
+                batch.traces.asReversed().map { mapper.listItem(it, batch.nowNanos).copy(imported = it.id.value in batch.importedIds) },
+            )
         }
         .distinctUntilChanged()
         .catch { if (it is CancellationException) throw it else emit(ListState.Error(it::class.simpleName ?: "Error")) }
@@ -39,7 +41,10 @@ internal class InspectorPresenter(
     fun detail(id: String): Flow<DetailState> = source.observe()
         .map<TraceBatch, DetailState> { batch ->
             batch.traces.firstOrNull { it.id.value == id }
-                ?.let { DetailState.Ready(mapper.detail(it, batch.nowNanos)) }
+                ?.let { trace ->
+                    val detail = mapper.detail(trace, batch.nowNanos)
+                    DetailState.Ready(if (trace.id.value in batch.importedIds) detail.copy(subtitle = "Imported · " + detail.subtitle) else detail)
+                }
                 ?: DetailState.Missing
         }
         .distinctUntilChanged()

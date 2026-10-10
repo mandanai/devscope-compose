@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -25,10 +26,13 @@ import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.journeyscope.export.JourneyExportController
+import dev.journeyscope.ui.components.ExportDialogHost
 import dev.journeyscope.ui.components.JourneyEmptyState
 import dev.journeyscope.ui.components.JourneyErrorState
 import dev.journeyscope.ui.components.JourneyLoadingState
 import dev.journeyscope.ui.state.DetailState
+import dev.journeyscope.ui.state.ExportUiState
 import dev.journeyscope.ui.state.InspectorDestination
 import dev.journeyscope.ui.state.InspectorPresenter
 import dev.journeyscope.ui.state.ListState
@@ -44,8 +48,11 @@ internal fun JourneyInspectorScreen(
     presenter: InspectorPresenter,
     onClose: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    exportController: JourneyExportController? = null,
 ) {
     val state = rememberInspectorState()
+    val scope = rememberCoroutineScope()
+    val export = remember(exportController) { exportController?.let { ExportUiState(it, scope) } }
     var retryKey by remember { mutableIntStateOf(0) }
     val listState by remember(presenter, retryKey) { presenter.list() }.collectAsState(ListState.Loading)
     val destination = state.destination
@@ -78,25 +85,27 @@ internal fun JourneyInspectorScreen(
                                 onOpen = state::open,
                                 onClose = onClose,
                                 modifier = Modifier.width(ListPaneWidth).fillMaxHeight(),
+                                export = export,
                             )
                             Box(Modifier.weight(1f).fillMaxHeight().padding(start = 16.dp)) {
                                 if (selectedId == null) {
                                     JourneyEmptyState("Select a journey", "Pick a journey on the left to inspect its timeline.")
                                 } else {
-                                    DetailPane(presenter, selectedId, state, onBack = null, retry = { retryKey++ })
+                                    DetailPane(presenter, selectedId, state, onBack = null, retry = { retryKey++ }, export = export)
                                 }
                             }
                         }
                     } else if (selectedId != null) {
-                        DetailPane(presenter, selectedId, state, onBack = state::close, retry = { retryKey++ }, modifier = bodyModifier)
+                        DetailPane(presenter, selectedId, state, onBack = state::close, retry = { retryKey++ }, modifier = bodyModifier, export = export)
                     } else {
-                        JourneyListScreen(current.items, selectedId = null, onOpen = state::open, onClose = onClose, modifier = bodyModifier)
+                        JourneyListScreen(current.items, selectedId = null, onOpen = state::open, onClose = onClose, modifier = bodyModifier, export = export)
                     }
                 }
             }
         }
         body(Modifier.widthIn(max = if (twoPane) Dp.Unspecified else ContentMaxWidth).padding(16.dp))
     }
+    if (export != null) ExportDialogHost(export)
 }
 
 @Composable
@@ -107,12 +116,13 @@ private fun DetailPane(
     onBack: (() -> Unit)?,
     retry: () -> Unit,
     modifier: Modifier = Modifier,
+    export: ExportUiState? = null,
 ) {
     val detailState by remember(presenter, traceId) { presenter.detail(traceId) }.collectAsState(DetailState.Loading)
     when (val current = detailState) {
         DetailState.Loading -> JourneyLoadingState(modifier)
         DetailState.Missing -> JourneyEmptyState("Journey not found", "It may have been evicted from the recorder.", modifier)
         is DetailState.Error -> JourneyErrorState(current.reason, onRetry = retry, modifier = modifier)
-        is DetailState.Ready -> JourneyDetailScreen(current.detail, state, onBack, modifier)
+        is DetailState.Ready -> JourneyDetailScreen(current.detail, state, onBack, modifier, export)
     }
 }

@@ -30,16 +30,25 @@ internal class EngineDeps(
 }
 
 // Plain class: StateFlow CAS compares with equals, so identity semantics are intended.
-internal class TraceState(val trace: JourneyTrace, val nextSequence: Long, val detached: Boolean) {
+internal class TraceState(
+    val trace: JourneyTrace,
+    val nextSequence: Long,
+    val detached: Boolean,
+    val rateWindowStartNanos: Long = 0,
+    val rateWindowCount: Int = 0,
+) {
     val accepting: Boolean get() = !detached && !trace.status.isTerminal
 
     fun with(trace: JourneyTrace, consumedSequence: Boolean = false): TraceState =
-        TraceState(trace, if (consumedSequence) nextSequence + 1 else nextSequence, detached)
+        TraceState(trace, if (consumedSequence) nextSequence + 1 else nextSequence, detached, rateWindowStartNanos, rateWindowCount)
+
+    fun withRate(windowStartNanos: Long, count: Int): TraceState =
+        TraceState(trace, nextSequence, detached, windowStartNanos, count)
 
     fun activated(): TraceState =
         if (trace.status == TraceStatus.CREATED) with(trace.copy(status = TraceStatus.RUNNING)) else this
 
-    fun detach(): TraceState = TraceState(trace, nextSequence, true)
+    fun detach(): TraceState = TraceState(trace, nextSequence, true, rateWindowStartNanos, rateWindowCount)
 }
 
 internal class RecordingJourney(
@@ -97,7 +106,7 @@ internal class RecordingJourney(
         val meta = deps.sanitizer.metadata(metadata)
         val spanId = span?.takeIf { it.isRecording }?.id
         val admitted = mutate { s ->
-            admit(s) { trace, sequence ->
+            admit(s, now) { trace, sequence ->
                 trace.copy(events = trace.events + JourneyEvent(eventId, label, category, sequence, now, wall, spanId, meta))
             }
         }
@@ -111,7 +120,7 @@ internal class RecordingJourney(
         val label = deps.sanitizer.label(name)
         val meta = deps.sanitizer.metadata(metadata)
         val admitted = mutate { s ->
-            admit(s) { trace, sequence ->
+            admit(s, now) { trace, sequence ->
                 val parent = parentId?.takeIf { candidate -> trace.spans.any { it.id == candidate } }
                 trace.copy(
                     spans = trace.spans + JourneySpan(
@@ -232,7 +241,7 @@ internal class RecordingJourney(
         )
     }
 
-    private fun admit(s: TraceState, build: (JourneyTrace, Long) -> JourneyTrace): Pair<TraceState, Boolean> {
+    private fun admit(s: TraceState, nowNanos: Long, build: (JourneyTrace, Long) -> JourneyTrace): Pair<TraceState, Boolean> {
         if (s.detached) return s to false
         if (!s.accepting) return s.with(s.trace.copy(droppedItems = s.trace.droppedItems + 1)) to false
         val active = s.activated()
@@ -240,7 +249,18 @@ internal class RecordingJourney(
         if (used >= deps.config.maxEventsPerTrace) {
             return active.with(active.trace.copy(droppedItems = active.trace.droppedItems + 1)) to false
         }
-        return active.with(build(active.trace, active.nextSequence), consumedSequence = true) to true
+        val limit = deps.config.maxEventsPerSecond
+        var rated = active
+        if (limit != null) {
+            val newWindow = nowNanos - active.rateWindowStartNanos >= NANOS_PER_SECOND || active.rateWindowCount == 0
+            val windowStart = if (newWindow) nowNanos else active.rateWindowStartNanos
+            val count = if (newWindow) 0 else active.rateWindowCount
+            if (count >= limit) {
+                return active.with(active.trace.copy(droppedItems = active.trace.droppedItems + 1)) to false
+            }
+            rated = active.withRate(windowStart, count + 1)
+        }
+        return rated.with(build(rated.trace, rated.nextSequence), consumedSequence = true) to true
     }
 
     private inline fun <R> mutate(block: (TraceState) -> Pair<TraceState, R>): R {
@@ -263,6 +283,7 @@ internal class RecordingJourney(
     private companion object {
         const val CANCELLED_TYPE = "Cancelled"
         const val INTERRUPTED_TYPE = "Interrupted"
+        const val NANOS_PER_SECOND = 1_000_000_000L
     }
 }
 

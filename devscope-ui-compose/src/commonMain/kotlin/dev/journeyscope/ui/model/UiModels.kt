@@ -112,4 +112,5 @@ internal data class JourneyListItemUi(
     val status: StatusUi,
     val breakdown: DurationBreakdownUi,
     val spokenDescription: String,
+    val imported: Boolean = false,
 )

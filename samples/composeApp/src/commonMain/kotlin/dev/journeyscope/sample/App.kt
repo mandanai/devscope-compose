@@ -13,6 +13,7 @@ import dev.journeyscope.flow.LifecycleSource
 import dev.journeyscope.sample.navigation.Routes
 import dev.journeyscope.sample.navigation.SampleNavigator
 import dev.journeyscope.sample.shop.AddToCartCompletion
+import dev.journeyscope.sample.shop.SampleExport
 import dev.journeyscope.sample.shop.SampleGraph
 import dev.journeyscope.sample.shop.enableJourneyScopeForSample
 import dev.journeyscope.sample.shop.ui.CartScreen
@@ -55,7 +56,11 @@ fun App(lifecycleSource: LifecycleSource? = null) {
                 },
                 lifecycleSource = lifecycleSource,
             )
-            Routes.INSPECTOR_LIVE -> JourneyScopeInspector(expectedSequences = listOf(AddToCartCompletion), onClose = { navigator.pop() })
+            Routes.INSPECTOR_LIVE -> JourneyScopeInspector(
+                expectedSequences = listOf(AddToCartCompletion),
+                onClose = { navigator.pop() },
+                exportController = SampleExport.controller,
+            )
             Routes.INSPECTOR_DEMO -> JourneyScopeInspector(
                 source = DemoJourneys.source,
                 expectedSequences = listOf(DemoJourneys.addToCartCompletion),

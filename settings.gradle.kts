@@ -35,8 +35,10 @@ rootProject.name = "journeyscope"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(":devscope-core")
+include(":devscope-core-noop")
 include(":devscope-database-sqldelight")
 include(":devscope-diagnostics")
+include(":devscope-export")
 include(":devscope-flow")
 include(":devscope-navigation")
 include(":devscope-network-ktor")

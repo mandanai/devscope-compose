@@ -26,5 +26,7 @@ iOS: open `samples/iosApp/iosApp.xcodeproj` in Xcode 26+ and run. See [docs/deve
 - [Modules](docs/modules.md)
 - [Development](docs/development.md)
 - [Sample walkthrough: Add to Cart](docs/sample-walkthrough.md)
+- [Persistence, privacy and debug export](docs/export.md)
+- [Release safety and disabled mode](docs/release.md)
 
 Tracing engine usage: [docs/api.md](docs/api.md). Design notes: [docs/architecture.md](docs/architecture.md).

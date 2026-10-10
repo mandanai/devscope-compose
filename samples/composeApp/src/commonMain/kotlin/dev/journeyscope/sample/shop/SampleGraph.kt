@@ -6,6 +6,13 @@ import dev.journeyscope.core.JourneyScopeConfig
 import dev.journeyscope.core.expectation.ExpectedSequence
 import dev.journeyscope.core.expectation.ExpectedStep
 import dev.journeyscope.core.model.SpanCategory
+import dev.journeyscope.diagnostics.DiagnosticAnalyzer
+import dev.journeyscope.export.JourneyExportController
+import dev.journeyscope.export.persistence.JourneyPersistence
+import dev.journeyscope.export.policy.ExportPolicy
+import dev.journeyscope.export.share.ShareSink
+import dev.journeyscope.export.storage.createTraceFileSystem
+import dev.journeyscope.ui.export.exportFindings
 import dev.journeyscope.sample.shop.data.CartLocalDataSource
 import dev.journeyscope.sample.shop.data.CartRepository
 import dev.journeyscope.sample.shop.data.KtorCartApi
@@ -55,6 +62,40 @@ val AddToCartCompletion = ExpectedSequence(
     appliesTo = { it.name == "Add to Cart" },
 )
 
+/** Opt-in persistence and export for the sample; stays off until a platform entry point calls [install]. */
+object SampleExport {
+    private var traceDirectory: String? = null
+    private var shareSink: ShareSink? = null
+
+    var controller: JourneyExportController? = null
+        private set
+
+    fun install(traceDirectory: String, shareSink: ShareSink?) {
+        this.traceDirectory = traceDirectory
+        this.shareSink = shareSink
+    }
+
+    internal fun enable(config: JourneyScopeConfig) {
+        val directory = traceDirectory
+        if (directory == null) {
+            JourneyScope.configure(config)
+            return
+        }
+        val policy = ExportPolicy(persistenceEnabled = true, appVersion = SAMPLE_VERSION)
+        val persistence = JourneyPersistence.install(config, policy, fileSystem = { createTraceFileSystem(directory) })
+        JourneyScope.configure(config, persistence.recorder)
+        controller = JourneyExportController(
+            recorder = persistence.recorder,
+            store = persistence.store,
+            policy = policy,
+            shareSink = shareSink,
+            findings = DiagnosticAnalyzer().exportFindings(),
+        )
+    }
+
+    private const val SAMPLE_VERSION = "sample"
+}
+
 fun enableJourneyScopeForSample() {
-    if (!JourneyScope.isEnabled) JourneyScope.configure(JourneyScopeConfig.debugOnly(isDebuggable = true))
+    if (!JourneyScope.isEnabled) SampleExport.enable(JourneyScopeConfig.debugOnly(isDebuggable = true))
 }

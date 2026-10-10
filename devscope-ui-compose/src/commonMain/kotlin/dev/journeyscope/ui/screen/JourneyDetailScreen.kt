@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +39,7 @@ import dev.journeyscope.ui.model.Glyph
 import dev.journeyscope.ui.model.JourneyCategory
 import dev.journeyscope.ui.model.JourneyDetailUi
 import dev.journeyscope.ui.model.TimelineRowUi
+import dev.journeyscope.ui.state.ExportUiState
 import dev.journeyscope.ui.state.InspectorState
 import dev.journeyscope.ui.theme.JourneyTheme
 
@@ -49,6 +51,7 @@ internal fun JourneyDetailScreen(
     state: InspectorState,
     onBack: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    export: ExportUiState? = null,
 ) {
     val colors = JourneyTheme.colors
     val listState = rememberLazyListState()
@@ -71,6 +74,7 @@ internal fun JourneyDetailScreen(
 
     Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (onBack != null) BackBar(onBack)
+        if (export != null) TextButton(onClick = { export.review(setOf(detail.id)) }) { Text("Export this journey") }
         Surface(
             modifier = Modifier.fillMaxWidth().weight(1f),
             shape = RoundedCornerShape(28.dp),
