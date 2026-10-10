@@ -51,3 +51,7 @@ private fun EmptyJourneyList() = PreviewHost(emptyList())
 @Preview
 @Composable
 private fun LargeJourneyList() = PreviewHost(listOf(DemoJourneys.importCatalogLarge()))
+
+@Preview
+@Composable
+private fun ParallelRequestsList() = PreviewHost(listOf(DemoJourneys.parallelRequests(), DemoJourneys.addToCartWithoutCheckpoint()))

@@ -2,7 +2,7 @@
 
 Runtime debugging and diagnostics SDK for Kotlin Multiplatform apps. Inspect complete application journeys (UI → ViewModel → UseCase → Repository → Network → Database → UI state), not only HTTP calls. Android and iOS, with a Compose Multiplatform inspector UI.
 
-> Phase 0: project foundation. Only `devscope-core` and `devscope-ui-compose` exist, with placeholder content.
+> Status: phases 0–6 implemented — core tracing, Ktor/OkHttp network, flow and navigation tracing, SQLDelight database tracing and a diagnostic engine, with the Compose inspector. See [docs/modules.md](docs/modules.md).
 
 ## Modules
 | Module | Purpose |

@@ -9,7 +9,7 @@ import dev.journeyscope.core.network.NetworkRequestInfo
 import dev.journeyscope.core.network.NetworkResponseInfo
 import dev.journeyscope.core.network.NetworkTraceConfig
 import dev.journeyscope.core.network.NetworkTracing
-import dev.journeyscope.ui.mapping.DefaultInsightProvider
+import dev.journeyscope.diagnostics.DiagnosticAnalyzer
 import dev.journeyscope.ui.mapping.InspectorThresholds
 import dev.journeyscope.ui.mapping.MetadataDisplayPolicy
 import dev.journeyscope.ui.mapping.TraceMapper
@@ -37,7 +37,7 @@ class NetworkMappingTest {
         )
         block(tracing.begin(request, journey.context()[TraceContext]))
         journey.finish()
-        val mapper = TraceMapper(InspectorThresholds(), MetadataDisplayPolicy.Default, DefaultInsightProvider())
+        val mapper = TraceMapper(InspectorThresholds(), MetadataDisplayPolicy.Default, DiagnosticAnalyzer())
         return mapper.detail(checkNotNull(journey.snapshot()), 0L)
     }
 

@@ -12,9 +12,9 @@ The product and cart screens collect `CartUiState` through `observeWithJourneySc
 | View model | `ProductViewModel.execute` | `VIEW_MODEL` | explicit: `journey.traceSuspend` |
 | Use case | `AddToCartUseCase` | `USE_CASE` | explicit: `traced(...)` |
 | Repository | `CartRepository.add` | `REPOSITORY` | explicit: `traced(...)`, then `withContext(ioDispatcher)` |
-| API (simulated) | `SimulatedCartApi` | `NETWORK` | explicit: `traced(...)` |
+| API (simulated transport) | `KtorCartApi` | `NETWORK` | automatic: `JourneyScopeNetwork` Ktor plugin |
 | Business validation | `CartRepository.validate` | `BUSINESS_VALIDATION` | explicit: `traced(...)` |
-| Local storage (simulated) | `CartLocalDataSource.upsert` | `DATABASE` | explicit: `traced(...)` |
+| Local storage (real SQLDelight) | `CartLocalDataSource.upsert` | `DATABASE` | explicit: `DatabaseTracing.transaction` with child `query`/`update` spans (see [database.md](database.md)) |
 | State emission | `ProductViewModel.emit` | `STATE_EMISSION` | explicit: `recordEvent` after each `StateFlow` write |
 | Render checkpoint | `ProductDetailScreen` → `onCartCountRendered` | `UI_RENDER` | explicit: span from emission to UI acknowledgement |
 
@@ -26,7 +26,7 @@ The product and cart screens collect `CartUiState` through `observeWithJourneySc
 | Kind | What | Where |
 | --- | --- | --- |
 | Recorded at runtime | Every trace produced by the Add to Cart button; all durations come from the monotonic clock | Inspector |
-| Simulated operations | The API call and the database write are `delay()`s (`LatencyProfile`) and are tagged `simulated=true`; the delay is the only hardcoded number, the recorded duration is still measured | `shop/data` |
+| Simulated operations | The API call is a `MockEngine` with a `delay()` (`LatencyProfile`), tagged `simulated=true`; the database is a real SQLDelight database (`CartDatabase`, installed by `SampleGraph.configure(driver)` from the Android/iOS entry points) and its durations are measured | `shop/data` |
 | Deterministic fixtures | `DemoJourneys` static traces, opened with **Demo data** | `devscope-ui-compose` |
 
 ## Render checkpoint

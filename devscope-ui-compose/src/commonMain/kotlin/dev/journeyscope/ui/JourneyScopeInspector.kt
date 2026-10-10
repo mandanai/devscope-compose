@@ -5,9 +5,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import dev.journeyscope.core.JourneyScope
 import dev.journeyscope.core.expectation.ExpectedSequence
-import dev.journeyscope.ui.mapping.DefaultInsightProvider
+import dev.journeyscope.diagnostics.DiagnosticAnalyzer
+import dev.journeyscope.diagnostics.DiagnosticConfig
 import dev.journeyscope.ui.mapping.InspectorThresholds
-import dev.journeyscope.ui.mapping.JourneyInsightProvider
 import dev.journeyscope.ui.mapping.MetadataDisplayPolicy
 import dev.journeyscope.ui.mapping.TraceMapper
 import dev.journeyscope.ui.screen.JourneyInspectorScreen
@@ -23,14 +23,17 @@ public fun JourneyScopeInspector(
     modifier: Modifier = Modifier,
     source: JourneyTraceSource = rememberRecorderSource(),
     thresholds: InspectorThresholds = rememberRecorderThresholds(),
-    insightProvider: JourneyInsightProvider = DefaultInsightProvider(),
+    analyzer: DiagnosticAnalyzer? = null,
     metadataPolicy: MetadataDisplayPolicy = MetadataDisplayPolicy.Default,
     colors: JourneyColors = defaultJourneyColors(),
     expectedSequences: List<ExpectedSequence> = emptyList(),
     onClose: (() -> Unit)? = null,
 ) {
-    val presenter = remember(source, thresholds, insightProvider, metadataPolicy, expectedSequences) {
-        InspectorPresenter(source, TraceMapper(thresholds, metadataPolicy, insightProvider, expectedSequences))
+    val presenter = remember(source, thresholds, analyzer, metadataPolicy, expectedSequences) {
+        val resolved = analyzer ?: DiagnosticAnalyzer(
+            DiagnosticConfig(slowJourney = thresholds.slowJourney, expectedSequences = expectedSequences),
+        )
+        InspectorPresenter(source, TraceMapper(thresholds, metadataPolicy, resolved, expectedSequences))
     }
     JourneyScopeTheme(colors = colors) {
         JourneyInspectorScreen(presenter = presenter, onClose = onClose, modifier = modifier)

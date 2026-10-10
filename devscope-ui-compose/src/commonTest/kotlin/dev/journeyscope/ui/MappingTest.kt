@@ -1,12 +1,11 @@
 package dev.journeyscope.ui
 
 import dev.journeyscope.ui.demo.DemoJourneys
-import dev.journeyscope.ui.mapping.DefaultInsightProvider
+import dev.journeyscope.diagnostics.DiagnosticAnalyzer
+import dev.journeyscope.diagnostics.DiagnosticConfig
 import dev.journeyscope.ui.mapping.InspectorThresholds
 import dev.journeyscope.ui.mapping.MetadataDisplayPolicy
-import dev.journeyscope.ui.mapping.SpanInterval
 import dev.journeyscope.ui.mapping.TraceMapper
-import dev.journeyscope.ui.mapping.aggregateByCategory
 import dev.journeyscope.ui.model.JourneyCategory
 import dev.journeyscope.ui.model.RowState
 import dev.journeyscope.ui.model.StatusKind
@@ -21,66 +20,7 @@ import kotlin.time.Duration.Companion.seconds
 private const val MS = 1_000_000L
 
 private fun mapper(policy: MetadataDisplayPolicy = MetadataDisplayPolicy.Default) =
-    TraceMapper(InspectorThresholds(slowJourney = 1.seconds), policy, DefaultInsightProvider())
-
-class DurationAggregatorTest {
-    private fun interval(id: String, category: JourneyCategory, start: Long, end: Long, parent: String? = null, seq: Long = 0) =
-        SpanInterval(id, parent, category, start * MS, end * MS, seq)
-
-    @Test
-    fun sequentialSpansSumToTraceLength() {
-        val result = aggregateByCategory(
-            listOf(
-                interval("a", JourneyCategory.UiVm, 0, 10),
-                interval("b", JourneyCategory.Network, 10, 110),
-            ),
-            0, 110 * MS,
-        )
-        assertEquals(10 * MS, result[JourneyCategory.UiVm])
-        assertEquals(100 * MS, result[JourneyCategory.Network])
-        assertEquals(110 * MS, result.values.sum())
-    }
-
-    @Test
-    fun overlappingSiblingsAreNeverDoubleCounted() {
-        val result = aggregateByCategory(
-            listOf(
-                interval("net", JourneyCategory.Network, 0, 100, seq = 0),
-                interval("db", JourneyCategory.Storage, 50, 150, seq = 1),
-            ),
-            0, 150 * MS,
-        )
-        assertEquals(150 * MS, result.values.sum())
-        assertEquals(50 * MS, result[JourneyCategory.Network])
-        assertEquals(100 * MS, result[JourneyCategory.Storage])
-    }
-
-    @Test
-    fun childOwnsItsWindowInsideParent() {
-        val result = aggregateByCategory(
-            listOf(
-                interval("parent", JourneyCategory.UiVm, 0, 100),
-                interval("child", JourneyCategory.Network, 20, 80, parent = "parent"),
-            ),
-            0, 100 * MS,
-        )
-        assertEquals(60 * MS, result[JourneyCategory.Network])
-        assertEquals(40 * MS, result[JourneyCategory.UiVm])
-    }
-
-    @Test
-    fun uncoveredTimeIsIdle() {
-        val result = aggregateByCategory(listOf(interval("a", JourneyCategory.Render, 10, 20)), 0, 50 * MS)
-        assertEquals(40 * MS, result[JourneyCategory.Idle])
-        assertEquals(10 * MS, result[JourneyCategory.Render])
-    }
-
-    @Test
-    fun spansOutsideTheTraceAreClipped() {
-        val result = aggregateByCategory(listOf(interval("a", JourneyCategory.Render, -10, 500)), 0, 100 * MS)
-        assertEquals(mapOf(JourneyCategory.Render to 100 * MS), result)
-    }
-}
+    TraceMapper(InspectorThresholds(slowJourney = 1.seconds), policy, DiagnosticAnalyzer(DiagnosticConfig(slowJourney = 1.seconds)))
 
 class TraceMapperTest {
     private val detail = mapper().detail(DemoJourneys.addToCart(), DemoJourneys.NOW_NANOS)
@@ -121,14 +61,26 @@ class TraceMapperTest {
     }
 
     @Test
-    fun insightPercentageIsComputedFromData() {
-        val insight = detail.insights.single()
-        assertEquals("Diagnostic insight", insight.title)
-        assertEquals(
-            "API accounts for approximately 74% of the total journey duration. Investigate the network and backend before optimizing the UI.",
-            insight.message,
-        )
-        assertEquals(detail.rows.first { it.title == "API Request" }.id, insight.targetRowId)
+    fun networkDominanceDiagnosticReports743PercentWithRelatedRow() {
+        val diagnostic = detail.diagnostics.single { it.ruleId == "timing.dominant" }
+        assertTrue("approximately 74.3% of this sequential journey" in diagnostic.evidence.first())
+        assertEquals(listOf(detail.rows.first { it.title == "API Request" }.id), diagnostic.related.map { it.rowId })
+        assertTrue(diagnostic.inference.orEmpty().isNotBlank())
+        assertTrue(diagnostic.nextSteps.isNotEmpty())
+    }
+
+    @Test
+    fun segmentPercentagesSumToOneHundred() {
+        assertEquals(100, detail.breakdown.segments.sumOf { it.percent })
+        assertEquals(74, detail.breakdown.segments.first { it.category == JourneyCategory.Network }.percent)
+    }
+
+    @Test
+    fun timingSectionShowsOneDecimalPercentAndSequentialCriticalPath() {
+        val network = detail.timing.rows.first { it.category == JourneyCategory.Network }
+        assertEquals("74.3%", network.percentLabel)
+        assertEquals(null, detail.timing.overlapNote)
+        assertTrue(detail.timing.criticalPathLabel.startsWith("Critical path:"))
     }
 
     @Test
@@ -202,19 +154,14 @@ class TraceMapperTest {
 
 class InsightAndFormattingTest {
     @Test
-    fun noInsightWithoutDominantCategory() {
-        val detail = mapper().detail(DemoJourneys.openProduct(), DemoJourneys.NOW_NANOS)
-        assertTrue(detail.insights.isNotEmpty())
-        val balanced = DefaultInsightProvider(dominantShare = 0.99)
-        assertTrue(balanced.insights(
-            dev.journeyscope.ui.mapping.JourneyBreakdown(
-                kotlin.time.Duration.parse("1s"),
-                listOf(
-                    dev.journeyscope.ui.mapping.BreakdownEntry(JourneyCategory.Network, kotlin.time.Duration.parse("500ms")),
-                    dev.journeyscope.ui.mapping.BreakdownEntry(JourneyCategory.Render, kotlin.time.Duration.parse("500ms")),
-                ),
-            ),
-        ).isEmpty())
+    fun balancedJourneyHasNoDominantDiagnostic() {
+        val strict = TraceMapper(
+            InspectorThresholds(slowJourney = 1.seconds),
+            MetadataDisplayPolicy.Default,
+            DiagnosticAnalyzer(DiagnosticConfig(dominantShare = 0.99)),
+        )
+        val detail = strict.detail(DemoJourneys.addToCart(), DemoJourneys.NOW_NANOS)
+        assertTrue(detail.diagnostics.none { it.ruleId == "timing.dominant" })
     }
 
     @Test
@@ -232,5 +179,40 @@ class InsightAndFormattingTest {
         assertTrue(policy.isVisible("http.status"))
         assertTrue(policy.isVisible("returnCode"))
         assertFalse(policy.isVisible("userId"))
+    }
+}
+
+class DiagnosticMappingTest {
+    private val mapper = TraceMapper(
+        InspectorThresholds(slowJourney = 1.seconds),
+        MetadataDisplayPolicy.Default,
+        DiagnosticAnalyzer(DiagnosticConfig(slowJourney = 1.seconds, expectedSequences = listOf(DemoJourneys.addToCartCompletion))),
+        listOf(DemoJourneys.addToCartCompletion),
+    )
+
+    @Test
+    fun overlappingRequestsAreFlaggedAndNeverExceedTheTotal() {
+        val detail = mapper.detail(DemoJourneys.parallelRequests(), DemoJourneys.NOW_NANOS)
+
+        assertEquals(100, detail.breakdown.segments.sumOf { it.percent })
+        assertTrue(detail.breakdown.segments.sumOf { it.nanos } <= detail.breakdown.totalNanos)
+        assertTrue(detail.timing.overlapNote.orEmpty().contains("overlapping"))
+        assertTrue(detail.timing.criticalPathLabel.startsWith("Critical path unavailable"))
+    }
+
+    @Test
+    fun missingCheckpointProducesAWarningWithEvidence() {
+        val detail = mapper.detail(DemoJourneys.addToCartWithoutCheckpoint(), DemoJourneys.NOW_NANOS)
+
+        val missing = detail.diagnostics.single { it.ruleId == "journey.checkpoint_missing" }
+        assertTrue(missing.evidence.any { "UI render checkpoint" in it })
+        assertEquals(1, detail.sequences.single().missingCount)
+    }
+
+    @Test
+    fun expectationDoesNotApplyToUnrelatedJourneys() {
+        val detail = mapper.detail(DemoJourneys.parallelRequests(), DemoJourneys.NOW_NANOS)
+        assertTrue(detail.diagnostics.none { it.ruleId == "journey.checkpoint_missing" })
+        assertTrue(detail.sequences.isEmpty())
     }
 }

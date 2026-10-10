@@ -10,10 +10,18 @@ import dev.journeyscope.core.model.MetadataValue
 import dev.journeyscope.core.model.SpanCategory
 import dev.journeyscope.core.model.SpanStatus
 import dev.journeyscope.core.model.TraceStatus
+import dev.journeyscope.diagnostics.DiagnosticAnalyzer
+import dev.journeyscope.diagnostics.DiagnosticFinding
+import dev.journeyscope.diagnostics.Percentages
+import dev.journeyscope.diagnostics.TimingAnalysis
+import dev.journeyscope.diagnostics.analyzeTiming
 import dev.journeyscope.ui.model.BreakdownOrder
 import dev.journeyscope.ui.model.DurationBreakdownUi
 import dev.journeyscope.ui.model.DurationSegmentUi
-import dev.journeyscope.ui.model.InsightUi
+import dev.journeyscope.ui.model.DiagnosticUi
+import dev.journeyscope.ui.model.RelatedRowUi
+import dev.journeyscope.ui.model.TimingBreakdownUi
+import dev.journeyscope.ui.model.TimingRowUi
 import dev.journeyscope.ui.model.JourneyCategory
 import dev.journeyscope.ui.model.JourneyDetailUi
 import dev.journeyscope.ui.model.JourneyListItemUi
@@ -26,7 +34,6 @@ import dev.journeyscope.ui.model.StatusUi
 import dev.journeyscope.ui.model.TimelineRowUi
 import dev.journeyscope.ui.model.displayName
 import dev.journeyscope.ui.model.formatDuration
-import dev.journeyscope.ui.model.percentOf
 import dev.journeyscope.ui.model.spokenDuration
 import dev.journeyscope.ui.model.toGlyph
 import dev.journeyscope.ui.model.toJourneyCategory
@@ -62,13 +69,13 @@ private val NETWORK_FAILURE_LABELS = mapOf(
 internal class TraceMapper(
     private val thresholds: InspectorThresholds,
     private val policy: MetadataDisplayPolicy,
-    private val insightProvider: JourneyInsightProvider,
+    private val analyzer: DiagnosticAnalyzer,
     private val expectedSequences: List<ExpectedSequence> = emptyList(),
 ) {
     fun listItem(trace: JourneyTrace, nowNanos: Long): JourneyListItemUi {
-        val timing = trace.timing(nowNanos)
-        val breakdown = breakdown(trace, timing.duration.inWholeNanoseconds, nowNanos)
-        val status = status(trace, timing.duration)
+        val timing = analyzeTiming(trace, nowNanos)
+        val breakdown = breakdown(timing)
+        val status = status(trace, timing.total)
         return JourneyListItemUi(
             id = trace.id.value,
             title = trace.name,
@@ -80,21 +87,22 @@ internal class TraceMapper(
     }
 
     fun detail(trace: JourneyTrace, nowNanos: Long): JourneyDetailUi {
-        val timing = trace.timing(nowNanos)
-        val totalNanos = timing.duration.inWholeNanoseconds
-        val breakdown = breakdown(trace, totalNanos, nowNanos)
+        val report = analyzer.analyze(trace, nowNanos)
+        val timing = report.timing
+        val breakdown = breakdown(timing)
         val rows = rows(trace, timing.spans.associateBy { it.spanId.value }, nowNanos)
         return JourneyDetailUi(
             id = trace.id.value,
             title = "Journey: ${trace.name}",
             subtitle = subtitle(trace),
-            status = status(trace, timing.duration),
+            status = status(trace, timing.total),
             breakdown = breakdown,
             rows = rows,
-            insights = insights(breakdown, rows),
+            diagnostics = report.findings.map { diagnostic(it, rows) },
+            timing = timingBreakdown(trace, timing, breakdown),
             failureLabel = trace.failure?.let { failureText(it.type, it.message) },
             droppedItems = trace.droppedItems,
-            sequences = expectedSequences.map { sequence ->
+            sequences = expectedSequences.filter { it.appliesTo(trace) }.map { sequence ->
                 val check = sequence.evaluate(trace)
                 SequenceCheckUi(check.name, check.steps.map { SequenceStepUi(it.label, it.observed) })
             },
@@ -121,27 +129,27 @@ internal class TraceMapper(
             else StatusUi(StatusKind.Completed, "Completed")
     }
 
-    private fun breakdown(trace: JourneyTrace, totalNanos: Long, nowNanos: Long): DurationBreakdownUi {
-        val intervals = trace.spans.map {
-            SpanInterval(
-                id = it.id.value,
-                parentId = it.parentId?.value,
-                category = it.category.toJourneyCategory(),
-                startNanos = it.startNanos,
-                endNanos = it.endNanos ?: (trace.endNanos ?: nowNanos),
-                sequence = it.sequence,
-            )
+    private fun attributedByCategory(timing: TimingAnalysis): Map<JourneyCategory, Long> {
+        val result = HashMap<JourneyCategory, Long>()
+        timing.categories.forEach { entry ->
+            val category = entry.category.toJourneyCategory()
+            result[category] = (result[category] ?: 0L) + entry.attributedNanos
         }
-        val traceEnd = trace.startNanos + totalNanos
-        val byCategory = aggregateByCategory(intervals, trace.startNanos, traceEnd)
-        val segments = BreakdownOrder.mapNotNull { category ->
-            val nanos = byCategory[category] ?: 0L
-            if (nanos <= 0L) null
-            else DurationSegmentUi(
+        if (timing.untrackedNanos > 0L) result[JourneyCategory.Idle] = timing.untrackedNanos
+        return result
+    }
+
+    private fun breakdown(timing: TimingAnalysis): DurationBreakdownUi {
+        val totalNanos = timing.totalNanos
+        val byCategory = attributedByCategory(timing)
+        val entries = BreakdownOrder.mapNotNull { category -> byCategory[category]?.takeIf { it > 0L }?.let { category to it } }
+        val percents = Percentages.distribute(entries.map { it.second }, totalNanos)
+        val segments = entries.mapIndexed { index, (category, nanos) ->
+            DurationSegmentUi(
                 category = category,
                 nanos = nanos,
                 label = formatDuration(nanos),
-                percent = percentOf(nanos, totalNanos),
+                percent = percents[index],
                 weight = (nanos.toDouble() / totalNanos).toFloat(),
             )
         }
@@ -152,17 +160,42 @@ internal class TraceMapper(
         return DurationBreakdownUi(totalNanos, formatDuration(totalNanos), segments, spoken)
     }
 
-    private fun insights(breakdown: DurationBreakdownUi, rows: List<TimelineRowUi>): List<InsightUi> {
-        val input = JourneyBreakdown(
-            total = breakdown.totalNanos.nanoseconds,
-            entries = breakdown.segments.map { BreakdownEntry(it.category, it.nanos.nanoseconds) },
-        )
-        return insightProvider.insights(input).map { insight ->
-            val target = insight.focusCategory?.let { focus ->
-                rows.filter { it.category == focus && it.state != RowState.Event }.maxByOrNull { it.selfNanos }?.id
+    private fun timingBreakdown(trace: JourneyTrace, timing: TimingAnalysis, breakdown: DurationBreakdownUi): TimingBreakdownUi {
+        val byCategory = attributedByCategory(timing)
+        val rows = BreakdownOrder.mapNotNull { category ->
+            byCategory[category]?.takeIf { it > 0L }?.let {
+                TimingRowUi(category, formatDuration(it), Percentages.format(it, timing.totalNanos))
             }
-            InsightUi(insight.title, insight.message, target)
         }
+        val names = trace.spans.associate { it.id to it.name }
+        val slowest = timing.slowestSpan?.let { id ->
+            val exclusive = timing.spans.firstOrNull { it.spanId == id }?.exclusive?.inWholeNanoseconds ?: 0L
+            "${names[id] ?: id.value} · ${formatDuration(exclusive)} own time"
+        }
+        val critical = timing.criticalPath?.takeIf { it.isNotEmpty() }
+            ?.joinToString(" → ") { names[it] ?: it.value }
+            ?.let { "Critical path: $it" }
+            ?: if (timing.criticalPath == null) "Critical path unavailable: overlapping spans do not say which one the others waited on."
+            else "Critical path: none recorded."
+        val overlap = if (timing.isSequential) null else
+            "${timing.overlaps.size} overlapping span pair(s), up to ${timing.maxConcurrency} running at once. " +
+                "Each moment is counted once, so percentages cover wall-clock time, not summed span durations."
+        return TimingBreakdownUi(breakdown.totalLabel, rows, overlap, slowest, critical)
+    }
+
+    private fun diagnostic(finding: DiagnosticFinding, rows: List<TimelineRowUi>): DiagnosticUi {
+        val byId = rows.associateBy { it.id }
+        return DiagnosticUi(
+            ruleId = finding.ruleId,
+            severity = finding.severity,
+            categoryLabel = finding.category.name,
+            title = finding.title,
+            evidence = finding.evidence,
+            inference = finding.inference,
+            nextSteps = finding.nextSteps,
+            related = finding.relatedSpanIds.mapNotNull { id -> byId[id.value]?.let { RelatedRowUi(it.id, it.title) } },
+            metadata = finding.metrics.map { (key, value) -> MetadataRowUi(key, value, hidden = false) },
+        )
     }
 
     private fun rows(

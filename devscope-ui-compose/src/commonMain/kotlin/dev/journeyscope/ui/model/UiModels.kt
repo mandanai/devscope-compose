@@ -1,6 +1,7 @@
 package dev.journeyscope.ui.model
 
 import androidx.compose.runtime.Immutable
+import dev.journeyscope.diagnostics.DiagnosticSeverity
 
 internal enum class StatusKind { Created, Running, Completed, Slow, Failed, Cancelled, Interrupted }
 
@@ -49,7 +50,36 @@ internal data class DurationBreakdownUi(
 )
 
 @Immutable
-internal data class InsightUi(val title: String, val message: String, val targetRowId: String?)
+internal data class RelatedRowUi(val rowId: String, val label: String)
+
+@Immutable
+internal data class DiagnosticUi(
+    val ruleId: String,
+    val severity: DiagnosticSeverity,
+    val categoryLabel: String,
+    val title: String,
+    val evidence: List<String>,
+    val inference: String?,
+    val nextSteps: List<String>,
+    val related: List<RelatedRowUi>,
+    val metadata: List<MetadataRowUi>,
+)
+
+@Immutable
+internal data class TimingRowUi(
+    val category: JourneyCategory,
+    val attributedLabel: String,
+    val percentLabel: String,
+)
+
+@Immutable
+internal data class TimingBreakdownUi(
+    val totalLabel: String,
+    val rows: List<TimingRowUi>,
+    val overlapNote: String?,
+    val slowestLabel: String?,
+    val criticalPathLabel: String,
+)
 
 @Immutable
 internal data class JourneyDetailUi(
@@ -59,7 +89,8 @@ internal data class JourneyDetailUi(
     val status: StatusUi,
     val breakdown: DurationBreakdownUi,
     val rows: List<TimelineRowUi>,
-    val insights: List<InsightUi>,
+    val diagnostics: List<DiagnosticUi>,
+    val timing: TimingBreakdownUi,
     val failureLabel: String?,
     val droppedItems: Int,
     val sequences: List<SequenceCheckUi> = emptyList(),

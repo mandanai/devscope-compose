@@ -1,5 +1,7 @@
 package dev.journeyscope.ui.demo
 
+import dev.journeyscope.core.expectation.ExpectedSequence
+import dev.journeyscope.core.expectation.ExpectedStep
 import dev.journeyscope.core.model.DiagnosticMetadata
 import dev.journeyscope.core.model.EventId
 import dev.journeyscope.core.model.FailureInfo
@@ -30,7 +32,10 @@ public object DemoJourneys {
     public val source: JourneyTraceSource by lazy { staticTraceSource(all, NOW_NANOS) }
 
     internal val all: List<JourneyTrace> by lazy {
-        listOf(addToCart(), addToCartThenCart(), openProduct(), checkoutFailed(), syncOrdersRunning(), syncProfileRunning(), coldStartEmpty(), importCatalogLarge())
+        listOf(
+            addToCart(), addToCartThenCart(), openProduct(), checkoutFailed(), parallelRequests(), addToCartWithoutCheckpoint(),
+            syncOrdersRunning(), syncProfileRunning(), coldStartEmpty(), importCatalogLarge(),
+        )
     }
 
     internal fun addToCart(): JourneyTrace {
@@ -83,6 +88,67 @@ public object DemoJourneys {
     }
 
     internal fun slowJourney(): JourneyTrace = addToCart()
+
+    /** Expectation the inspector demo applies to journeys named "Add to Cart…". */
+    public val addToCartCompletion: ExpectedSequence = ExpectedSequence(
+        name = "Add to Cart completion",
+        steps = listOf(
+            ExpectedStep.category("API request", SpanCategory.NETWORK),
+            ExpectedStep.category("UI render checkpoint", SpanCategory.UI_RENDER),
+        ),
+        appliesTo = { it.name.startsWith("Add to Cart") },
+    )
+
+    /** Three overlapping requests: wall-clock attribution counts the shared time once and flags the overlap. */
+    internal fun parallelRequests(): JourneyTrace {
+        val start = BASE_NANOS + 9_000 * NANOS_PER_MILLI
+        fun at(ms: Long) = start + ms * NANOS_PER_MILLI
+        val spans = listOf(
+            span("PAR-0", "Button Click", SpanCategory.UI_INTERACTION, at(0), 0, 0, "HomeScreen · Refresh"),
+            span("PAR-1", "GET /profile", SpanCategory.NETWORK, at(10), 600, 1, "GET /profile · HTTP 200"),
+            span("PAR-2", "GET /orders", SpanCategory.NETWORK, at(20), 900, 2, "GET /orders · HTTP 200"),
+            span("PAR-3", "GET /offers", SpanCategory.NETWORK, at(30), 450, 3, "GET /offers · HTTP 200"),
+            span("PAR-4", "Render Home", SpanCategory.UI_RENDER, at(920), 80, 4, "HomeScreen"),
+        )
+        return finish(id = "PAR-2001", name = "Refresh Home", start = start, end = at(1_000), startMillis = 9_000, spans = spans, events = emptyList())
+    }
+
+    /** State was emitted but the render checkpoint never arrived, so the expected completion step is missing. */
+    internal fun addToCartWithoutCheckpoint(): JourneyTrace {
+        val start = BASE_NANOS + 12_000 * NANOS_PER_MILLI
+        fun at(ms: Long) = start + ms * NANOS_PER_MILLI
+        val spans = listOf(
+            span("NCP-0", "ProductViewModel.addToCart", SpanCategory.VIEW_MODEL, at(0), 300, 0, "ViewModel action"),
+            span("NCP-1", "POST api.shop.example/cart/items", SpanCategory.NETWORK, at(20), 240, 1, "POST /cart/items · HTTP 200", parent = "NCP-0"),
+        )
+        val events = listOf(event("NCP-e0", "CartUiState emitted", SpanCategory.STATE_EMISSION, at(310), 2))
+        return finish(id = "NCP-3001", name = "Add to Cart (no checkpoint)", start = start, end = at(320), startMillis = 12_000, spans = spans, events = events)
+    }
+
+    private fun finish(
+        id: String,
+        name: String,
+        start: Long,
+        end: Long,
+        startMillis: Long,
+        spans: List<JourneySpan>,
+        events: List<JourneyEvent>,
+    ): JourneyTrace {
+        val trace = JourneyTrace(
+            id = TraceId(id), name = name, status = TraceStatus.COMPLETED, startNanos = start,
+            startWallMillis = BASE_WALL_MILLIS + startMillis, endNanos = end,
+            endWallMillis = BASE_WALL_MILLIS + startMillis + (end - start) / NANOS_PER_MILLI,
+            spans = spans, events = events, failure = null, metadata = demoMetadata(), droppedItems = 0, summary = null,
+        )
+        val timing = trace.timing()
+        return trace.copy(
+            summary = JourneySummary(
+                name = name, status = TraceStatus.COMPLETED, duration = timing.duration, spanCount = spans.size, eventCount = events.size,
+                failedSpanCount = 0, droppedItems = 0, isSlow = timing.duration >= 1_000.milliseconds,
+                criticalPathDuration = timing.criticalPathDuration, failureType = null,
+            ),
+        )
+    }
 
     internal fun openProduct(): JourneyTrace = sequentialTrace(
         id = "PROD-2201",

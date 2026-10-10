@@ -26,13 +26,13 @@ class RealClockJourneyTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun traceSurvivesDispatcherSwitchesAndMeasuresRealTime() = runTest {
-        val latency = LatencyProfile(normal = 40.milliseconds, database = 20.milliseconds)
+        val latency = LatencyProfile(normal = 40.milliseconds)
         val recorder = InMemoryJourneyRecorder()
         val tracer = JourneyTracer(JourneyScopeConfig(enabled = true), recorder)
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         val repository = CartRepository(
             KtorCartApi(sampleHttpClient(latency, { tracer })),
-            CartLocalDataSource(latency),
+            CartLocalDataSource(createTestDatabase()),
             Dispatchers.Default.limitedParallelism(1, "test-io"),
         )
         val viewModel = ProductViewModel(
@@ -48,9 +48,8 @@ class RealClockJourneyTest {
 
         val trace = recorder.snapshot().single()
         assertEquals(TraceStatus.COMPLETED, trace.status)
-        assertEquals(6, trace.spans.count { it.name != "Cart count render" })
+        assertEquals(9, trace.spans.count { it.name != "Cart count render" })
         assertTrue(trace.span(CART_API_SPAN).duration >= latency.normal)
-        assertTrue(trace.span("cart.upsert").duration >= latency.database)
-        assertTrue(checkNotNull(trace.summary).duration >= latency.normal + latency.database)
+        assertTrue(checkNotNull(trace.summary).duration >= latency.normal)
     }
 }

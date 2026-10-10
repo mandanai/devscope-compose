@@ -1,0 +1,13 @@
+CREATE TABLE cart_items (
+    product_id TEXT NOT NULL PRIMARY KEY,
+    quantity INTEGER NOT NULL
+);
+
+upsert:
+INSERT OR REPLACE INTO cart_items(product_id, quantity) VALUES (?, ?);
+
+quantityFor:
+SELECT quantity FROM cart_items WHERE product_id = ?;
+
+totalQuantity:
+SELECT COALESCE(SUM(quantity), 0) FROM cart_items;

@@ -59,7 +59,7 @@ class VirtualShop(
     val viewModel = ProductViewModel(
         product = TestProduct,
         addToCartUseCase = AddToCartUseCase(
-            CartRepository(remote ?: KtorCartApi(sampleHttpClient(latency, { tracer }, ioDispatcher)), CartLocalDataSource(latency), ioDispatcher),
+            CartRepository(remote ?: KtorCartApi(sampleHttpClient(latency, { tracer }, ioDispatcher)), CartLocalDataSource(createTestDatabase()), ioDispatcher),
         ),
         scope = scope,
         latency = latency,

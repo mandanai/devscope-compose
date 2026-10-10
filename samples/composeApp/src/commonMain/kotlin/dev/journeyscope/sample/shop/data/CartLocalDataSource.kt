@@ -1,25 +1,19 @@
 package dev.journeyscope.sample.shop.data
 
-import dev.journeyscope.core.model.SpanCategory
-import dev.journeyscope.sample.shop.LatencyProfile
-import dev.journeyscope.sample.shop.simulatedMetadata
-import dev.journeyscope.sample.shop.traced
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import dev.journeyscope.database.sqldelight.DatabaseTracing
+import dev.journeyscope.sample.shop.db.CartDatabase
 
-/** In-memory stand-in for a database table. */
-class CartLocalDataSource(private val latency: LatencyProfile = LatencyProfile.Default) {
-    private val mutex = Mutex()
-    private val quantities = mutableMapOf<String, Int>()
+class CartLocalDataSource(
+    private val database: CartDatabase,
+    private val tracing: DatabaseTracing = DatabaseTracing(),
+) {
+    private val queries = database.cartItemQueries
 
     /** Returns the total item count in the cart after the write. */
     suspend fun upsert(productId: String, quantity: Int): Int =
-        traced("cart.upsert", SpanCategory.DATABASE, simulatedMetadata("table" to "cart_items")) {
-            delay(latency.database)
-            mutex.withLock {
-                quantities[productId] = (quantities[productId] ?: 0) + quantity
-                quantities.values.sum()
-            }
+        tracing.transaction<Int>(database, "cart.upsert") {
+            val current = query("cart_items.quantityFor") { queries.quantityFor(productId).executeAsOneOrNull() ?: 0L }
+            update("cart_items.upsert") { queries.upsert(productId, current + quantity) }
+            query("cart_items.totalQuantity") { queries.totalQuantity().executeAsOne() }.toInt()
         }
 }

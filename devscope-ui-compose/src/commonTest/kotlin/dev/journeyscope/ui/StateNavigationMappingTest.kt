@@ -7,7 +7,7 @@ import dev.journeyscope.core.expectation.ExpectedStep
 import dev.journeyscope.core.model.SpanCategory
 import dev.journeyscope.core.model.diagnosticMetadata
 import dev.journeyscope.ui.demo.DemoJourneys
-import dev.journeyscope.ui.mapping.DefaultInsightProvider
+import dev.journeyscope.diagnostics.DiagnosticAnalyzer
 import dev.journeyscope.ui.mapping.InspectorThresholds
 import dev.journeyscope.ui.mapping.MetadataDisplayPolicy
 import dev.journeyscope.ui.mapping.TraceMapper
@@ -21,7 +21,7 @@ class StateNavigationMappingTest {
     private val tracer = JourneyTracer(JourneyScopeConfig(enabled = true))
 
     private fun mapper(sequences: List<ExpectedSequence> = emptyList()) =
-        TraceMapper(InspectorThresholds(), MetadataDisplayPolicy.Default, DefaultInsightProvider(), sequences)
+        TraceMapper(InspectorThresholds(), MetadataDisplayPolicy.Default, DiagnosticAnalyzer(), sequences)
 
     @Test
     fun stateAndNavigationEventsAppearInTheTimeline() {

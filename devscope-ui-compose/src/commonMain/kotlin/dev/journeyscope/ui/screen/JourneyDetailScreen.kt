@@ -31,6 +31,7 @@ import dev.journeyscope.ui.components.ExpectedSequenceSection
 import dev.journeyscope.ui.components.JourneyDiagnosticSection
 import dev.journeyscope.ui.components.JourneyDurationSummary
 import dev.journeyscope.ui.components.JourneyHeader
+import dev.journeyscope.ui.components.JourneyTimingSection
 import dev.journeyscope.ui.components.journeyTimeline
 import dev.journeyscope.ui.icons.GlyphIcon
 import dev.journeyscope.ui.model.Glyph
@@ -125,8 +126,11 @@ internal fun JourneyDetailScreen(
                         ExpectedSequenceSection(detail.sequences, modifier = Modifier.padding(top = 16.dp))
                     }
                 }
+                item(key = "timing", contentType = "timing") {
+                    JourneyTimingSection(detail.timing, modifier = Modifier.padding(top = 16.dp))
+                }
                 item(key = "insight", contentType = "insight") {
-                    JourneyDiagnosticSection(detail.insights, onShowTarget = state::reveal, modifier = Modifier.padding(top = 16.dp))
+                    JourneyDiagnosticSection(detail.diagnostics, onShowTarget = state::reveal, modifier = Modifier.padding(top = 16.dp))
                 }
             }
         }

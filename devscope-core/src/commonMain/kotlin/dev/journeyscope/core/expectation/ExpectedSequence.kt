@@ -40,7 +40,10 @@ public data class SequenceCheck(public val name: String, public val steps: List<
 public class ExpectedSequence(
     public val name: String,
     public val steps: List<ExpectedStep>,
+    private val appliesTo: (JourneyTrace) -> Boolean = { true },
 ) {
+    public fun appliesTo(trace: JourneyTrace): Boolean = appliesTo.invoke(trace)
+
     public fun evaluate(trace: JourneyTrace): SequenceCheck {
         val items = buildList {
             trace.spans.forEach { add(SequenceItem(it.name, it.category, it.metadata, it.sequence)) }

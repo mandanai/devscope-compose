@@ -20,6 +20,7 @@ public class MetadataDisplayPolicy(
                 "http.streaming", "http.request.bytes", "http.response.bytes", "http.request.header.*", "http.response.header.*",
                 "business.status", "returnCode", "component", "state.*", "flow.kind", "collector.id", "lifecycle.state", "nav.*",
                 "coroutine.*", UI_CHECKPOINT_KEY,
+                "db.operation", "db.label", "db.transaction.*", "db.rows",
             )
 
         public val Default: MetadataDisplayPolicy = MetadataDisplayPolicy()

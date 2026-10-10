@@ -15,7 +15,6 @@ enum class SampleScenario(val label: String) {
 data class LatencyProfile(
     val normal: Duration = 120.milliseconds,
     val slow: Duration = 2400.milliseconds,
-    val database: Duration = 25.milliseconds,
     val cancelAfter: Duration = 300.milliseconds,
 ) {
     fun networkFor(scenario: SampleScenario): Duration = when (scenario) {

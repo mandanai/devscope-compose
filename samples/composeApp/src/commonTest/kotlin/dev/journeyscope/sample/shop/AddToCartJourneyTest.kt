@@ -2,6 +2,9 @@ package dev.journeyscope.sample.shop
 
 import dev.journeyscope.core.model.MetadataValue
 import dev.journeyscope.core.model.SpanCategory
+import dev.journeyscope.diagnostics.DiagnosticAnalyzer
+import dev.journeyscope.diagnostics.DiagnosticConfig
+import dev.journeyscope.diagnostics.DiagnosticSeverity
 import dev.journeyscope.core.model.SpanStatus
 import dev.journeyscope.core.model.TraceStatus
 import dev.journeyscope.sample.shop.data.CartApiResponse
@@ -64,6 +67,40 @@ class AddToCartJourneyTest {
             assertEquals(repository.id, trace.span(name).parentId, name)
         }
         assertNull(trace.span("Cart count render").parentId)
+        val transaction = trace.span("cart.upsert")
+        listOf("cart_items.quantityFor", "cart_items.upsert", "cart_items.totalQuantity").forEach { name ->
+            assertEquals(transaction.id, trace.span(name).parentId, name)
+        }
+    }
+
+    @Test
+    fun databaseSpanSharesTheJourneyAndNeverRecordsSqlOrValues() = runTest {
+        val shop = VirtualShop(this).also { it.autoRender(this) }
+
+        shop.viewModel.addToCart()
+        advanceUntilIdle()
+
+        val trace = shop.onlyTrace()
+        val transaction = trace.span("cart.upsert")
+        assertEquals("committed", (transaction.metadata["db.transaction.outcome"] as MetadataValue.Text).value)
+        trace.spans(SpanCategory.DATABASE).forEach { span ->
+            assertTrue(span.metadata.entries.keys.all { it.startsWith("db.") }, span.name)
+            assertTrue(span.metadata.entries.values.none { it is MetadataValue.Text && (it.value.contains("SELECT", true) || it.value.contains("sku-test")) })
+        }
+        val order = trace.spans.sortedBy { it.sequence }.map { it.name }
+        assertTrue(order.indexOf("validateCartResponse") < order.indexOf("cart.upsert"))
+        assertTrue(order.indexOf("cart.upsert") < order.indexOf("Cart count render"))
+    }
+
+    @Test
+    fun diagnosticsSeeNoFindingsForTheNormalFlowAndCompletionCheckpointIsObserved() = runTest {
+        val shop = VirtualShop(this).also { it.autoRender(this) }
+
+        shop.viewModel.addToCart()
+        advanceUntilIdle()
+
+        val report = DiagnosticAnalyzer(DiagnosticConfig(expectedSequences = listOf(AddToCartCompletion))).analyze(shop.onlyTrace())
+        assertTrue(report.findings.none { it.severity != DiagnosticSeverity.Info }, report.findings.map { it.ruleId }.toString())
     }
 
     @Test
@@ -88,8 +125,7 @@ class AddToCartJourneyTest {
 
         val trace = shop.onlyTrace()
         assertEquals(shop.latency.normal, trace.span(CART_API_SPAN).duration)
-        assertEquals(shop.latency.database, trace.span("cart.upsert").duration)
-        assertEquals(shop.latency.normal + shop.latency.database, trace.summary?.duration)
+        assertEquals(shop.latency.normal, trace.summary?.duration)
         assertEquals(false, trace.summary?.isSlow)
     }
 
@@ -197,7 +233,7 @@ class AddToCartJourneyTest {
 
         shop.viewModel.addToCart()
         shop.viewModel.addToCart()
-        advanceTimeBy(shop.latency.normal + shop.latency.database + 1.milliseconds)
+        advanceTimeBy(shop.latency.normal + 1.milliseconds)
         shop.viewModel.onCartCountRendered(shop.viewModel.state.value.renderToken)
         advanceUntilIdle()
 
@@ -220,7 +256,7 @@ class AddToCartJourneyTest {
 
         shop.viewModel.addToCart()
         shop.viewModel.addToCart(SampleScenario.SlowApi)
-        advanceTimeBy(shop.latency.normal + shop.latency.database + 1.milliseconds)
+        advanceTimeBy(shop.latency.normal + 1.milliseconds)
         assertEquals(CartPhase.Adding, shop.viewModel.state.value.phase)
         assertEquals(1, shop.viewModel.state.value.pending)
         advanceUntilIdle()
@@ -236,7 +272,7 @@ class AddToCartJourneyTest {
         val shop = VirtualShop(this)
 
         shop.viewModel.addToCart()
-        advanceTimeBy(shop.latency.normal + shop.latency.database + 1.milliseconds)
+        advanceTimeBy(shop.latency.normal + 1.milliseconds)
         assertEquals(TraceStatus.RUNNING, shop.onlyTrace().status)
         assertEquals(SpanStatus.RUNNING, shop.onlyTrace().span("Cart count render").status)
 
