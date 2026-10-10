@@ -13,19 +13,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.journeyscope.ui.JourneyScopeInspector
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
     MaterialTheme {
+        LaunchedEffect(Unit) { enableJourneyScopeForSample() }
         var inspectorVisible by rememberSaveable { mutableStateOf(false) }
         if (inspectorVisible) {
             Scaffold(
@@ -53,12 +57,14 @@ fun App() {
 
 @Composable
 private fun SampleHome(onOpenInspector: () -> Unit, contentPadding: PaddingValues, modifier: Modifier = Modifier) {
+    val scope = rememberCoroutineScope()
     Column(
         modifier = modifier.fillMaxSize().padding(contentPadding).padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text("JourneyScope Sample", style = MaterialTheme.typography.headlineMedium)
+        Button(onClick = { scope.launch { runAddToCartJourney() } }) { Text("Run sample journey") }
         Button(onClick = onOpenInspector) { Text("Open Inspector") }
     }
 }

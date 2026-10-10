@@ -8,7 +8,7 @@ import kotlin.test.assertTrue
 class JourneyScopeTest {
     @AfterTest
     fun reset() {
-        JourneyScope.isEnabled = false
+        JourneyScope.configure(JourneyScopeConfig())
     }
 
     @Test
@@ -17,13 +17,26 @@ class JourneyScopeTest {
     }
 
     @Test
-    fun enableToggles() {
-        JourneyScope.isEnabled = true
+    fun configureEnablesAndDisableStops() {
+        JourneyScope.configure(JourneyScopeConfig(enabled = true))
         assertTrue(JourneyScope.isEnabled)
+        JourneyScope.disable()
+        assertFalse(JourneyScope.isEnabled)
+    }
+
+    @Test
+    fun debugOnlyFollowsHostFlag() {
+        assertFalse(JourneyScopeConfig.debugOnly(isDebuggable = false).enabled)
+        assertTrue(JourneyScopeConfig.debugOnly(isDebuggable = true).enabled)
     }
 
     @Test
     fun versionIsNotBlank() {
         assertTrue(JourneyScope.VERSION.isNotBlank())
+    }
+
+    @Test
+    fun disabledScopeStartsInertJourneys() {
+        assertFalse(JourneyScope.startJourney("noop").isRecording)
     }
 }
