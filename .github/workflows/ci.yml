@@ -1,0 +1,28 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  android-and-common:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :devscope-core:testAndroidHostTest :devscope-core:compileCommonMainKotlinMetadata :devscope-ui-compose:compileCommonMainKotlinMetadata :samples:androidApp:assembleDebug
+
+  apple:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :devscope-core:iosSimulatorArm64Test :samples:composeApp:linkDebugFrameworkIosSimulatorArm64

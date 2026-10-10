@@ -1,0 +1,54 @@
+# Gradle / Kotlin
+.gradle/
+build/
+.kotlin/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android
+local.properties
+*.apk
+*.aab
+*.keystore
+*.jks
+captures/
+.cxx/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Apple / Xcode
+xcuserdata/
+*.xcuserstate
+DerivedData/
+Pods/
+*.xcarchive
+*.ipa
+*.dSYM/
+
+# Secrets
+.env
+*.pem
+
+# AI tooling
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
+GEMINI.md
+.mcp.json
+.serena/
+graphify-out/
+.gitnexus/
+.socraticode*
+.understand-anything/
+.cursor/
+.cursorrules
+.windsurf/
+.aider*
+.codex/
+.github/copilot-instructions.md
+
+# OS
+.DS_Store
