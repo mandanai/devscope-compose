@@ -19,14 +19,16 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlin.time.Duration
 
 /** Monotonic time is the test scheduler's virtual time, so recorded durations equal the simulated delays exactly. */
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestSchedulerClock(private val scheduler: TestCoroutineScheduler) : JourneyClock {
+class TestSchedulerClock(
+    private val scheduler: TestCoroutineScheduler,
+) : JourneyClock {
     override fun monotonicNanos(): Long = scheduler.currentTime * NANOS_PER_MILLI
 
     override fun wallClockMillis(): Long = WALL_EPOCH + scheduler.currentTime
@@ -51,21 +53,32 @@ class VirtualShop(
 ) {
     val recorder = InMemoryJourneyRecorder(maxTraces = 50)
     val ioDispatcher: CoroutineDispatcher = StandardTestDispatcher(testScope.testScheduler, "io")
-    private val tracer = JourneyTracer(
-        config = JourneyScopeConfig(enabled = true),
-        recorder = recorder,
-        clock = TestSchedulerClock(testScope.testScheduler),
-    )
-    val viewModel = ProductViewModel(
-        product = TestProduct,
-        addToCartUseCase = AddToCartUseCase(
-            CartRepository(remote ?: KtorCartApi(sampleHttpClient(latency, { tracer }, ioDispatcher)), CartLocalDataSource(createTestDatabase()), ioDispatcher),
-        ),
-        scope = scope,
-        latency = latency,
-        renderTimeout = renderTimeout,
-        tracer = { tracer },
-    )
+    private val tracer =
+        JourneyTracer(
+            config = JourneyScopeConfig(enabled = true),
+            recorder = recorder,
+            clock = TestSchedulerClock(testScope.testScheduler),
+        )
+    val viewModel =
+        ProductViewModel(
+            product = TestProduct,
+            addToCartUseCase =
+                AddToCartUseCase(
+                    CartRepository(
+                        remote ?: KtorCartApi(
+                            sampleHttpClient(latency, {
+                                tracer
+                            }, ioDispatcher),
+                        ),
+                        CartLocalDataSource(createTestDatabase()),
+                        ioDispatcher,
+                    ),
+                ),
+            scope = scope,
+            latency = latency,
+            renderTimeout = renderTimeout,
+            tracer = { tracer },
+        )
 
     /** Stands in for the screen: acknowledges every emitted state as drawn. */
     fun autoRender(testScope: TestScope) {

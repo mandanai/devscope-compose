@@ -19,12 +19,27 @@ internal object UrlSanitizer {
     private const val MAX_PLAIN_NUMBER_LENGTH = 9
     private const val MAX_PATH_LENGTH = 200
 
-    private val signedMarkers = setOf(
-        "x-amz-signature", "x-amz-credential", "x-amz-security-token", "x-goog-signature", "x-goog-credential",
-        "signature", "sig", "googleaccessid", "sas", "sv", "se", "skoid",
-    )
+    private val signedMarkers =
+        setOf(
+            "x-amz-signature",
+            "x-amz-credential",
+            "x-amz-security-token",
+            "x-goog-signature",
+            "x-goog-credential",
+            "signature",
+            "sig",
+            "googleaccessid",
+            "sas",
+            "sv",
+            "se",
+            "skoid",
+        )
 
-    fun sanitize(url: String, allowedQueryParams: Set<String>, policy: RedactionPolicy): SanitizedUrl {
+    fun sanitize(
+        url: String,
+        allowedQueryParams: Set<String>,
+        policy: RedactionPolicy,
+    ): SanitizedUrl {
         val noFragment = url.substringBefore('#')
         val schemeEnd = noFragment.indexOf("://")
         val scheme = if (schemeEnd > 0) noFragment.substring(0, schemeEnd).lowercase() else ""
@@ -41,11 +56,12 @@ internal object UrlSanitizer {
         val params = rawQuery.split('&').filter { it.isNotEmpty() }.map { it.substringBefore('=') to it.substringAfter('=', "") }
         val signed = params.any { (key, _) -> key.lowercase() in signedMarkers }
         val allowed = allowedQueryParams.map { it.lowercase() }.toSet()
-        val values = if (signed) {
-            emptyMap()
-        } else {
-            params.filter { (key, _) -> key.lowercase() in allowed && !policy.isSensitive(key) }.toMap()
-        }
+        val values =
+            if (signed) {
+                emptyMap()
+            } else {
+                params.filter { (key, _) -> key.lowercase() in allowed && !policy.isSensitive(key) }.toMap()
+            }
         return SanitizedUrl(
             scheme = scheme,
             host = host,
@@ -62,11 +78,15 @@ internal object UrlSanitizer {
         return path.split('/').joinToString("/") { if (isOpaque(it)) REDACTED_SEGMENT else it }.take(MAX_PATH_LENGTH)
     }
 
-    private fun isOpaque(segment: String): Boolean = when {
-        segment.length > MAX_PLAIN_NUMBER_LENGTH && segment.all { it.isDigit() } -> true
-        segment.length >= MIN_HEX_LENGTH && segment.all { it.isDigit() || it in 'a'..'f' || it in 'A'..'F' || it == '-' } -> true
-        segment.length >= OPAQUE_SEGMENT_LENGTH && segment.any { it.isDigit() } && segment.any { it.isLetter() } &&
-            segment.all { it.isLetterOrDigit() || it == '_' || it == '-' } -> true
-        else -> false
-    }
+    private fun isOpaque(segment: String): Boolean =
+        when {
+            segment.length > MAX_PLAIN_NUMBER_LENGTH && segment.all { it.isDigit() } -> true
+
+            segment.length >= MIN_HEX_LENGTH && segment.all { it.isDigit() || it in 'a'..'f' || it in 'A'..'F' || it == '-' } -> true
+
+            segment.length >= OPAQUE_SEGMENT_LENGTH && segment.any { it.isDigit() } && segment.any { it.isLetter() } &&
+                segment.all { it.isLetterOrDigit() || it == '_' || it == '-' } -> true
+
+            else -> false
+        }
 }

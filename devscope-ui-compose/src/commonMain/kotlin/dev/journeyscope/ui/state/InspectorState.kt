@@ -13,20 +13,26 @@ import dev.journeyscope.ui.model.JourneyCategory
 
 internal sealed interface InspectorDestination {
     data object List : InspectorDestination
-    data class Detail(val traceId: String) : InspectorDestination
+
+    data class Detail(
+        val traceId: String,
+    ) : InspectorDestination
 }
 
 private const val DETAIL_PREFIX = "detail:"
 
-private val DestinationSaver = Saver<InspectorDestination, String>(
-    save = { (it as? InspectorDestination.Detail)?.let { detail -> DETAIL_PREFIX + detail.traceId } ?: "" },
-    restore = {
-        if (it.startsWith(DETAIL_PREFIX)) InspectorDestination.Detail(it.removePrefix(DETAIL_PREFIX)) else InspectorDestination.List
-    },
-)
+private val DestinationSaver =
+    Saver<InspectorDestination, String>(
+        save = { (it as? InspectorDestination.Detail)?.let { detail -> DETAIL_PREFIX + detail.traceId } ?: "" },
+        restore = {
+            if (it.startsWith(DETAIL_PREFIX)) InspectorDestination.Detail(it.removePrefix(DETAIL_PREFIX)) else InspectorDestination.List
+        },
+    )
 
 @Stable
-internal class InspectorState(private val destinationState: MutableState<InspectorDestination>) {
+internal class InspectorState(
+    private val destinationState: MutableState<InspectorDestination>,
+) {
     val destination: InspectorDestination get() = destinationState.value
     var filters: Set<JourneyCategory> by mutableStateOf(emptySet())
         private set

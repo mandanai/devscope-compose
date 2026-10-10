@@ -1,8 +1,8 @@
 package dev.journeyscope.ui
 
-import dev.journeyscope.ui.demo.DemoJourneys
 import dev.journeyscope.diagnostics.DiagnosticAnalyzer
 import dev.journeyscope.diagnostics.DiagnosticConfig
+import dev.journeyscope.ui.demo.DemoJourneys
 import dev.journeyscope.ui.mapping.InspectorThresholds
 import dev.journeyscope.ui.mapping.MetadataDisplayPolicy
 import dev.journeyscope.ui.mapping.TraceMapper
@@ -19,8 +19,7 @@ import kotlin.time.Duration.Companion.seconds
 
 private const val MS = 1_000_000L
 
-private fun mapper(policy: MetadataDisplayPolicy = MetadataDisplayPolicy.Default) =
-    TraceMapper(InspectorThresholds(slowJourney = 1.seconds), policy, DiagnosticAnalyzer(DiagnosticConfig(slowJourney = 1.seconds)))
+private fun mapper(policy: MetadataDisplayPolicy = MetadataDisplayPolicy.Default) = TraceMapper(InspectorThresholds(slowJourney = 1.seconds), policy, DiagnosticAnalyzer(DiagnosticConfig(slowJourney = 1.seconds)))
 
 class TraceMapperTest {
     private val detail = mapper().detail(DemoJourneys.addToCart(), DemoJourneys.NOW_NANOS)
@@ -29,8 +28,14 @@ class TraceMapperTest {
     fun addToCartShowsAllEightStagesInOrder() {
         assertEquals(
             listOf(
-                "Button Click", "ViewModel Action", "UseCase Execute", "API Request",
-                "Business Validation", "Database Update", "UI State Emission", "UI Render Checkpoint",
+                "Button Click",
+                "ViewModel Action",
+                "UseCase Execute",
+                "API Request",
+                "Business Validation",
+                "Database Update",
+                "UI State Emission",
+                "UI Render Checkpoint",
             ),
             detail.rows.map { it.title },
         )
@@ -55,7 +60,12 @@ class TraceMapperTest {
     fun breakdownMatchesCategoryTotals() {
         val byCategory = detail.breakdown.segments.associate { it.category to it.nanos / MS }
         assertEquals(
-            mapOf(JourneyCategory.UiVm to 65L, JourneyCategory.Network to 940L, JourneyCategory.Storage to 150L, JourneyCategory.Render to 110L),
+            mapOf(
+                JourneyCategory.UiVm to 65L,
+                JourneyCategory.Network to 940L,
+                JourneyCategory.Storage to 150L,
+                JourneyCategory.Render to 110L,
+            ),
             byCategory,
         )
     }
@@ -72,7 +82,12 @@ class TraceMapperTest {
     @Test
     fun segmentPercentagesSumToOneHundred() {
         assertEquals(100, detail.breakdown.segments.sumOf { it.percent })
-        assertEquals(74, detail.breakdown.segments.first { it.category == JourneyCategory.Network }.percent)
+        assertEquals(
+            74,
+            detail.breakdown.segments
+                .first { it.category == JourneyCategory.Network }
+                .percent,
+        )
     }
 
     @Test
@@ -118,7 +133,12 @@ class TraceMapperTest {
         val empty = mapper().detail(DemoJourneys.coldStartEmpty(), DemoJourneys.NOW_NANOS)
         assertTrue(empty.rows.isEmpty())
         assertEquals(listOf(JourneyCategory.Idle), empty.breakdown.segments.map { it.category })
-        assertEquals(JourneyCategory.Idle, empty.breakdown.segments.single().category)
+        assertEquals(
+            JourneyCategory.Idle,
+            empty.breakdown.segments
+                .single()
+                .category,
+        )
     }
 
     @Test
@@ -132,7 +152,13 @@ class TraceMapperTest {
     fun largeJourneyKeepsStableUniqueKeys() {
         val large = mapper().detail(DemoJourneys.importCatalogLarge(), DemoJourneys.NOW_NANOS)
         assertEquals(1_000, large.rows.size)
-        assertEquals(1_000, large.rows.map { it.id }.toSet().size)
+        assertEquals(
+            1_000,
+            large.rows
+                .map { it.id }
+                .toSet()
+                .size,
+        )
         assertEquals(large.breakdown.totalNanos, large.breakdown.segments.sumOf { it.nanos })
     }
 
@@ -141,7 +167,17 @@ class TraceMapperTest {
         val row = detail.rows.first()
         val thread = row.metadata.single { it.key == "thread" }
         assertTrue(thread.hidden)
-        assertFalse(mapper(MetadataDisplayPolicy.ShowAll).detail(DemoJourneys.addToCart(), 0).rows.first().metadata.single { it.key == "thread" }.hidden)
+        assertFalse(
+            mapper(MetadataDisplayPolicy.ShowAll)
+                .detail(DemoJourneys.addToCart(), 0)
+                .rows
+                .first()
+                .metadata
+                .single {
+                    it.key ==
+                        "thread"
+                }.hidden,
+        )
     }
 
     @Test
@@ -155,11 +191,12 @@ class TraceMapperTest {
 class InsightAndFormattingTest {
     @Test
     fun balancedJourneyHasNoDominantDiagnostic() {
-        val strict = TraceMapper(
-            InspectorThresholds(slowJourney = 1.seconds),
-            MetadataDisplayPolicy.Default,
-            DiagnosticAnalyzer(DiagnosticConfig(dominantShare = 0.99)),
-        )
+        val strict =
+            TraceMapper(
+                InspectorThresholds(slowJourney = 1.seconds),
+                MetadataDisplayPolicy.Default,
+                DiagnosticAnalyzer(DiagnosticConfig(dominantShare = 0.99)),
+            )
         val detail = strict.detail(DemoJourneys.addToCart(), DemoJourneys.NOW_NANOS)
         assertTrue(detail.diagnostics.none { it.ruleId == "timing.dominant" })
     }
@@ -183,12 +220,13 @@ class InsightAndFormattingTest {
 }
 
 class DiagnosticMappingTest {
-    private val mapper = TraceMapper(
-        InspectorThresholds(slowJourney = 1.seconds),
-        MetadataDisplayPolicy.Default,
-        DiagnosticAnalyzer(DiagnosticConfig(slowJourney = 1.seconds, expectedSequences = listOf(DemoJourneys.addToCartCompletion))),
-        listOf(DemoJourneys.addToCartCompletion),
-    )
+    private val mapper =
+        TraceMapper(
+            InspectorThresholds(slowJourney = 1.seconds),
+            MetadataDisplayPolicy.Default,
+            DiagnosticAnalyzer(DiagnosticConfig(slowJourney = 1.seconds, expectedSequences = listOf(DemoJourneys.addToCartCompletion))),
+            listOf(DemoJourneys.addToCartCompletion),
+        )
 
     @Test
     fun overlappingRequestsAreFlaggedAndNeverExceedTheTotal() {
@@ -196,7 +234,11 @@ class DiagnosticMappingTest {
 
         assertEquals(100, detail.breakdown.segments.sumOf { it.percent })
         assertTrue(detail.breakdown.segments.sumOf { it.nanos } <= detail.breakdown.totalNanos)
-        assertTrue(detail.timing.overlapNote.orEmpty().contains("overlapping"))
+        assertTrue(
+            detail.timing.overlapNote
+                .orEmpty()
+                .contains("overlapping"),
+        )
         assertTrue(detail.timing.criticalPathLabel.startsWith("Critical path unavailable"))
     }
 

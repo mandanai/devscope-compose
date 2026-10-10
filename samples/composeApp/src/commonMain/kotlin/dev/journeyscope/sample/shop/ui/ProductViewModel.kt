@@ -18,8 +18,8 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -33,7 +33,11 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-data class Product(val id: String, val name: String, val price: String)
+data class Product(
+    val id: String,
+    val name: String,
+    val price: String,
+)
 
 class ProductViewModel(
     val product: Product,
@@ -58,15 +62,19 @@ class ProductViewModel(
 
     /** The journey starts here, synchronously in the click handler, and ends once the render checkpoint resolves. */
     @OptIn(DelicateCoroutinesApi::class)
-    fun addToCart(scenario: SampleScenario = SampleScenario.Normal, openCartOnSuccess: Boolean = false): Job {
-        val journey = tracer().startJourney(
-            "Add to Cart",
-            diagnosticMetadata {
-                put("scenario", scenario.name)
-                put("productId", product.id)
-                put("simulated", true)
-            },
-        )
+    fun addToCart(
+        scenario: SampleScenario = SampleScenario.Normal,
+        openCartOnSuccess: Boolean = false,
+    ): Job {
+        val journey =
+            tracer().startJourney(
+                "Add to Cart",
+                diagnosticMetadata {
+                    put("scenario", scenario.name)
+                    put("productId", product.id)
+                    put("simulated", true)
+                },
+            )
         latestJourney.value = journey
         journey.recordEvent(
             "Add to Cart tapped",
@@ -91,11 +99,12 @@ class ProductViewModel(
         return job
     }
 
-    fun traceOptions(lifecycle: LifecycleSource? = null): FlowTraceOptions<CartUiState> = FlowTraceOptions(
-        formatter = { "${it.phase.name} · ${it.cartCount}" },
-        journey = ::observedJourney,
-        lifecycle = lifecycle,
-    )
+    fun traceOptions(lifecycle: LifecycleSource? = null): FlowTraceOptions<CartUiState> =
+        FlowTraceOptions(
+            formatter = { "${it.phase.name} · ${it.cartCount}" },
+            journey = ::observedJourney,
+            lifecycle = lifecycle,
+        )
 
     /** The journey a UI collector should attribute observations to, while that journey is still open. */
     fun observedJourney(): Journey? = latestJourney.value?.takeIf { it.isRecording && !it.status.isTerminal }
@@ -118,22 +127,28 @@ class ProductViewModel(
         renderedToken.update { maxOf(it, token) }
     }
 
-    private suspend fun execute(journey: Journey, scenario: SampleScenario, openCartOnSuccess: Boolean) {
+    private suspend fun execute(
+        journey: Journey,
+        scenario: SampleScenario,
+        openCartOnSuccess: Boolean,
+    ) {
         try {
             withContext(journey.context()) {
                 var failure: Throwable? = null
-                val token = try {
-                    val count = journey.traceSuspend("ProductViewModel.addToCart", SpanCategory.VIEW_MODEL) {
-                        addToCartUseCase(product.id, 1, scenario)
+                val token =
+                    try {
+                        val count =
+                            journey.traceSuspend("ProductViewModel.addToCart", SpanCategory.VIEW_MODEL) {
+                                addToCartUseCase(product.id, 1, scenario)
+                            }
+                        emit(journey) { it.added(count) }
+                    } catch (e: CartRejectedException) {
+                        failure = e
+                        emit(journey) { it.failed(e.reason.userMessage) }
+                    } catch (e: SimulatedNetworkException) {
+                        failure = e
+                        emit(journey) { it.failed(NETWORK_MESSAGE) }
                     }
-                    emit(journey) { it.added(count) }
-                } catch (e: CartRejectedException) {
-                    failure = e
-                    emit(journey) { it.failed(e.reason.userMessage) }
-                } catch (e: SimulatedNetworkException) {
-                    failure = e
-                    emit(journey) { it.failed(NETWORK_MESSAGE) }
-                }
                 awaitRender(journey, token)
                 if (failure == null && openCartOnSuccess) awaitCartShown(journey)
                 if (failure == null) journey.finish() else journey.fail(failure)
@@ -149,10 +164,14 @@ class ProductViewModel(
         }
     }
 
-    private fun emit(journey: Journey, transform: (CartUiState) -> CartUiState): Long {
-        val next = mutableState.updateAndGet { current ->
-            transform(current).let { it.copy(renderToken = current.renderToken + 1) }
-        }
+    private fun emit(
+        journey: Journey,
+        transform: (CartUiState) -> CartUiState,
+    ): Long {
+        val next =
+            mutableState.updateAndGet { current ->
+                transform(current).let { it.copy(renderToken = current.renderToken + 1) }
+            }
         journey.recordEvent(
             "CartUiState emitted",
             SpanCategory.STATE_EMISSION,
@@ -172,7 +191,10 @@ class ProductViewModel(
         withTimeoutOrNull(renderTimeout) { cartShown.first { it > before } }
     }
 
-    private suspend fun awaitRender(journey: Journey, token: Long) {
+    private suspend fun awaitRender(
+        journey: Journey,
+        token: Long,
+    ) {
         if (!journey.isRecording) return
         val span = journey.beginSpan("Cart count render", SpanCategory.UI_RENDER, diagnosticMetadata { put("renderToken", token) })
         val confirmed = withTimeoutOrNull(renderTimeout) { renderedToken.first { it >= token } } != null

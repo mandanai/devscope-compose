@@ -42,58 +42,62 @@ class StateNavigationJourneyTest {
     }
 
     @Test
-    fun stateObservationAndNavigationJoinTheAddToCartJourney() = runTest {
-        val shop = VirtualShop(this)
-        val navigator = screens(shop)
+    fun stateObservationAndNavigationJoinTheAddToCartJourney() =
+        runTest {
+            val shop = VirtualShop(this)
+            val navigator = screens(shop)
 
-        shop.viewModel.addToCart(openCartOnSuccess = true)
-        advanceUntilIdle()
+            shop.viewModel.addToCart(openCartOnSuccess = true)
+            advanceUntilIdle()
 
-        val trace = shop.onlyTrace()
-        assertEquals(TraceStatus.COMPLETED, trace.status)
-        assertEquals(Routes.CART, navigator.current)
+            val trace = shop.onlyTrace()
+            assertEquals(TraceStatus.COMPLETED, trace.status)
+            assertEquals(Routes.CART, navigator.current)
 
-        val observed = trace.events.filter { it.text("state.event") == "observed" }
-        assertEquals(listOf("Adding · 0", "Added · 1"), observed.map { it.text("state.current") })
-        assertTrue(trace.events.any { it.category == SpanCategory.NAVIGATION && it.text("nav.action") == "Navigate" })
-        assertTrue(trace.events.any { it.metadata["nav.completed"] == MetadataValue.Flag(true) })
+            val observed = trace.events.filter { it.text("state.event") == "observed" }
+            assertEquals(listOf("Adding · 0", "Added · 1"), observed.map { it.text("state.current") })
+            assertTrue(trace.events.any { it.category == SpanCategory.NAVIGATION && it.text("nav.action") == "Navigate" })
+            assertTrue(trace.events.any { it.metadata["nav.completed"] == MetadataValue.Flag(true) })
 
-        val sequence = ExpectedSequence(
-            "add-to-cart-then-cart",
-            listOf(
-                ExpectedStep.named("Tap", "Add to Cart tapped"),
-                ExpectedStep.category("API", SpanCategory.NETWORK),
-                ExpectedStep.category("UI collector observed", SpanCategory.STATE, "cart-ui-state state observed"),
-                ExpectedStep.category("Navigation", SpanCategory.NAVIGATION, "Navigate"),
-            ),
-        )
-        assertTrue(sequence.evaluate(trace).missing.isEmpty())
-    }
-
-    @Test
-    fun plainAddRecordsStateButNoNavigation() = runTest {
-        val shop = VirtualShop(this)
-        screens(shop)
-
-        shop.viewModel.addToCart()
-        advanceUntilIdle()
-
-        val trace = shop.onlyTrace()
-        assertEquals(TraceStatus.COMPLETED, trace.status)
-        assertTrue(trace.events.none { it.category == SpanCategory.NAVIGATION })
-        assertTrue(trace.events.any { it.text("state.event") == "observed" })
-    }
+            val sequence =
+                ExpectedSequence(
+                    "add-to-cart-then-cart",
+                    listOf(
+                        ExpectedStep.named("Tap", "Add to Cart tapped"),
+                        ExpectedStep.category("API", SpanCategory.NETWORK),
+                        ExpectedStep.category("UI collector observed", SpanCategory.STATE, "cart-ui-state state observed"),
+                        ExpectedStep.category("Navigation", SpanCategory.NAVIGATION, "Navigate"),
+                    ),
+                )
+            assertTrue(sequence.evaluate(trace).missing.isEmpty())
+        }
 
     @Test
-    fun missingNavigationIsOnlyReportedWhenExpected() = runTest {
-        val shop = VirtualShop(this)
-        screens(shop)
+    fun plainAddRecordsStateButNoNavigation() =
+        runTest {
+            val shop = VirtualShop(this)
+            screens(shop)
 
-        shop.viewModel.addToCart()
-        advanceUntilIdle()
+            shop.viewModel.addToCart()
+            advanceUntilIdle()
 
-        val expectation = ExpectedSequence("needs-nav", listOf(ExpectedStep.category("Navigation", SpanCategory.NAVIGATION)))
-        assertEquals(listOf("Navigation"), expectation.evaluate(shop.onlyTrace()).missing)
-        assertEquals(TraceStatus.COMPLETED, shop.onlyTrace().status)
-    }
+            val trace = shop.onlyTrace()
+            assertEquals(TraceStatus.COMPLETED, trace.status)
+            assertTrue(trace.events.none { it.category == SpanCategory.NAVIGATION })
+            assertTrue(trace.events.any { it.text("state.event") == "observed" })
+        }
+
+    @Test
+    fun missingNavigationIsOnlyReportedWhenExpected() =
+        runTest {
+            val shop = VirtualShop(this)
+            screens(shop)
+
+            shop.viewModel.addToCart()
+            advanceUntilIdle()
+
+            val expectation = ExpectedSequence("needs-nav", listOf(ExpectedStep.category("Navigation", SpanCategory.NAVIGATION)))
+            assertEquals(listOf("Navigation"), expectation.evaluate(shop.onlyTrace()).missing)
+            assertEquals(TraceStatus.COMPLETED, shop.onlyTrace().status)
+        }
 }

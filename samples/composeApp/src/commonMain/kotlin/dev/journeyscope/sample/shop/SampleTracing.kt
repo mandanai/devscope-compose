@@ -16,15 +16,20 @@ suspend fun <T> traced(
     return journey.traceSuspend(name, category, metadata, block)
 }
 
-internal fun simulatedMetadata(vararg extra: Pair<String, String>): DiagnosticMetadata = diagnosticMetadata {
-    put("simulated", true)
-    extra.forEach { (key, value) -> put(key, value) }
-}
+internal fun simulatedMetadata(vararg extra: Pair<String, String>): DiagnosticMetadata =
+    diagnosticMetadata {
+        put("simulated", true)
+        extra.forEach { (key, value) -> put(key, value) }
+    }
 
 class SimulatedNetworkException : Exception("Simulated network failure")
 
-class CartRejectedException(val reason: Reason) : Exception("Cart rejected: $reason") {
-    enum class Reason(val userMessage: String) {
+class CartRejectedException(
+    val reason: Reason,
+) : Exception("Cart rejected: $reason") {
+    enum class Reason(
+        val userMessage: String,
+    ) {
         OutOfStock("Out of stock"),
         Unknown("Could not add to cart"),
     }

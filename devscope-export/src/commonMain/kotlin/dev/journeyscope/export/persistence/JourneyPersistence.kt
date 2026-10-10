@@ -11,17 +11,21 @@ import dev.journeyscope.export.storage.StorageListener
 import dev.journeyscope.export.storage.TraceFileSystem
 import dev.journeyscope.export.storage.TraceStore
 
+/** The recorder (and optional store) produced by [install]; persistence is opt-in via [ExportPolicy.persistenceEnabled]. */
 public class JourneyPersistence internal constructor(
     public val recorder: JourneyRecorder,
     public val store: TraceStore?,
     private val persisting: PersistingJourneyRecorder?,
 ) {
+    /** False when the SDK or persistence is disabled and traces stay in memory. */
     public val isPersisting: Boolean get() = persisting != null
 
+    /** Waits for queued traces to be written; no-op when not persisting. */
     public suspend fun flush() {
         persisting?.flush()
     }
 
+    /** Stops background persistence; idempotent. */
     public fun close() {
         persisting?.close()
     }

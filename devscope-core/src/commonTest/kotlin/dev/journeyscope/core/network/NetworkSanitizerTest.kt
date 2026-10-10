@@ -9,7 +9,10 @@ import kotlin.test.assertTrue
 class NetworkSanitizerTest {
     private val policy = RedactionPolicy.Default
 
-    private fun url(raw: String, allowed: Set<String> = emptySet()) = UrlSanitizer.sanitize(raw, allowed, policy)
+    private fun url(
+        raw: String,
+        allowed: Set<String> = emptySet(),
+    ) = UrlSanitizer.sanitize(raw, allowed, policy)
 
     @Test
     fun stripsUserInfoFragmentAndQueryValues() {
@@ -36,10 +39,11 @@ class NetworkSanitizerTest {
 
     @Test
     fun presignedUrlDropsEveryQueryParameter() {
-        val sanitized = url(
-            "https://bucket.s3.amazonaws.com/a/b.png?X-Amz-Algorithm=AWS4&X-Amz-Credential=AKIA%2F1&X-Amz-Signature=deadbeef&page=1",
-            allowed = setOf("page"),
-        )
+        val sanitized =
+            url(
+                "https://bucket.s3.amazonaws.com/a/b.png?X-Amz-Algorithm=AWS4&X-Amz-Credential=AKIA%2F1&X-Amz-Signature=deadbeef&page=1",
+                allowed = setOf("page"),
+            )
         assertTrue(sanitized.signed)
         assertTrue(sanitized.queryKeys.isEmpty())
         assertTrue(sanitized.allowedQueryValues.isEmpty())
@@ -54,12 +58,13 @@ class NetworkSanitizerTest {
 
     @Test
     fun headersAreAllowlistOnlyAndCredentialsStayDenied() {
-        val headers = mapOf(
-            "Authorization" to listOf("Bearer secret"),
-            "Cookie" to listOf("sid=1"),
-            "X-Request-Id" to listOf("r-1"),
-            "Accept" to listOf("application/json"),
-        )
+        val headers =
+            mapOf(
+                "Authorization" to listOf("Bearer secret"),
+                "Cookie" to listOf("sid=1"),
+                "X-Request-Id" to listOf("r-1"),
+                "Accept" to listOf("application/json"),
+            )
         val collected = HeaderSanitizer.collect("h.", headers, setOf("authorization", "cookie", "x-request-id"), policy)
         assertEquals(mapOf("h.x-request-id" to "r-1"), collected)
         assertTrue(HeaderSanitizer.collect("h.", headers, emptySet(), policy).isEmpty())
@@ -79,8 +84,11 @@ class NetworkSanitizerTest {
     @Test
     fun classifiesFailuresByCauseChain() {
         class SocketTimeoutException : Exception()
+
         class UnknownHostException : Exception()
+
         class SSLHandshakeException : Exception()
+
         class ConnectException : Exception()
         assertEquals(NetworkFailure.TIMEOUT, FailureClassifier.forThrowable(SocketTimeoutException(), cancelled = false))
         assertEquals(NetworkFailure.DNS, FailureClassifier.forThrowable(Exception(UnknownHostException()), cancelled = false))

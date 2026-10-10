@@ -45,14 +45,19 @@ public class JourneyExportController(
 
     private val historyVersion = MutableStateFlow(0)
 
+    /** Traces accepted by [importReport] this session; in memory only and capped by the import limits. */
     public val importedTraces: StateFlow<List<JourneyTrace>> get() = importedState.asStateFlow()
 
     /** Changes whenever persisted history is cleared, so observers know to reload [history]. */
     public val historyChanges: StateFlow<Int> get() = historyVersion.asStateFlow()
+
+    /** False when no [ShareSink] was supplied. */
     public val canShare: Boolean get() = shareSink != null
 
+    /** Persisted traces, or empty when no store is configured. */
     public suspend fun history(): List<JourneyTrace> = store?.loadAll().orEmpty()
 
+    /** Renders the redacted report exactly as [export] would, without producing a file; null when nothing selected matches. */
     public suspend fun preview(ids: Set<String>): ExportPreview? {
         val selected = select(ids)
         if (selected.isEmpty()) return null
@@ -71,6 +76,7 @@ public class JourneyExportController(
         )
     }
 
+    /** Redacts the selected traces and builds a report in memory; nothing is written or sent. */
     public suspend fun export(ids: Set<String>): ExportOutcome {
         val selected = select(ids)
         if (selected.isEmpty()) return ExportOutcome.NothingSelected
@@ -81,8 +87,10 @@ public class JourneyExportController(
         return ExportOutcome.Ready(ExportedReport(name, json, selected.size))
     }
 
+    /** Hands the report to the [ShareSink]; returns false when none is configured or the platform could not present it. */
     public suspend fun share(report: ExportedReport): Boolean = shareSink?.share(report) ?: false
 
+    /** Imported traces are re-redacted and deduplicated by id; malformed or oversized input is rejected, never thrown. */
     public fun importReport(text: String): ImportResult {
         val result = importer.import(text)
         if (result is ImportResult.Accepted) {
@@ -94,10 +102,12 @@ public class JourneyExportController(
         return result
     }
 
+    /** Drops imported traces from memory only. */
     public fun clearImported() {
         importedState.value = emptyList()
     }
 
+    /** Clears the recorder, the persisted store and imported traces. */
     public suspend fun clearHistory() {
         recorder.clear()
         store?.clearAll()

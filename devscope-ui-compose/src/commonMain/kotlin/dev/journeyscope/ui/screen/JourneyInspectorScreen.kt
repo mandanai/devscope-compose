@@ -9,23 +9,23 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import dev.journeyscope.export.JourneyExportController
 import dev.journeyscope.ui.components.ExportDialogHost
 import dev.journeyscope.ui.components.JourneyEmptyState
@@ -58,10 +58,11 @@ internal fun JourneyInspectorScreen(
     val destination = state.destination
 
     BoxWithConstraints(
-        modifier = modifier
-            .fillMaxSize()
-            .background(JourneyTheme.colors.background)
-            .windowInsetsPadding(WindowInsets.safeDrawing),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(JourneyTheme.colors.background)
+                .windowInsetsPadding(WindowInsets.safeDrawing),
         contentAlignment = Alignment.TopCenter,
     ) {
         val twoPane = maxWidth >= TwoPaneBreakpoint
@@ -73,8 +74,14 @@ internal fun JourneyInspectorScreen(
 
         val body: @Composable (Modifier) -> Unit = { bodyModifier ->
             when (val current = listState) {
-                ListState.Loading -> JourneyLoadingState(bodyModifier)
-                is ListState.Error -> JourneyErrorState(current.reason, onRetry = { retryKey++ }, modifier = bodyModifier)
+                ListState.Loading -> {
+                    JourneyLoadingState(bodyModifier)
+                }
+
+                is ListState.Error -> {
+                    JourneyErrorState(current.reason, onRetry = { retryKey++ }, modifier = bodyModifier)
+                }
+
                 is ListState.Ready -> {
                     val selectedId = (destination as? InspectorDestination.Detail)?.traceId
                     if (twoPane) {
@@ -96,9 +103,18 @@ internal fun JourneyInspectorScreen(
                             }
                         }
                     } else if (selectedId != null) {
-                        DetailPane(presenter, selectedId, state, onBack = state::close, retry = { retryKey++ }, modifier = bodyModifier, export = export)
+                        DetailPane(presenter, selectedId, state, onBack = state::close, retry = {
+                            retryKey++
+                        }, modifier = bodyModifier, export = export)
                     } else {
-                        JourneyListScreen(current.items, selectedId = null, onOpen = state::open, onClose = onClose, modifier = bodyModifier, export = export)
+                        JourneyListScreen(
+                            current.items,
+                            selectedId = null,
+                            onOpen = state::open,
+                            onClose = onClose,
+                            modifier = bodyModifier,
+                            export = export,
+                        )
                     }
                 }
             }

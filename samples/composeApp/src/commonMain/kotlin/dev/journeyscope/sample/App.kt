@@ -29,9 +29,10 @@ fun App(lifecycleSource: LifecycleSource? = null) {
     MaterialTheme {
         remember { enableJourneyScopeForSample() }
         val viewModel = SampleGraph.productViewModel
-        val navigator = rememberSaveable(saver = SampleNavigator.saver(viewModel::observedJourney)) {
-            SampleNavigator(viewModel::observedJourney)
-        }
+        val navigator =
+            rememberSaveable(saver = SampleNavigator.saver(viewModel::observedJourney)) {
+                SampleNavigator(viewModel::observedJourney)
+            }
         val pendingJourney = remember { PendingJourney() }
 
         LaunchedEffect(viewModel) {
@@ -47,34 +48,45 @@ fun App(lifecycleSource: LifecycleSource? = null) {
         )
 
         when (navigator.current) {
-            Routes.CART -> CartScreen(
-                viewModel = viewModel,
-                onBack = { navigator.pop() },
-                onShown = {
-                    navigator.markShown(Routes.CART, pendingJourney.take())
-                    viewModel.onCartShown()
-                },
-                lifecycleSource = lifecycleSource,
-            )
-            Routes.INSPECTOR_LIVE -> JourneyScopeInspector(
-                expectedSequences = listOf(AddToCartCompletion),
-                onClose = { navigator.pop() },
-                exportController = SampleExport.controller,
-            )
-            Routes.INSPECTOR_DEMO -> JourneyScopeInspector(
-                source = DemoJourneys.source,
-                expectedSequences = listOf(DemoJourneys.addToCartCompletion),
-                thresholds = InspectorThresholds(slowJourney = 1.seconds),
-                colors = defaultJourneyColors(),
-                onClose = { navigator.pop() },
-            )
-            else -> ProductDetailScreen(
-                viewModel = viewModel,
-                onOpenInspector = { navigator.push(Routes.INSPECTOR_LIVE) },
-                onOpenDemo = { navigator.push(Routes.INSPECTOR_DEMO) },
-                onOpenCart = { navigator.push(Routes.CART) },
-                lifecycleSource = lifecycleSource,
-            )
+            Routes.CART -> {
+                CartScreen(
+                    viewModel = viewModel,
+                    onBack = { navigator.pop() },
+                    onShown = {
+                        navigator.markShown(Routes.CART, pendingJourney.take())
+                        viewModel.onCartShown()
+                    },
+                    lifecycleSource = lifecycleSource,
+                )
+            }
+
+            Routes.INSPECTOR_LIVE -> {
+                JourneyScopeInspector(
+                    expectedSequences = listOf(AddToCartCompletion),
+                    onClose = { navigator.pop() },
+                    exportController = SampleExport.controller,
+                )
+            }
+
+            Routes.INSPECTOR_DEMO -> {
+                JourneyScopeInspector(
+                    source = DemoJourneys.source,
+                    expectedSequences = listOf(DemoJourneys.addToCartCompletion),
+                    thresholds = InspectorThresholds(slowJourney = 1.seconds),
+                    colors = defaultJourneyColors(),
+                    onClose = { navigator.pop() },
+                )
+            }
+
+            else -> {
+                ProductDetailScreen(
+                    viewModel = viewModel,
+                    onOpenInspector = { navigator.push(Routes.INSPECTOR_LIVE) },
+                    onOpenDemo = { navigator.push(Routes.INSPECTOR_DEMO) },
+                    onOpenCart = { navigator.push(Routes.CART) },
+                    lifecycleSource = lifecycleSource,
+                )
+            }
         }
     }
 }

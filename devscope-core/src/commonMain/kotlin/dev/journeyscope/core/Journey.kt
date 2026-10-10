@@ -27,7 +27,11 @@ public abstract class Journey internal constructor() {
     /** Null for inert journeys. */
     public abstract fun snapshot(): JourneyTrace?
 
+    /** Moves a CREATED journey to RUNNING; ignored once started or terminal. */
+
     public abstract fun start()
+
+    /** Records a point event, attached to [span] when it is recording; discarded once trace limits are hit. */
 
     public abstract fun recordEvent(
         name: String,
@@ -56,11 +60,19 @@ public abstract class Journey internal constructor() {
     /** Binds this journey (and optionally [parent]) to manually launched coroutines. */
     public abstract fun context(parent: SpanHandle? = null): CoroutineContext
 
+    /** Terminates as COMPLETED, closing still-open spans; further calls are ignored. */
+
     public abstract fun finish()
+
+    /** Terminates as FAILED; failure detail is limited by [JourneyScopeConfig.redactionPolicy]. */
 
     public abstract fun fail(throwable: Throwable)
 
+    /** Terminates as CANCELLED, closing still-open spans. */
+
     public abstract fun cancel(reason: String? = null)
+
+    /** Terminates as INTERRUPTED because the host went away, not because the work failed. */
 
     public abstract fun interrupt(reason: String)
 
@@ -84,6 +96,8 @@ public abstract class Journey internal constructor() {
         }
     }
 
+    /** Runs [block] in a span that child traces and network calls in the same coroutine nest under; always rethrows. */
+
     public suspend fun <T> traceSuspend(
         name: String,
         category: SpanCategory = SpanCategory.CUSTOM,
@@ -106,14 +120,26 @@ public abstract class Journey internal constructor() {
     }
 }
 
+/** Handle to one span; inert when its journey is not recording. */
+
 public abstract class SpanHandle internal constructor() {
     public abstract val id: SpanId
     public abstract val isRecording: Boolean
 
     /** The first call wins; later calls are ignored. [metadata] is merged into the span's start metadata. */
-    public abstract fun end(status: SpanStatus = SpanStatus.OK, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty)
+    public abstract fun end(
+        status: SpanStatus = SpanStatus.OK,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    )
 
-    public abstract fun fail(throwable: Throwable, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty)
+    /** Ends the span as FAILED; failure detail is limited by [JourneyScopeConfig.redactionPolicy]. */
+
+    public abstract fun fail(
+        throwable: Throwable,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    )
+
+    /** Records a point event under this span. */
 
     public abstract fun recordEvent(
         name: String,
@@ -142,11 +168,21 @@ internal object NoopSpanHandle : SpanHandle() {
     override val id: SpanId = SpanId("noop")
     override val isRecording: Boolean = false
 
-    override fun end(status: SpanStatus, metadata: DiagnosticMetadata) = Unit
+    override fun end(
+        status: SpanStatus,
+        metadata: DiagnosticMetadata,
+    ) = Unit
 
-    override fun fail(throwable: Throwable, metadata: DiagnosticMetadata) = Unit
+    override fun fail(
+        throwable: Throwable,
+        metadata: DiagnosticMetadata,
+    ) = Unit
 
-    override fun recordEvent(name: String, category: SpanCategory, metadata: DiagnosticMetadata) = Unit
+    override fun recordEvent(
+        name: String,
+        category: SpanCategory,
+        metadata: DiagnosticMetadata,
+    ) = Unit
 }
 
 internal object NoopJourney : Journey() {
@@ -159,10 +195,19 @@ internal object NoopJourney : Journey() {
 
     override fun start() = Unit
 
-    override fun recordEvent(name: String, category: SpanCategory, metadata: DiagnosticMetadata, span: SpanHandle?) = Unit
+    override fun recordEvent(
+        name: String,
+        category: SpanCategory,
+        metadata: DiagnosticMetadata,
+        span: SpanHandle?,
+    ) = Unit
 
-    override fun openSpan(name: String, category: SpanCategory, metadata: DiagnosticMetadata, parentId: SpanId?): SpanHandle =
-        NoopSpanHandle
+    override fun openSpan(
+        name: String,
+        category: SpanCategory,
+        metadata: DiagnosticMetadata,
+        parentId: SpanId?,
+    ): SpanHandle = NoopSpanHandle
 
     override fun handleFor(id: SpanId): SpanHandle = NoopSpanHandle
 

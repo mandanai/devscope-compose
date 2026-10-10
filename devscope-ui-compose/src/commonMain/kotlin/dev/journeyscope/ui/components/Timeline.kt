@@ -49,32 +49,39 @@ internal fun LazyListScope.journeyTimeline(
 }
 
 @Composable
-internal fun JourneyTimelineItem(row: TimelineRowUi, expanded: Boolean, onToggle: () -> Unit, modifier: Modifier = Modifier) {
+internal fun JourneyTimelineItem(
+    row: TimelineRowUi,
+    expanded: Boolean,
+    onToggle: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val colors = JourneyTheme.colors
     val accent = colors.categoryColor(row.category)
     val background = if (row.isBottleneck) colors.bottleneckContainer else Color.Transparent
-    val durationColor = when {
-        row.state == RowState.Failed -> colors.failure
-        row.isBottleneck -> colors.bottleneck
-        else -> colors.textPrimary
-    }
+    val durationColor =
+        when {
+            row.state == RowState.Failed -> colors.failure
+            row.isBottleneck -> colors.bottleneck
+            else -> colors.textPrimary
+        }
     val spoken = if (expanded) row.spokenDescription + ". " + expandedSpoken(row) else row.spokenDescription
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
-            .background(background)
-            .clickable(onClickLabel = if (expanded) "Collapse details" else "Expand details", role = Role.Button, onClick = onToggle)
-            .padding(start = (12 + row.depth * INDENT_STEP_DP).dp, end = 12.dp, top = 10.dp, bottom = 10.dp)
-            .clearAndSetSemantics {
-                contentDescription = spoken
-                stateDescription = if (expanded) "Expanded" else "Collapsed"
-                role = Role.Button
-                onClick(label = if (expanded) "Collapse details" else "Expand details") {
-                    onToggle()
-                    true
-                }
-            },
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(background)
+                .clickable(onClickLabel = if (expanded) "Collapse details" else "Expand details", role = Role.Button, onClick = onToggle)
+                .padding(start = (12 + row.depth * INDENT_STEP_DP).dp, end = 12.dp, top = 10.dp, bottom = 10.dp)
+                .clearAndSetSemantics {
+                    contentDescription = spoken
+                    stateDescription = if (expanded) "Expanded" else "Collapsed"
+                    role = Role.Button
+                    onClick(label = if (expanded) "Collapse details" else "Expand details") {
+                        onToggle()
+                        true
+                    }
+                },
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -108,13 +115,14 @@ internal fun JourneyTimelineItem(row: TimelineRowUi, expanded: Boolean, onToggle
 
 private const val ICON_BACKGROUND_ALPHA = 0.14f
 
-private fun stateLabel(state: RowState): Pair<String, (dev.journeyscope.ui.theme.JourneyColors) -> Color>? = when (state) {
-    RowState.Running -> "Running" to { c -> c.running }
-    RowState.Failed -> "Failed" to { c -> c.failure }
-    RowState.Cancelled -> "Cancelled" to { c -> c.textSecondary }
-    RowState.Interrupted -> "Interrupted" to { c -> c.textSecondary }
-    RowState.Ok, RowState.Event -> null
-}
+private fun stateLabel(state: RowState): Pair<String, (dev.journeyscope.ui.theme.JourneyColors) -> Color>? =
+    when (state) {
+        RowState.Running -> "Running" to { c -> c.running }
+        RowState.Failed -> "Failed" to { c -> c.failure }
+        RowState.Cancelled -> "Cancelled" to { c -> c.textSecondary }
+        RowState.Interrupted -> "Interrupted" to { c -> c.textSecondary }
+        RowState.Ok, RowState.Event -> null
+    }
 
 @Composable
 private fun ExpandedDetails(row: TimelineRowUi) {
@@ -131,16 +139,26 @@ private fun ExpandedDetails(row: TimelineRowUi) {
 }
 
 @Composable
-private fun DetailLine(label: String, value: String, valueColor: Color = JourneyTheme.colors.textPrimary) {
+private fun DetailLine(
+    label: String,
+    value: String,
+    valueColor: Color = JourneyTheme.colors.textPrimary,
+) {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(label, style = MaterialTheme.typography.labelMedium, color = JourneyTheme.colors.textSecondary, modifier = Modifier.weight(0.4f))
+        Text(
+            label,
+            style = MaterialTheme.typography.labelMedium,
+            color = JourneyTheme.colors.textSecondary,
+            modifier = Modifier.weight(0.4f),
+        )
         Text(value, style = MaterialTheme.typography.labelMedium, color = valueColor, modifier = Modifier.weight(0.6f))
     }
 }
 
-private fun expandedSpoken(row: TimelineRowUi): String = buildList {
-    add(row.offsetLabel)
-    row.selfLabel?.let { add("own time $it") }
-    row.failureLabel?.let { add("failure $it") }
-    row.metadata.forEach { add("${it.key} ${it.value}") }
-}.joinToString(", ")
+private fun expandedSpoken(row: TimelineRowUi): String =
+    buildList {
+        add(row.offsetLabel)
+        row.selfLabel?.let { add("own time $it") }
+        row.failureLabel?.let { add("failure $it") }
+        row.metadata.forEach { add("${it.key} ${it.value}") }
+    }.joinToString(", ")

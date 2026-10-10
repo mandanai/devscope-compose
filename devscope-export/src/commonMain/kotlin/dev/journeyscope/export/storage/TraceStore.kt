@@ -33,26 +33,40 @@ public class TraceStore(
     private val failureThreshold: Int = DEFAULT_FAILURE_THRESHOLD,
 ) : JourneyStore {
     private val pipeline = RedactionPipeline(policy)
-    private val importer = TraceImporter(
-        limits = ImportLimits(maxBytes = policy.maxTraceBytes.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), maxTraces = 1, maxSpansPerTrace = MAX_STORED_ITEMS, maxEventsPerTrace = MAX_STORED_ITEMS),
-        redaction = pipeline,
-    )
+    private val importer =
+        TraceImporter(
+            limits =
+                ImportLimits(
+                    maxBytes = policy.maxTraceBytes.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(),
+                    maxTraces = 1,
+                    maxSpansPerTrace = MAX_STORED_ITEMS,
+                    maxEventsPerTrace = MAX_STORED_ITEMS,
+                ),
+            redaction = pipeline,
+        )
     private val mutex = Mutex()
     private var recovered = false
     private var consecutiveFailures = 0
     private var suspended = false
 
+    /** True after repeated failures until [resume]. */
     public val isSuspended: Boolean get() = suspended
 
+    /** Re-enables persistence after it was suspended by repeated failures. */
     public fun resume() {
         consecutiveFailures = 0
         suspended = false
     }
 
+    /** Redacts then writes atomically, then evicts to stay within the policy's retention and size limits. */
     public suspend fun saveTrace(trace: JourneyTrace): SaveOutcome {
         val safeId = trace.id.value.takeIf { SAFE_ID.matches(it) } ?: return SaveOutcome.INVALID_ID
         val redacted = pipeline.redact(trace)
-        val content = TraceReportWriter.write(listOf(redacted), ReportContext(appVersion = policy.appVersion, exportedAtWallMillis = clock.wallClockMillis()))
+        val content =
+            TraceReportWriter.write(
+                listOf(redacted),
+                ReportContext(appVersion = policy.appVersion, exportedAtWallMillis = clock.wallClockMillis()),
+            )
         if (content.encodeToByteArray().size > policy.maxTraceBytes) return SaveOutcome.TOO_LARGE
         return guarded("save", SaveOutcome.FAILED) {
             mutex.withLock {
@@ -83,22 +97,26 @@ public class TraceStore(
 
     override suspend fun loadAll(): List<JourneyTrace> = query(TraceQuery())
 
-    public suspend fun query(query: TraceQuery): List<JourneyTrace> = guarded("query", emptyList()) {
-        mutex.withLock {
-            recoverOnce()
-            val result = ArrayList<JourneyTrace>()
-            for (file in storedTraceFiles().sortedBy { it.name }) {
-                if (result.size >= query.limit) break
-                val trace = readTrace(file.name) ?: continue
-                val matches = (query.statuses == null || trace.status in query.statuses) &&
-                    (query.nameContains == null || trace.name.contains(query.nameContains, ignoreCase = true)) &&
-                    (query.sinceWallMillis == null || trace.startWallMillis >= query.sinceWallMillis)
-                if (matches) result += trace
+    /** Oldest first; unreadable or corrupt files are skipped. */
+    public suspend fun query(query: TraceQuery): List<JourneyTrace> =
+        guarded("query", emptyList()) {
+            mutex.withLock {
+                recoverOnce()
+                val result = ArrayList<JourneyTrace>()
+                for (file in storedTraceFiles().sortedBy { it.name }) {
+                    if (result.size >= query.limit) break
+                    val trace = readTrace(file.name) ?: continue
+                    val matches =
+                        (query.statuses == null || trace.status in query.statuses) &&
+                            (query.nameContains == null || trace.name.contains(query.nameContains, ignoreCase = true)) &&
+                            (query.sinceWallMillis == null || trace.startWallMillis >= query.sinceWallMillis)
+                    if (matches) result += trace
+                }
+                result
             }
-            result
         }
-    }
 
+    /** Returns whether a stored file was removed. */
     public suspend fun delete(id: TraceId): Boolean {
         val safeId = id.value.takeIf { SAFE_ID.matches(it) } ?: return false
         return guarded("delete", false) {
@@ -108,6 +126,7 @@ public class TraceStore(
         }
     }
 
+    /** Deletes every stored file. */
     public suspend fun clearAll() {
         guarded("clear", Unit) {
             mutex.withLock {
@@ -116,9 +135,11 @@ public class TraceStore(
         }
     }
 
-    public suspend fun storedBytes(): Long = guarded("stats", 0L) {
-        mutex.withLock { storedTraceFiles().sumOf { it.sizeBytes } }
-    }
+    /** Total size of stored traces; 0 on I/O failure. */
+    public suspend fun storedBytes(): Long =
+        guarded("stats", 0L) {
+            mutex.withLock { storedTraceFiles().sumOf { it.sizeBytes } }
+        }
 
     private fun recoverOnce() {
         if (recovered) return
@@ -160,21 +181,28 @@ public class TraceStore(
 
     private fun storedTraceFiles(): List<StoredFile> = fileSystem.list().filter { it.name.endsWith(".$EXTENSION") }
 
-    private suspend fun <T> guarded(operation: String, fallback: T, block: suspend () -> T): T = try {
-        withContext(dispatcher) { block() }
-    } catch (cancellation: CancellationException) {
-        throw cancellation
-    } catch (t: Throwable) {
-        listener.onEvent(StorageEvent.Failure(operation, t::class.simpleName ?: "Throwable"))
-        if (operation == "save" && ++consecutiveFailures >= failureThreshold && !suspended) {
-            suspended = true
-            listener.onEvent(StorageEvent.CircuitOpened)
+    private suspend fun <T> guarded(
+        operation: String,
+        fallback: T,
+        block: suspend () -> T,
+    ): T =
+        try {
+            withContext(dispatcher) { block() }
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (t: Throwable) {
+            listener.onEvent(StorageEvent.Failure(operation, t::class.simpleName ?: "Throwable"))
+            if (operation == "save" && ++consecutiveFailures >= failureThreshold && !suspended) {
+                suspended = true
+                listener.onEvent(StorageEvent.CircuitOpened)
+            }
+            fallback
         }
-        fallback
-    }
 
-    private fun fileName(startWall: Long, safeId: String): String =
-        "${startWall.coerceAtLeast(0).toString().padStart(WALL_WIDTH, '0')}-$safeId.$EXTENSION"
+    private fun fileName(
+        startWall: Long,
+        safeId: String,
+    ): String = "${startWall.coerceAtLeast(0).toString().padStart(WALL_WIDTH, '0')}-$safeId.$EXTENSION"
 
     private fun startOf(name: String): Long = name.substringBefore('-').toLongOrNull() ?: -1
 

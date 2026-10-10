@@ -1,5 +1,6 @@
 package dev.journeyscope.export.schema
 
+/** Identity of the exported report format. */
 public object TraceSchema {
     public const val NAME: String = "journeyscope.trace"
     public const val VERSION: Int = 1

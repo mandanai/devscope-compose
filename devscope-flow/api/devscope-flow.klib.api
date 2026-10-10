@@ -1,0 +1,58 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <dev.journeyscope:devscope-flow>
+final enum class dev.journeyscope.flow/CollectorLifecycleState : kotlin/Enum<dev.journeyscope.flow/CollectorLifecycleState> { // dev.journeyscope.flow/CollectorLifecycleState|null[0]
+    enum entry Created // dev.journeyscope.flow/CollectorLifecycleState.Created|null[0]
+    enum entry Destroyed // dev.journeyscope.flow/CollectorLifecycleState.Destroyed|null[0]
+    enum entry Resumed // dev.journeyscope.flow/CollectorLifecycleState.Resumed|null[0]
+    enum entry Started // dev.journeyscope.flow/CollectorLifecycleState.Started|null[0]
+    enum entry Stopped // dev.journeyscope.flow/CollectorLifecycleState.Stopped|null[0]
+
+    final val entries // dev.journeyscope.flow/CollectorLifecycleState.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.journeyscope.flow/CollectorLifecycleState> // dev.journeyscope.flow/CollectorLifecycleState.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): dev.journeyscope.flow/CollectorLifecycleState // dev.journeyscope.flow/CollectorLifecycleState.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.journeyscope.flow/CollectorLifecycleState> // dev.journeyscope.flow/CollectorLifecycleState.values|values#static(){}[0]
+}
+
+abstract fun interface <#A: in kotlin/Any?> dev.journeyscope.flow/ValueFormatter { // dev.journeyscope.flow/ValueFormatter|null[0]
+    abstract fun format(#A): kotlin/String // dev.journeyscope.flow/ValueFormatter.format|format(1:0){}[0]
+
+    final object Companion { // dev.journeyscope.flow/ValueFormatter.Companion|null[0]
+        final val TypeName // dev.journeyscope.flow/ValueFormatter.Companion.TypeName|{}TypeName[0]
+            final fun <get-TypeName>(): dev.journeyscope.flow/ValueFormatter<kotlin/Any?> // dev.journeyscope.flow/ValueFormatter.Companion.TypeName.<get-TypeName>|<get-TypeName>(){}[0]
+    }
+}
+
+abstract fun interface dev.journeyscope.flow/LifecycleSource { // dev.journeyscope.flow/LifecycleSource|null[0]
+    abstract fun states(): kotlinx.coroutines.flow/Flow<dev.journeyscope.flow/CollectorLifecycleState> // dev.journeyscope.flow/LifecycleSource.states|states(){}[0]
+}
+
+final class <#A: kotlin/Any?> dev.journeyscope.flow/FlowTraceOptions { // dev.journeyscope.flow/FlowTraceOptions|null[0]
+    constructor <init>(dev.journeyscope.flow/ValueFormatter<#A> = ..., kotlin/Int = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Function0<dev.journeyscope.core/Journey?>? = ..., dev.journeyscope.flow/LifecycleSource? = ...) // dev.journeyscope.flow/FlowTraceOptions.<init>|<init>(dev.journeyscope.flow.ValueFormatter<1:0>;kotlin.Int;kotlin.Boolean;kotlin.Boolean;kotlin.Function0<dev.journeyscope.core.Journey?>?;dev.journeyscope.flow.LifecycleSource?){}[0]
+
+    final val formatter // dev.journeyscope.flow/FlowTraceOptions.formatter|{}formatter[0]
+        final fun <get-formatter>(): dev.journeyscope.flow/ValueFormatter<#A> // dev.journeyscope.flow/FlowTraceOptions.formatter.<get-formatter>|<get-formatter>(){}[0]
+    final val journey // dev.journeyscope.flow/FlowTraceOptions.journey|{}journey[0]
+        final fun <get-journey>(): kotlin/Function0<dev.journeyscope.core/Journey?>? // dev.journeyscope.flow/FlowTraceOptions.journey.<get-journey>|<get-journey>(){}[0]
+    final val lifecycle // dev.journeyscope.flow/FlowTraceOptions.lifecycle|{}lifecycle[0]
+        final fun <get-lifecycle>(): dev.journeyscope.flow/LifecycleSource? // dev.journeyscope.flow/FlowTraceOptions.lifecycle.<get-lifecycle>|<get-lifecycle>(){}[0]
+    final val maxSummaryLength // dev.journeyscope.flow/FlowTraceOptions.maxSummaryLength|{}maxSummaryLength[0]
+        final fun <get-maxSummaryLength>(): kotlin/Int // dev.journeyscope.flow/FlowTraceOptions.maxSummaryLength.<get-maxSummaryLength>|<get-maxSummaryLength>(){}[0]
+    final val recordObserved // dev.journeyscope.flow/FlowTraceOptions.recordObserved|{}recordObserved[0]
+        final fun <get-recordObserved>(): kotlin/Boolean // dev.journeyscope.flow/FlowTraceOptions.recordObserved.<get-recordObserved>|<get-recordObserved>(){}[0]
+    final val recordUpstream // dev.journeyscope.flow/FlowTraceOptions.recordUpstream|{}recordUpstream[0]
+        final fun <get-recordUpstream>(): kotlin/Boolean // dev.journeyscope.flow/FlowTraceOptions.recordUpstream.<get-recordUpstream>|<get-recordUpstream>(){}[0]
+}
+
+final fun (kotlinx.coroutines/CoroutineScope).dev.journeyscope.flow/launchTraced(kotlin/String, dev.journeyscope.core/Journey? = ..., kotlin.coroutines/CoroutineContext = ..., kotlinx.coroutines/CoroutineStart = ..., kotlin.coroutines/SuspendFunction1<kotlinx.coroutines/CoroutineScope, kotlin/Unit>): kotlinx.coroutines/Job // dev.journeyscope.flow/launchTraced|launchTraced@kotlinx.coroutines.CoroutineScope(kotlin.String;dev.journeyscope.core.Journey?;kotlin.coroutines.CoroutineContext;kotlinx.coroutines.CoroutineStart;kotlin.coroutines.SuspendFunction1<kotlinx.coroutines.CoroutineScope,kotlin.Unit>){}[0]
+final fun <#A: kotlin/Any?> (kotlinx.coroutines.flow/Flow<#A>).dev.journeyscope.flow/traceFlow(kotlin/String, dev.journeyscope.flow/FlowTraceOptions<#A> = ...): kotlinx.coroutines.flow/Flow<#A> // dev.journeyscope.flow/traceFlow|traceFlow@kotlinx.coroutines.flow.Flow<0:0>(kotlin.String;dev.journeyscope.flow.FlowTraceOptions<0:0>){0§<kotlin.Any?>}[0]
+final fun <#A: kotlin/Any?> (kotlinx.coroutines.flow/SharedFlow<#A>).dev.journeyscope.flow/traceShared(kotlin/String, dev.journeyscope.flow/FlowTraceOptions<#A> = ...): kotlinx.coroutines.flow/SharedFlow<#A> // dev.journeyscope.flow/traceShared|traceShared@kotlinx.coroutines.flow.SharedFlow<0:0>(kotlin.String;dev.journeyscope.flow.FlowTraceOptions<0:0>){0§<kotlin.Any?>}[0]
+final fun <#A: kotlin/Any?> (kotlinx.coroutines.flow/StateFlow<#A>).dev.journeyscope.flow/traceState(kotlin/String, dev.journeyscope.flow/FlowTraceOptions<#A> = ...): kotlinx.coroutines.flow/StateFlow<#A> // dev.journeyscope.flow/traceState|traceState@kotlinx.coroutines.flow.StateFlow<0:0>(kotlin.String;dev.journeyscope.flow.FlowTraceOptions<0:0>){0§<kotlin.Any?>}[0]
+final fun <#A: kotlin/Any?> (kotlinx.coroutines/CoroutineScope).dev.journeyscope.flow/asyncTraced(kotlin/String, dev.journeyscope.core/Journey? = ..., kotlin.coroutines/CoroutineContext = ..., kotlinx.coroutines/CoroutineStart = ..., kotlin.coroutines/SuspendFunction1<kotlinx.coroutines/CoroutineScope, #A>): kotlinx.coroutines/Deferred<#A> // dev.journeyscope.flow/asyncTraced|asyncTraced@kotlinx.coroutines.CoroutineScope(kotlin.String;dev.journeyscope.core.Journey?;kotlin.coroutines.CoroutineContext;kotlinx.coroutines.CoroutineStart;kotlin.coroutines.SuspendFunction1<kotlinx.coroutines.CoroutineScope,0:0>){0§<kotlin.Any?>}[0]
+final suspend fun <#A: kotlin/Any?> (kotlinx.coroutines.flow/StateFlow<#A>).dev.journeyscope.flow/observeWithJourneyScope(kotlin/String, dev.journeyscope.flow/FlowTraceOptions<#A> = ..., kotlin.coroutines/SuspendFunction1<#A, kotlin/Unit> = ...): kotlin/Nothing // dev.journeyscope.flow/observeWithJourneyScope|observeWithJourneyScope@kotlinx.coroutines.flow.StateFlow<0:0>(kotlin.String;dev.journeyscope.flow.FlowTraceOptions<0:0>;kotlin.coroutines.SuspendFunction1<0:0,kotlin.Unit>){0§<kotlin.Any?>}[0]

@@ -3,7 +3,11 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(libs.versions.jdk.get().toInt())
+    jvmToolchain(
+        libs.versions.jdk
+            .get()
+            .toInt(),
+    )
 }
 
 dependencies {
@@ -11,6 +15,7 @@ dependencies {
     compileOnly(libs.compose.gradle.plugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
     compileOnly(libs.android.gradle.plugin)
+    implementation(libs.vanniktech.publish.plugin)
 }
 
 gradlePlugin {

@@ -28,7 +28,10 @@ class SampleNavigator(
 
     val current: String get() = stack.last()
 
-    fun push(route: String, journey: Journey? = null) {
+    fun push(
+        route: String,
+        journey: Journey? = null,
+    ) {
         val before = stack
         stack = before + route
         tracer.navigate(before.last(), route, before, stack, journey)
@@ -42,14 +45,18 @@ class SampleNavigator(
         tracer.pop(before.last(), stack.last(), before, stack, journey)
     }
 
-    fun markShown(route: String, journey: Journey?) {
+    fun markShown(
+        route: String,
+        journey: Journey?,
+    ) {
         tracer.markCompleted(route, journey)
     }
 
     companion object {
-        fun saver(journeyProvider: () -> Journey?): Saver<SampleNavigator, Any> = listSaver(
-            save = { it.stack },
-            restore = { SampleNavigator(journeyProvider, it) },
-        )
+        fun saver(journeyProvider: () -> Journey?): Saver<SampleNavigator, Any> =
+            listSaver(
+                save = { it.stack },
+                restore = { SampleNavigator(journeyProvider, it) },
+            )
     }
 }

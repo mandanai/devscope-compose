@@ -4,6 +4,7 @@ import dev.journeyscope.export.redaction.MetadataAllowlist
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 
+/** Privacy and size limits for persistence and export. Defaults keep persistence off and bodies out of reports. */
 public data class ExportPolicy(
     val persistenceEnabled: Boolean = false,
     val allowBodies: Boolean = false,

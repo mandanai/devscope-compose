@@ -7,48 +7,66 @@ import dev.journeyscope.core.model.JourneyTrace
 import dev.journeyscope.core.model.MetadataValue
 import dev.journeyscope.export.policy.ExportPolicy
 
+/** Applies the [ExportPolicy] allowlist, sensitive-key masking and value scrubbing; the only way to obtain a [RedactedTrace]. */
 public class RedactionPipeline(
     private val policy: ExportPolicy = ExportPolicy.Default,
     private val keyPolicy: RedactionPolicy = RedactionPolicy.Default,
 ) {
-    private val sensitiveFragments: Set<String> = (keyPolicy.sensitiveKeyFragments + EXTRA_SENSITIVE_FRAGMENTS).map { it.lowercase() }.toSet()
+    private val sensitiveFragments: Set<String> =
+        (keyPolicy.sensitiveKeyFragments + EXTRA_SENSITIVE_FRAGMENTS)
+            .map {
+                it.lowercase()
+            }.toSet()
 
     public fun redact(trace: JourneyTrace): RedactedTrace {
         val tally = Tally()
-        val spans = trace.spans.map { span ->
-            span.copy(
-                name = tally.text(span.name),
-                metadata = metadata(span.metadata, tally),
-                failure = failure(span.failure, tally),
-            )
-        }
+        val spans =
+            trace.spans.map { span ->
+                span.copy(
+                    name = tally.text(span.name),
+                    metadata = metadata(span.metadata, tally),
+                    failure = failure(span.failure, tally),
+                )
+            }
         val events = trace.events.map { it.copy(name = tally.text(it.name), metadata = metadata(it.metadata, tally)) }
-        val redacted = trace.copy(
-            name = tally.text(trace.name),
-            spans = spans,
-            events = events,
-            failure = failure(trace.failure, tally),
-            metadata = metadata(trace.metadata, tally),
-            summary = trace.summary?.let { it.copy(name = tally.text(it.name)) },
-        )
+        val redacted =
+            trace.copy(
+                name = tally.text(trace.name),
+                spans = spans,
+                events = events,
+                failure = failure(trace.failure, tally),
+                metadata = metadata(trace.metadata, tally),
+                summary = trace.summary?.let { it.copy(name = tally.text(it.name)) },
+            )
         return RedactedTrace(redacted, tally.report())
     }
 
-    private fun metadata(source: DiagnosticMetadata, tally: Tally): DiagnosticMetadata {
+    private fun metadata(
+        source: DiagnosticMetadata,
+        tally: Tally,
+    ): DiagnosticMetadata {
         if (source.isEmpty) return source
         val kept = LinkedHashMap<String, MetadataValue>()
         for ((key, value) in source.entries) {
             when {
-                isBodyKey(key) && !policy.allowBodies -> tally.droppedBodies++
-                !policy.allowlist.allows(key) -> tally.droppedKeys++
+                isBodyKey(key) && !policy.allowBodies -> {
+                    tally.droppedBodies++
+                }
+
+                !policy.allowlist.allows(key) -> {
+                    tally.droppedKeys++
+                }
+
                 isSensitive(key) -> {
                     tally.maskedKeys++
                     kept[key] = MetadataValue.Text(ValueScrubber.MASK)
                 }
+
                 value is MetadataValue.Text -> {
                     kept[key] = MetadataValue.Text(tally.text(value.value))
                     tally.included += key
                 }
+
                 else -> {
                     kept[key] = value
                     tally.included += key
@@ -58,7 +76,10 @@ public class RedactionPipeline(
         return DiagnosticMetadata(kept, source.truncated)
     }
 
-    private fun failure(source: FailureInfo?, tally: Tally): FailureInfo? {
+    private fun failure(
+        source: FailureInfo?,
+        tally: Tally,
+    ): FailureInfo? {
         if (source == null) return null
         if (source.message != null || source.stackTrace != null) tally.strippedFailureDetails++
         return FailureInfo(source.type, null, null)
@@ -88,8 +109,7 @@ public class RedactionPipeline(
             return result.text
         }
 
-        fun report(): RedactionReport =
-            RedactionReport(droppedKeys, maskedKeys, scrubbed, droppedBodies, strippedFailureDetails, included.toSet())
+        fun report(): RedactionReport = RedactionReport(droppedKeys, maskedKeys, scrubbed, droppedBodies, strippedFailureDetails, included.toSet())
     }
 
     private companion object {

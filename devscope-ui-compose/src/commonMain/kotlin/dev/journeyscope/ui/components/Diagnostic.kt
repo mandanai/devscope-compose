@@ -48,7 +48,10 @@ internal fun JourneyDiagnosticSection(
 }
 
 @Composable
-private fun DiagnosticItem(diagnostic: DiagnosticUi, onShowTarget: (String) -> Unit) {
+private fun DiagnosticItem(
+    diagnostic: DiagnosticUi,
+    onShowTarget: (String) -> Unit,
+) {
     val colors = JourneyTheme.colors
     val (accent, container) = severityColors(diagnostic.severity)
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
@@ -91,7 +94,10 @@ private fun DiagnosticItem(diagnostic: DiagnosticUi, onShowTarget: (String) -> U
 }
 
 @Composable
-private fun LabelledLines(label: String, lines: List<String>) {
+private fun LabelledLines(
+    label: String,
+    lines: List<String>,
+) {
     if (lines.isEmpty()) return
     val colors = JourneyTheme.colors
     Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = colors.textPrimary)

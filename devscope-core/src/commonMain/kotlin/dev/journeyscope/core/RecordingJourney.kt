@@ -39,14 +39,17 @@ internal class TraceState(
 ) {
     val accepting: Boolean get() = !detached && !trace.status.isTerminal
 
-    fun with(trace: JourneyTrace, consumedSequence: Boolean = false): TraceState =
-        TraceState(trace, if (consumedSequence) nextSequence + 1 else nextSequence, detached, rateWindowStartNanos, rateWindowCount)
+    fun with(
+        trace: JourneyTrace,
+        consumedSequence: Boolean = false,
+    ): TraceState = TraceState(trace, if (consumedSequence) nextSequence + 1 else nextSequence, detached, rateWindowStartNanos, rateWindowCount)
 
-    fun withRate(windowStartNanos: Long, count: Int): TraceState =
-        TraceState(trace, nextSequence, detached, windowStartNanos, count)
+    fun withRate(
+        windowStartNanos: Long,
+        count: Int,
+    ): TraceState = TraceState(trace, nextSequence, detached, windowStartNanos, count)
 
-    fun activated(): TraceState =
-        if (trace.status == TraceStatus.CREATED) with(trace.copy(status = TraceStatus.RUNNING)) else this
+    fun activated(): TraceState = if (trace.status == TraceStatus.CREATED) with(trace.copy(status = TraceStatus.RUNNING)) else this
 
     fun detach(): TraceState = TraceState(trace, nextSequence, true, rateWindowStartNanos, rateWindowCount)
 }
@@ -56,33 +59,36 @@ internal class RecordingJourney(
     override val name: String,
     private val deps: EngineDeps,
     metadata: DiagnosticMetadata,
-) : Journey(), RecordedTrace {
+) : Journey(),
+    RecordedTrace {
     private val state: MutableStateFlow<TraceState>
 
     init {
         val now = deps.clock.monotonicNanos()
         val wall = deps.clock.wallClockMillis()
-        state = MutableStateFlow(
-            TraceState(
-                trace = JourneyTrace(
-                    id = id,
-                    name = name,
-                    status = TraceStatus.CREATED,
-                    startNanos = now,
-                    startWallMillis = wall,
-                    endNanos = null,
-                    endWallMillis = null,
-                    spans = emptyList(),
-                    events = emptyList(),
-                    failure = null,
-                    metadata = metadata,
-                    droppedItems = 0,
-                    summary = null,
+        state =
+            MutableStateFlow(
+                TraceState(
+                    trace =
+                        JourneyTrace(
+                            id = id,
+                            name = name,
+                            status = TraceStatus.CREATED,
+                            startNanos = now,
+                            startWallMillis = wall,
+                            endNanos = null,
+                            endWallMillis = null,
+                            spans = emptyList(),
+                            events = emptyList(),
+                            failure = null,
+                            metadata = metadata,
+                            droppedItems = 0,
+                            summary = null,
+                        ),
+                    nextSequence = 0,
+                    detached = false,
                 ),
-                nextSequence = 0,
-                detached = false,
-            ),
-        )
+            )
     }
 
     override val status: TraceStatus get() = state.value.trace.status
@@ -92,54 +98,69 @@ internal class RecordingJourney(
     override fun snapshot(): JourneyTrace = state.value.trace.ordered()
 
     override fun start() {
-        val changed = mutate { s ->
-            if (s.trace.status.canTransitionTo(TraceStatus.RUNNING)) s.activated() to true else s to false
-        }
+        val changed =
+            mutate { s ->
+                if (s.trace.status.canTransitionTo(TraceStatus.RUNNING)) s.activated() to true else s to false
+            }
         if (changed) notifyChanged()
     }
 
-    override fun recordEvent(name: String, category: SpanCategory, metadata: DiagnosticMetadata, span: SpanHandle?) {
+    override fun recordEvent(
+        name: String,
+        category: SpanCategory,
+        metadata: DiagnosticMetadata,
+        span: SpanHandle?,
+    ) {
         val now = deps.clock.monotonicNanos()
         val wall = deps.clock.wallClockMillis()
         val eventId = EventId(deps.newId("e"))
         val label = deps.sanitizer.label(name)
         val meta = deps.sanitizer.metadata(metadata)
         val spanId = span?.takeIf { it.isRecording }?.id
-        val admitted = mutate { s ->
-            admit(s, now) { trace, sequence ->
-                trace.copy(events = trace.events + JourneyEvent(eventId, label, category, sequence, now, wall, spanId, meta))
+        val admitted =
+            mutate { s ->
+                admit(s, now) { trace, sequence ->
+                    trace.copy(events = trace.events + JourneyEvent(eventId, label, category, sequence, now, wall, spanId, meta))
+                }
             }
-        }
         if (admitted) notifyChanged()
     }
 
-    override fun openSpan(name: String, category: SpanCategory, metadata: DiagnosticMetadata, parentId: SpanId?): SpanHandle {
+    override fun openSpan(
+        name: String,
+        category: SpanCategory,
+        metadata: DiagnosticMetadata,
+        parentId: SpanId?,
+    ): SpanHandle {
         val now = deps.clock.monotonicNanos()
         val wall = deps.clock.wallClockMillis()
         val spanId = SpanId(deps.newId("s"))
         val label = deps.sanitizer.label(name)
         val meta = deps.sanitizer.metadata(metadata)
-        val admitted = mutate { s ->
-            admit(s, now) { trace, sequence ->
-                val parent = parentId?.takeIf { candidate -> trace.spans.any { it.id == candidate } }
-                trace.copy(
-                    spans = trace.spans + JourneySpan(
-                        id = spanId,
-                        parentId = parent,
-                        name = label,
-                        category = category,
-                        sequence = sequence,
-                        startNanos = now,
-                        startWallMillis = wall,
-                        endNanos = null,
-                        status = SpanStatus.RUNNING,
-                        failure = null,
-                        endedBySystem = false,
-                        metadata = meta,
-                    ),
-                )
+        val admitted =
+            mutate { s ->
+                admit(s, now) { trace, sequence ->
+                    val parent = parentId?.takeIf { candidate -> trace.spans.any { it.id == candidate } }
+                    trace.copy(
+                        spans =
+                            trace.spans +
+                                JourneySpan(
+                                    id = spanId,
+                                    parentId = parent,
+                                    name = label,
+                                    category = category,
+                                    sequence = sequence,
+                                    startNanos = now,
+                                    startWallMillis = wall,
+                                    endNanos = null,
+                                    status = SpanStatus.RUNNING,
+                                    failure = null,
+                                    endedBySystem = false,
+                                    metadata = meta,
+                                ),
+                    )
+                }
             }
-        }
         if (!admitted) return NoopSpanHandle
         notifyChanged()
         return RecordingSpanHandle(this, spanId)
@@ -153,7 +174,13 @@ internal class RecordingJourney(
 
     override fun fail(throwable: Throwable) = terminate(TraceStatus.FAILED, failureOf(throwable))
 
-    override fun cancel(reason: String?) = terminate(TraceStatus.CANCELLED, reason?.let { FailureInfo(CANCELLED_TYPE, deps.sanitizer.label(it)) })
+    override fun cancel(reason: String?) =
+        terminate(
+            TraceStatus.CANCELLED,
+            reason?.let {
+                FailureInfo(CANCELLED_TYPE, deps.sanitizer.label(it))
+            },
+        )
 
     override fun interrupt(reason: String) = terminate(TraceStatus.INTERRUPTED, FailureInfo(INTERRUPTED_TYPE, deps.sanitizer.label(reason)))
 
@@ -161,69 +188,90 @@ internal class RecordingJourney(
         mutate { s -> s.detach() to Unit }
     }
 
-    internal fun failureOf(throwable: Throwable): FailureInfo? {
-        return try {
+    internal fun failureOf(throwable: Throwable): FailureInfo? =
+        try {
             deps.sanitizer.failure(throwable)
         } catch (ignored: Throwable) {
             null
         }
-    }
 
-    internal fun endSpan(spanId: SpanId, status: SpanStatus, failure: FailureInfo?, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty) {
+    internal fun endSpan(
+        spanId: SpanId,
+        status: SpanStatus,
+        failure: FailureInfo?,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    ) {
         val extra = if (metadata.isEmpty) metadata else deps.sanitizer.metadata(metadata)
         val now = deps.clock.monotonicNanos()
-        val changed = mutate { s ->
-            val target = s.trace.spans.firstOrNull { it.id == spanId }
-            if (s.detached || target == null || target.endNanos != null) {
-                s to false
-            } else {
-                val merged = if (extra.isEmpty) {
-                    target.metadata
+        val changed =
+            mutate { s ->
+                val target = s.trace.spans.firstOrNull { it.id == spanId }
+                if (s.detached || target == null || target.endNanos != null) {
+                    s to false
                 } else {
-                    deps.sanitizer.metadata(DiagnosticMetadata(target.metadata.entries + extra.entries, target.metadata.truncated || extra.truncated))
+                    val merged =
+                        if (extra.isEmpty) {
+                            target.metadata
+                        } else {
+                            deps.sanitizer.metadata(
+                                DiagnosticMetadata(
+                                    target.metadata.entries + extra.entries,
+                                    target.metadata.truncated || extra.truncated,
+                                ),
+                            )
+                        }
+                    val closed = target.copy(endNanos = now, status = status, failure = failure, metadata = merged)
+                    s.with(s.trace.copy(spans = s.trace.spans.map { if (it.id == spanId) closed else it })) to true
                 }
-                val closed = target.copy(endNanos = now, status = status, failure = failure, metadata = merged)
-                s.with(s.trace.copy(spans = s.trace.spans.map { if (it.id == spanId) closed else it })) to true
             }
-        }
         if (changed) notifyChanged()
     }
 
-    internal fun recordSpanEvent(spanId: SpanId, name: String, category: SpanCategory, metadata: DiagnosticMetadata) {
+    internal fun recordSpanEvent(
+        spanId: SpanId,
+        name: String,
+        category: SpanCategory,
+        metadata: DiagnosticMetadata,
+    ) {
         recordEvent(name, category, metadata, RecordingSpanHandle(this, spanId))
     }
 
-    private fun terminate(target: TraceStatus, failure: FailureInfo?) {
+    private fun terminate(
+        target: TraceStatus,
+        failure: FailureInfo?,
+    ) {
         val now = deps.clock.monotonicNanos()
         val wall = deps.clock.wallClockMillis()
-        val finished = mutate<JourneyTrace?> { s ->
-            if (s.detached || !s.trace.status.canTransitionTo(target)) {
-                s to null
-            } else {
-                val closedSpans = s.trace.spans.map { span ->
-                    if (span.endNanos != null) {
-                        span
-                    } else {
-                        span.copy(endNanos = now, status = openSpanStatusFor(target), endedBySystem = true)
-                    }
+        val finished =
+            mutate<JourneyTrace?> { s ->
+                if (s.detached || !s.trace.status.canTransitionTo(target)) {
+                    s to null
+                } else {
+                    val closedSpans =
+                        s.trace.spans.map { span ->
+                            if (span.endNanos != null) {
+                                span
+                            } else {
+                                span.copy(endNanos = now, status = openSpanStatusFor(target), endedBySystem = true)
+                            }
+                        }
+                    val ended =
+                        s.trace.copy(
+                            status = target,
+                            endNanos = now,
+                            endWallMillis = wall,
+                            spans = closedSpans,
+                            failure = failure,
+                        )
+                    s.with(ended.copy(summary = summarize(ended))) to ended
                 }
-                val ended = s.trace.copy(
-                    status = target,
-                    endNanos = now,
-                    endWallMillis = wall,
-                    spans = closedSpans,
-                    failure = failure,
-                )
-                s.with(ended.copy(summary = summarize(ended))) to ended
             }
-        }
         if (finished != null) {
             safely { deps.recorder.notifyFinished(state.value.trace.ordered()) }
         }
     }
 
-    private fun openSpanStatusFor(target: TraceStatus): SpanStatus =
-        if (target == TraceStatus.CANCELLED) SpanStatus.CANCELLED else SpanStatus.INTERRUPTED
+    private fun openSpanStatusFor(target: TraceStatus): SpanStatus = if (target == TraceStatus.CANCELLED) SpanStatus.CANCELLED else SpanStatus.INTERRUPTED
 
     private fun summarize(trace: JourneyTrace): JourneySummary {
         val timing = trace.copy(summary = null).timing()
@@ -241,7 +289,11 @@ internal class RecordingJourney(
         )
     }
 
-    private fun admit(s: TraceState, nowNanos: Long, build: (JourneyTrace, Long) -> JourneyTrace): Pair<TraceState, Boolean> {
+    private fun admit(
+        s: TraceState,
+        nowNanos: Long,
+        build: (JourneyTrace, Long) -> JourneyTrace,
+    ): Pair<TraceState, Boolean> {
         if (s.detached) return s to false
         if (!s.accepting) return s.with(s.trace.copy(droppedItems = s.trace.droppedItems + 1)) to false
         val active = s.activated()
@@ -275,10 +327,11 @@ internal class RecordingJourney(
         safely { deps.recorder.notifyChanged(id) }
     }
 
-    private fun JourneyTrace.ordered(): JourneyTrace = copy(
-        spans = spans.sortedWith(compareBy({ it.startNanos }, { it.sequence })),
-        events = events.sortedWith(compareBy({ it.atNanos }, { it.sequence })),
-    )
+    private fun JourneyTrace.ordered(): JourneyTrace =
+        copy(
+            spans = spans.sortedWith(compareBy({ it.startNanos }, { it.sequence })),
+            events = events.sortedWith(compareBy({ it.atNanos }, { it.sequence })),
+        )
 
     private companion object {
         const val CANCELLED_TYPE = "Cancelled"
@@ -293,11 +346,19 @@ internal class RecordingSpanHandle(
 ) : SpanHandle() {
     override val isRecording: Boolean get() = true
 
-    override fun end(status: SpanStatus, metadata: DiagnosticMetadata) = journey.endSpan(id, status, null, metadata)
+    override fun end(
+        status: SpanStatus,
+        metadata: DiagnosticMetadata,
+    ) = journey.endSpan(id, status, null, metadata)
 
-    override fun fail(throwable: Throwable, metadata: DiagnosticMetadata) =
-        journey.endSpan(id, SpanStatus.FAILED, journey.failureOf(throwable), metadata)
+    override fun fail(
+        throwable: Throwable,
+        metadata: DiagnosticMetadata,
+    ) = journey.endSpan(id, SpanStatus.FAILED, journey.failureOf(throwable), metadata)
 
-    override fun recordEvent(name: String, category: SpanCategory, metadata: DiagnosticMetadata) =
-        journey.recordSpanEvent(id, name, category, metadata)
+    override fun recordEvent(
+        name: String,
+        category: SpanCategory,
+        metadata: DiagnosticMetadata,
+    ) = journey.recordSpanEvent(id, name, category, metadata)
 }

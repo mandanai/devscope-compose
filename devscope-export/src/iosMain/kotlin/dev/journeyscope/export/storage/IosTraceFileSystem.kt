@@ -31,7 +31,9 @@ public fun iosTraceDirectory(): String {
     return "$root/journeyscope"
 }
 
-internal class IosTraceFileSystem(private val directory: String) : TraceFileSystem {
+internal class IosTraceFileSystem(
+    private val directory: String,
+) : TraceFileSystem {
     private val manager = NSFileManager.defaultManager
 
     init {
@@ -50,7 +52,10 @@ internal class IosTraceFileSystem(private val directory: String) : TraceFileSyst
 
     override fun read(name: String): String? = NSString.stringWithContentsOfFile(path(name), NSUTF8StringEncoding, null)
 
-    override fun writeAtomically(name: String, content: String) {
+    override fun writeAtomically(
+        name: String,
+        content: String,
+    ) {
         ensureDirectory()
         val written = NSString.create(string = content).writeToFile(path(name), true, NSUTF8StringEncoding, null)
         if (!written) error("write failed")

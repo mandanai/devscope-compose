@@ -15,17 +15,21 @@ internal fun groupThousands(value: Long): String {
     }
 }
 
-internal fun formatDuration(nanos: Long): String = when {
-    nanos <= 0L -> "0 ms"
-    nanos < SUB_MILLI_THRESHOLD_NANOS -> "<1 ms"
-    else -> "${groupThousands(nanos.nanosToMillis())} ms"
-}
+internal fun formatDuration(nanos: Long): String =
+    when {
+        nanos <= 0L -> "0 ms"
+        nanos < SUB_MILLI_THRESHOLD_NANOS -> "<1 ms"
+        else -> "${groupThousands(nanos.nanosToMillis())} ms"
+    }
 
-internal fun spokenDuration(nanos: Long): String = when {
-    nanos <= 0L -> "0 milliseconds"
-    nanos < SUB_MILLI_THRESHOLD_NANOS -> "less than 1 millisecond"
-    else -> nanos.nanosToMillis().let { if (it == 1L) "1 millisecond" else "$it milliseconds" }
-}
+internal fun spokenDuration(nanos: Long): String =
+    when {
+        nanos <= 0L -> "0 milliseconds"
+        nanos < SUB_MILLI_THRESHOLD_NANOS -> "less than 1 millisecond"
+        else -> nanos.nanosToMillis().let { if (it == 1L) "1 millisecond" else "$it milliseconds" }
+    }
 
-internal fun percentOf(part: Long, total: Long): Int =
-    if (total <= 0L) 0 else (part * 100.0 / total + 0.5).toInt()
+internal fun percentOf(
+    part: Long,
+    total: Long,
+): Int = if (total <= 0L) 0 else (part * 100.0 / total + 0.5).toInt()

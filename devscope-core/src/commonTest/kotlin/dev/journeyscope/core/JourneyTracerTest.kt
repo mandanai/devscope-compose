@@ -31,157 +31,184 @@ import kotlin.time.Duration.Companion.milliseconds
 @OptIn(ExperimentalCoroutinesApi::class)
 class JourneyTracerTest {
     @Test
-    fun successfulJourney() = runTest {
-        val clock = FakeJourneyClock()
-        val tracer = testTracer(clock = clock)
-        val journey = tracer.startJourney("Add to Cart")
-        journey.recordEvent("Button Click", SpanCategory.UI_INTERACTION)
-        val result = journey.traceSuspend("AddToCartUseCase", SpanCategory.USE_CASE) {
-            clock.advance(30.milliseconds)
-            "done"
+    fun successfulJourney() =
+        runTest {
+            val clock = FakeJourneyClock()
+            val tracer = testTracer(clock = clock)
+            val journey = tracer.startJourney("Add to Cart")
+            journey.recordEvent("Button Click", SpanCategory.UI_INTERACTION)
+            val result =
+                journey.traceSuspend("AddToCartUseCase", SpanCategory.USE_CASE) {
+                    clock.advance(30.milliseconds)
+                    "done"
+                }
+            journey.recordEvent("CartUiState.Success", SpanCategory.STATE_EMISSION)
+            journey.finish()
+
+            val trace = journey.trace()
+            assertEquals("done", result)
+            assertEquals(TraceStatus.COMPLETED, trace.status)
+            assertEquals(SpanStatus.OK, trace.span("AddToCartUseCase").status)
+            assertEquals(listOf("Button Click", "CartUiState.Success"), trace.events.map { it.name })
+            assertEquals(30.milliseconds, trace.summary?.duration)
+            assertEquals(trace.id, trace.correlationId)
         }
-        journey.recordEvent("CartUiState.Success", SpanCategory.STATE_EMISSION)
-        journey.finish()
-
-        val trace = journey.trace()
-        assertEquals("done", result)
-        assertEquals(TraceStatus.COMPLETED, trace.status)
-        assertEquals(SpanStatus.OK, trace.span("AddToCartUseCase").status)
-        assertEquals(listOf("Button Click", "CartUiState.Success"), trace.events.map { it.name })
-        assertEquals(30.milliseconds, trace.summary?.duration)
-        assertEquals(trace.id, trace.correlationId)
-    }
 
     @Test
-    fun failedJourneyRethrowsOriginalAndRedactsMessage() = runTest {
-        val tracer = testTracer()
-        val boom = IllegalStateException("card 4111-1111-1111-1111")
-        val thrown = assertFailsWith<IllegalStateException> {
-            tracer.withJourney("Checkout") { traceSuspend("Pay") { throw boom } }
+    fun failedJourneyRethrowsOriginalAndRedactsMessage() =
+        runTest {
+            val tracer = testTracer()
+            val boom = IllegalStateException("card 4111-1111-1111-1111")
+            val thrown =
+                assertFailsWith<IllegalStateException> {
+                    tracer.withJourney("Checkout") { traceSuspend("Pay") { throw boom } }
+                }
+            assertEquals(boom.message, thrown.message)
+
+            val trace = tracer.recorder.snapshot().single()
+            assertEquals(TraceStatus.FAILED, trace.status)
+            assertEquals(SpanStatus.FAILED, trace.span("Pay").status)
+            assertTrue(
+                trace.failure
+                    ?.type
+                    .orEmpty()
+                    .contains("IllegalStateException"),
+            )
+            assertNull(trace.failure?.message)
+            assertNull(trace.span("Pay").failure?.message)
         }
-        assertEquals(boom.message, thrown.message)
-
-        val trace = tracer.recorder.snapshot().single()
-        assertEquals(TraceStatus.FAILED, trace.status)
-        assertEquals(SpanStatus.FAILED, trace.span("Pay").status)
-        assertTrue(trace.failure?.type.orEmpty().contains("IllegalStateException"))
-        assertNull(trace.failure?.message)
-        assertNull(trace.span("Pay").failure?.message)
-    }
 
     @Test
-    fun failureMessageKeptOnlyWhenPolicyAllows() = runTest {
-        val config = JourneyScopeConfig(enabled = true, redactionPolicy = RedactionPolicy(includeFailureMessages = true))
-        val tracer = testTracer(config)
-        runCatching { tracer.withJourney("j") { error("visible") } }
-        assertEquals("visible", tracer.recorder.snapshot().single().failure?.message)
-    }
-
-    @Test
-    fun recordFailuresOffDropsFailureInfoButKeepsStatus() = runTest {
-        val tracer = testTracer(JourneyScopeConfig(enabled = true, recordFailures = false))
-        runCatching { tracer.withJourney("j") { traceSuspend("s") { error("x") } } }
-        val trace = tracer.recorder.snapshot().single()
-        assertEquals(SpanStatus.FAILED, trace.span("s").status)
-        assertNull(trace.span("s").failure)
-        assertNull(trace.failure)
-    }
-
-    @Test
-    fun cancellationIsPropagatedAndRecorded() = runTest {
-        val tracer = testTracer()
-        var caught: Throwable? = null
-        val job = launch {
-            try {
-                tracer.withJourney("Slow") { traceSuspend("Wait") { delay(10_000) } }
-            } catch (e: CancellationException) {
-                caught = e
-                throw e
-            }
+    fun failureMessageKeptOnlyWhenPolicyAllows() =
+        runTest {
+            val config = JourneyScopeConfig(enabled = true, redactionPolicy = RedactionPolicy(includeFailureMessages = true))
+            val tracer = testTracer(config)
+            runCatching { tracer.withJourney("j") { error("visible") } }
+            assertEquals(
+                "visible",
+                tracer.recorder
+                    .snapshot()
+                    .single()
+                    .failure
+                    ?.message,
+            )
         }
-        runCurrent()
-        job.cancelAndJoin()
-
-        val trace = tracer.recorder.snapshot().single()
-        assertTrue(caught is CancellationException)
-        assertEquals(TraceStatus.CANCELLED, trace.status)
-        assertEquals(SpanStatus.CANCELLED, trace.span("Wait").status)
-    }
 
     @Test
-    fun nestedSpansFormHierarchy() = runTest {
-        val tracer = testTracer()
-        val journey = tracer.startJourney("Nested")
-        journey.traceSuspend("outer") { journey.traceSuspend("middle") { journey.traceSuspend("inner") {} } }
-        val trace = journey.trace()
-        assertNull(trace.span("outer").parentId)
-        assertEquals(trace.span("outer").id, trace.span("middle").parentId)
-        assertEquals(trace.span("middle").id, trace.span("inner").parentId)
-    }
+    fun recordFailuresOffDropsFailureInfoButKeepsStatus() =
+        runTest {
+            val tracer = testTracer(JourneyScopeConfig(enabled = true, recordFailures = false))
+            runCatching { tracer.withJourney("j") { traceSuspend("s") { error("x") } } }
+            val trace = tracer.recorder.snapshot().single()
+            assertEquals(SpanStatus.FAILED, trace.span("s").status)
+            assertNull(trace.span("s").failure)
+            assertNull(trace.failure)
+        }
 
     @Test
-    fun concurrentChildrenKeepTheirOwnParents() = runTest {
-        val tracer = testTracer()
-        val journey = tracer.startJourney("Fan out")
-        journey.traceSuspend("root") {
-            coroutineScope {
-                (1..5).map { i ->
-                    async {
-                        journey.traceSuspend("child$i") { journey.traceSuspend("grandchild$i") { delay(1) } }
+    fun cancellationIsPropagatedAndRecorded() =
+        runTest {
+            val tracer = testTracer()
+            var caught: Throwable? = null
+            val job =
+                launch {
+                    try {
+                        tracer.withJourney("Slow") { traceSuspend("Wait") { delay(10_000) } }
+                    } catch (e: CancellationException) {
+                        caught = e
+                        throw e
                     }
-                }.awaitAll()
+                }
+            runCurrent()
+            job.cancelAndJoin()
+
+            val trace = tracer.recorder.snapshot().single()
+            assertTrue(caught is CancellationException)
+            assertEquals(TraceStatus.CANCELLED, trace.status)
+            assertEquals(SpanStatus.CANCELLED, trace.span("Wait").status)
+        }
+
+    @Test
+    fun nestedSpansFormHierarchy() =
+        runTest {
+            val tracer = testTracer()
+            val journey = tracer.startJourney("Nested")
+            journey.traceSuspend("outer") { journey.traceSuspend("middle") { journey.traceSuspend("inner") {} } }
+            val trace = journey.trace()
+            assertNull(trace.span("outer").parentId)
+            assertEquals(trace.span("outer").id, trace.span("middle").parentId)
+            assertEquals(trace.span("middle").id, trace.span("inner").parentId)
+        }
+
+    @Test
+    fun concurrentChildrenKeepTheirOwnParents() =
+        runTest {
+            val tracer = testTracer()
+            val journey = tracer.startJourney("Fan out")
+            journey.traceSuspend("root") {
+                coroutineScope {
+                    (1..5)
+                        .map { i ->
+                            async {
+                                journey.traceSuspend("child$i") { journey.traceSuspend("grandchild$i") { delay(1) } }
+                            }
+                        }.awaitAll()
+                }
+            }
+            val trace = journey.trace()
+            val root = trace.span("root")
+            (1..5).forEach { i ->
+                assertEquals(root.id, trace.span("child$i").parentId)
+                assertEquals(trace.span("child$i").id, trace.span("grandchild$i").parentId)
             }
         }
-        val trace = journey.trace()
-        val root = trace.span("root")
-        (1..5).forEach { i ->
-            assertEquals(root.id, trace.span("child$i").parentId)
-            assertEquals(trace.span("child$i").id, trace.span("grandchild$i").parentId)
+
+    @Test
+    fun contextSurvivesDispatcherSwitch() =
+        runTest {
+            val tracer = testTracer()
+            val journey = tracer.startJourney("Switch")
+            journey.traceSuspend("outer") {
+                withContext(Dispatchers.Default) { journey.traceSuspend("background") { delay(1) } }
+            }
+            val trace = journey.trace()
+            assertEquals(trace.span("outer").id, trace.span("background").parentId)
         }
-    }
 
     @Test
-    fun contextSurvivesDispatcherSwitch() = runTest {
-        val tracer = testTracer()
-        val journey = tracer.startJourney("Switch")
-        journey.traceSuspend("outer") {
-            withContext(Dispatchers.Default) { journey.traceSuspend("background") { delay(1) } }
+    fun manuallyLaunchedWorkCanBeBoundExplicitly() =
+        runTest {
+            val tracer = testTracer()
+            val journey = tracer.startJourney("Manual")
+            val root = journey.beginSpan("root")
+            launch(Dispatchers.Default + journey.context(root)) { journey.traceSuspend("bound") { delay(1) } }.join()
+            launchInJourney(journey, root, Dispatchers.Default) { journey.traceSuspend("helper") { delay(1) } }.join()
+            root.end()
+            assertEquals(root.id, journey.trace().span("bound").parentId)
+            assertEquals(root.id, journey.trace().span("helper").parentId)
         }
-        val trace = journey.trace()
-        assertEquals(trace.span("outer").id, trace.span("background").parentId)
-    }
 
     @Test
-    fun manuallyLaunchedWorkCanBeBoundExplicitly() = runTest {
-        val tracer = testTracer()
-        val journey = tracer.startJourney("Manual")
-        val root = journey.beginSpan("root")
-        launch(Dispatchers.Default + journey.context(root)) { journey.traceSuspend("bound") { delay(1) } }.join()
-        launchInJourney(journey, root, Dispatchers.Default) { journey.traceSuspend("helper") { delay(1) } }.join()
-        root.end()
-        assertEquals(root.id, journey.trace().span("bound").parentId)
-        assertEquals(root.id, journey.trace().span("helper").parentId)
-    }
+    fun concurrentJourneysAreIsolated() =
+        runTest {
+            val tracer = testTracer()
+            val a = tracer.startJourney("A")
+            val b = tracer.startJourney("B")
+            a.traceSuspend("a-outer") { b.traceSuspend("b-inside-a") {} }
 
-    @Test
-    fun concurrentJourneysAreIsolated() = runTest {
-        val tracer = testTracer()
-        val a = tracer.startJourney("A")
-        val b = tracer.startJourney("B")
-        a.traceSuspend("a-outer") { b.traceSuspend("b-inside-a") {} }
-
-        assertEquals(1, a.trace().spans.size)
-        assertNull(b.trace().span("b-inside-a").parentId)
-        assertNotEquals(a.id, b.id)
-    }
+            assertEquals(1, a.trace().spans.size)
+            assertNull(b.trace().span("b-inside-a").parentId)
+            assertNotEquals(a.id, b.id)
+        }
 
     @Test
     fun syncTraceNestsExplicitlyAndRethrows() {
         val journey = testTracer().startJourney("Sync")
         val boom = IllegalArgumentException()
-        val thrown = assertFailsWith<IllegalArgumentException> {
-            journey.trace("outer") { outer -> journey.trace("inner", parent = outer) { throw boom } }
-        }
+        val thrown =
+            assertFailsWith<IllegalArgumentException> {
+                journey.trace("outer") { outer -> journey.trace("inner", parent = outer) { throw boom } }
+            }
         assertSame(boom, thrown)
         val trace = journey.trace()
         assertEquals(trace.span("outer").id, trace.span("inner").parentId)
@@ -245,7 +272,14 @@ class JourneyTracerTest {
         val span = journey.trace().span("hanging")
         assertEquals(SpanStatus.INTERRUPTED, span.status)
         assertTrue(span.endedBySystem)
-        assertFalse(journey.trace().timing().spans.single().isOpen)
+        assertFalse(
+            journey
+                .trace()
+                .timing()
+                .spans
+                .single()
+                .isOpen,
+        )
     }
 
     @Test
@@ -282,28 +316,30 @@ class JourneyTracerTest {
     }
 
     @Test
-    fun disabledSdkRecordsNothingAndKeepsResults() = runTest {
-        val tracer = testTracer(JourneyScopeConfig(enabled = false))
-        val journey = tracer.startJourney("off")
-        val value = journey.traceSuspend("op") { 42 }
-        val sync = journey.trace("sync") { "ok" }
-        val viaScope = tracer.withJourney("scoped") { traceSuspend("x") { 7 } }
-        journey.recordEvent("ignored")
-        journey.finish()
+    fun disabledSdkRecordsNothingAndKeepsResults() =
+        runTest {
+            val tracer = testTracer(JourneyScopeConfig(enabled = false))
+            val journey = tracer.startJourney("off")
+            val value = journey.traceSuspend("op") { 42 }
+            val sync = journey.trace("sync") { "ok" }
+            val viaScope = tracer.withJourney("scoped") { traceSuspend("x") { 7 } }
+            journey.recordEvent("ignored")
+            journey.finish()
 
-        assertFalse(journey.isRecording)
-        assertEquals(42, value)
-        assertEquals("ok", sync)
-        assertEquals(7, viaScope)
-        assertTrue(tracer.recorder.snapshot().isEmpty())
-        assertNull(journey.snapshot())
-    }
+            assertFalse(journey.isRecording)
+            assertEquals(42, value)
+            assertEquals("ok", sync)
+            assertEquals(7, viaScope)
+            assertTrue(tracer.recorder.snapshot().isEmpty())
+            assertNull(journey.snapshot())
+        }
 
     @Test
-    fun disabledSdkStillRethrowsApplicationErrors() = runTest {
-        val tracer = testTracer(JourneyScopeConfig(enabled = false))
-        assertFailsWith<IllegalStateException> { tracer.withJourney("off") { traceSuspend("x") { error("app") } } }
-    }
+    fun disabledSdkStillRethrowsApplicationErrors() =
+        runTest {
+            val tracer = testTracer(JourneyScopeConfig(enabled = false))
+            assertFailsWith<IllegalStateException> { tracer.withJourney("off") { traceSuspend("x") { error("app") } } }
+        }
 
     @Test
     fun zeroSamplingRateRecordsNothing() {
@@ -354,28 +390,36 @@ class JourneyTracerTest {
     }
 
     @Test
-    fun recorderSurvivesConcurrentJourneysAndWrites() = runTest {
-        val tracer = testTracer(JourneyScopeConfig(enabled = true, maxTraces = 1_000, maxEventsPerTrace = 1_000))
-        val shared = tracer.startJourney("shared")
-        withContext(Dispatchers.Default) {
-            (1..8).map { worker ->
-                async {
-                    repeat(50) { shared.recordEvent("w$worker-$it") }
-                    repeat(25) { i ->
-                        val own = tracer.startJourney("own-$worker-$i")
-                        own.traceSuspend("op") { own.recordEvent("e") }
-                        own.finish()
-                    }
-                }
-            }.awaitAll()
+    fun recorderSurvivesConcurrentJourneysAndWrites() =
+        runTest {
+            val tracer = testTracer(JourneyScopeConfig(enabled = true, maxTraces = 1_000, maxEventsPerTrace = 1_000))
+            val shared = tracer.startJourney("shared")
+            withContext(Dispatchers.Default) {
+                (1..8)
+                    .map { worker ->
+                        async {
+                            repeat(50) { shared.recordEvent("w$worker-$it") }
+                            repeat(25) { i ->
+                                val own = tracer.startJourney("own-$worker-$i")
+                                own.traceSuspend("op") { own.recordEvent("e") }
+                                own.finish()
+                            }
+                        }
+                    }.awaitAll()
+            }
+            val traces = tracer.recorder.snapshot()
+            val sharedTrace = traces.single { it.name == "shared" }
+            assertEquals(400, sharedTrace.events.size)
+            assertEquals(
+                400,
+                sharedTrace.events
+                    .map { it.sequence }
+                    .toSet()
+                    .size,
+            )
+            assertEquals(200, traces.count { it.name.startsWith("own-") && it.status == TraceStatus.COMPLETED })
+            assertEquals(traces.size, traces.map { it.id }.toSet().size)
         }
-        val traces = tracer.recorder.snapshot()
-        val sharedTrace = traces.single { it.name == "shared" }
-        assertEquals(400, sharedTrace.events.size)
-        assertEquals(400, sharedTrace.events.map { it.sequence }.toSet().size)
-        assertEquals(200, traces.count { it.name.startsWith("own-") && it.status == TraceStatus.COMPLETED })
-        assertEquals(traces.size, traces.map { it.id }.toSet().size)
-    }
 
     @Test
     fun equalTimestampsKeepRecordingOrder() {
@@ -390,13 +434,19 @@ class JourneyTracerTest {
         val journey = tracer.startJourney("meta")
         journey.recordEvent(
             "e",
-            metadata = diagnosticMetadata {
-                put("authToken", "super-secret-value")
-                put("note", "x".repeat(500))
-                put("later", "dropped")
-            },
+            metadata =
+                diagnosticMetadata {
+                    put("authToken", "super-secret-value")
+                    put("note", "x".repeat(500))
+                    put("later", "dropped")
+                },
         )
-        val metadata = journey.trace().events.single().metadata
+        val metadata =
+            journey
+                .trace()
+                .events
+                .single()
+                .metadata
         assertEquals(MetadataValue.Text("[REDACTED]"), metadata["authToken"])
         assertTrue(metadata.truncated)
         val size = metadata.entries.entries.sumOf { (k, v) -> k.length + (v as? MetadataValue.Text)?.value?.length.orZero() }
@@ -405,11 +455,12 @@ class JourneyTracerTest {
 
     @Test
     fun metadataOnlyAcceptsPrimitiveValues() {
-        val metadata = diagnosticMetadata {
-            put("count", 3)
-            put("ratio", 0.5)
-            put("flag", true)
-        }
+        val metadata =
+            diagnosticMetadata {
+                put("count", 3)
+                put("ratio", 0.5)
+                put("flag", true)
+            }
         assertEquals(MetadataValue.Integer(3), metadata["count"])
         assertEquals(MetadataValue.Decimal(0.5), metadata["ratio"])
         assertEquals(MetadataValue.Flag(true), metadata["flag"])

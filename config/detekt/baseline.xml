@@ -1,0 +1,199 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:Formatting.kt:index &gt; 0 &amp;&amp; char.isDigit() &amp;&amp; digits[index - 1].isDigit() &amp;&amp; (digits.length - index) % 3 == 0</ID>
+    <ID>ComplexCondition:JourneyScopeInterceptor.kt:capture != null &amp;&amp; config.businessValidator != null &amp;&amp; !streaming &amp;&amp; length &lt;= capture.maxBytes &amp;&amp; capture.accepts(type)</ID>
+    <ID>ComplexCondition:JsonReader.kt:JsonReader$pos &lt; text.length &amp;&amp; (text[pos] == ' ' || text[pos] == '\n' || text[pos] == '\r' || text[pos] == '\t')</ID>
+    <ID>ComplexCondition:TraceImporter.kt:TraceImporter.Session$issues.size &gt; before || id == null || name == null || category == null || sequence == null || offset == null</ID>
+    <ID>ComplexCondition:TraceImporter.kt:TraceImporter.Session$issues.size &gt; before || id == null || name == null || category == null || sequence == null || start == null || status == null</ID>
+    <ID>ComplexCondition:TraceImporter.kt:TraceImporter.Session$issues.size &gt; before || id == null || name == null || status == null || startWall == null || duration == null</ID>
+    <ID>CyclomaticComplexMethod:FailureClassifier.kt:FailureClassifier$fun forThrowable: NetworkFailure</ID>
+    <ID>CyclomaticComplexMethod:GlyphIcon.kt:private fun DrawScope.drawGlyph</ID>
+    <ID>CyclomaticComplexMethod:NetworkTracing.kt:NetworkTracing$private fun open: NetworkCall</ID>
+    <ID>CyclomaticComplexMethod:TimingAnalysis.kt:public fun analyzeTiming: TimingAnalysis</ID>
+    <ID>CyclomaticComplexMethod:TraceImporter.kt:TraceImporter.Session$private fun parseSpan: JourneySpan?</ID>
+    <ID>CyclomaticComplexMethod:TraceImporter.kt:TraceImporter.Session$private fun validateGraph</ID>
+    <ID>CyclomaticComplexMethod:TraceMapper.kt:TraceMapper$private fun spanRow: TimelineRowUi</ID>
+    <ID>CyclomaticComplexMethod:UrlSanitizer.kt:UrlSanitizer$private fun isOpaque: Boolean</ID>
+    <ID>EmptyFunctionBlock:Journey.kt:Journey${}</ID>
+    <ID>EmptyFunctionBlock:Journey.kt:SpanHandle${}</ID>
+    <ID>LongMethod:GlyphIcon.kt:private fun DrawScope.drawGlyph</ID>
+    <ID>LongMethod:JourneyDetailScreen.kt:@Composable internal fun JourneyDetailScreen</ID>
+    <ID>LongMethod:JourneyInspectorScreen.kt:@Composable internal fun JourneyInspectorScreen</ID>
+    <ID>LongMethod:TimingAnalysis.kt:public fun analyzeTiming: TimingAnalysis</ID>
+    <ID>LongMethod:TraceReportWriter.kt:TraceReportWriter$private fun trace: JsonValue.Obj</ID>
+    <ID>LoopWithTooManyJumpStatements:Sanitizer.kt:Sanitizer$for</ID>
+    <ID>LoopWithTooManyJumpStatements:TraceStore.kt:TraceStore$for</ID>
+    <ID>MagicNumber:DatabaseTracing.kt:DatabaseTraceConfig$16</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$180</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$1_000</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$20</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$3</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$30</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$320</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$40</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$4L</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$50</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$70</ID>
+    <ID>MagicNumber:DemoJourneys.kt:DemoJourneys$90</ID>
+    <ID>MagicNumber:ExportPolicy.kt:ExportPolicy$1024</ID>
+    <ID>MagicNumber:ExportPolicy.kt:ExportPolicy$4L</ID>
+    <ID>MagicNumber:ExportPolicy.kt:ExportPolicy$512L</ID>
+    <ID>MagicNumber:ExportPolicy.kt:ExportPolicy$8L</ID>
+    <ID>MagicNumber:FailureClassifier.kt:FailureClassifier$400</ID>
+    <ID>MagicNumber:FailureClassifier.kt:FailureClassifier$499</ID>
+    <ID>MagicNumber:FailureClassifier.kt:FailureClassifier$500</ID>
+    <ID>MagicNumber:FailureClassifier.kt:FailureClassifier$599</ID>
+    <ID>MagicNumber:Formatting.kt:0.5</ID>
+    <ID>MagicNumber:Formatting.kt:100.0</ID>
+    <ID>MagicNumber:Formatting.kt:3</ID>
+    <ID>MagicNumber:GlyphIcon.kt:1.6f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:10.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:10.8f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:10f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:11f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:12.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:12f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:13.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:13f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:14.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:14f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:15.6f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:15.8f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:15f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:16.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:16.6f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:16f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:18.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:180f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:18f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:19f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:2.4f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:2.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:2.6f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:21f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:3f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:4f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:5.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:6f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:7.4f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:7.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:8.4f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:8f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:9.5f</ID>
+    <ID>MagicNumber:GlyphIcon.kt:9f</ID>
+    <ID>MagicNumber:ImportResult.kt:ImportLimits$1024</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF0E1013</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF0F9488</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF14181F</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF173626</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF181B20</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF1B2A47</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF1B7A43</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF1F5FD6</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF262B32</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF2B3038</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF2F6FED</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF3A2414</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF3CC9BB</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF3F1B19</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF4A515C</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF5A6372</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF6B7280</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF6B9BFF</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF6FD39A</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF7C4DDB</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF8CB1FF</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFF9AA3B2</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFA6AEBB</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFA98BF5</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFB3261E</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFB63D00</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFC3C9D2</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFE2E5EA</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFE3F4EA</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFE6EEFD</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFE9ECF0</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFF1F3F6</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFF2740F</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFF4F5F7</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFFDE8E6</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFFF8A80</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFFF9447</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFFFA06B</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFFFEDE2</ID>
+    <ID>MagicNumber:JourneyScopeTheme.kt:JourneyColors.Companion$0xFFFFFFFF</ID>
+    <ID>MagicNumber:JsonValue.kt:JsonLimits$1024</ID>
+    <ID>MagicNumber:JsonValue.kt:JsonLimits$4</ID>
+    <ID>MagicNumber:NavigationModels.kt:RouteRedactor$32</ID>
+    <ID>MagicNumber:Percentages.kt:Percentages$10</ID>
+    <ID>MagicNumber:Timeline.kt:0.4f</ID>
+    <ID>MagicNumber:Timeline.kt:0.6f</ID>
+    <ID>MagicNumber:Timeline.kt:180f</ID>
+    <ID>MatchingDeclarationName:JourneyScopeNetwork.kt:JourneyScopeNetworkConfig</ID>
+    <ID>ReturnCount:CoroutineTracing.kt:private fun CoroutineScope.openBoundary: Boundary?</ID>
+    <ID>ReturnCount:DiagnosticRules.kt:DatabaseSignificantRule$override fun evaluate: List&lt;DiagnosticFinding&gt;</ID>
+    <ID>ReturnCount:DiagnosticRules.kt:DominantContributorRule$override fun evaluate: List&lt;DiagnosticFinding&gt;</ID>
+    <ID>ReturnCount:JourneyExportController.kt:JourneyExportController$public suspend fun export: ExportOutcome</ID>
+    <ID>ReturnCount:JourneyScopeNetwork.kt:private suspend fun captureBody: Captured</ID>
+    <ID>ReturnCount:NetworkTracing.kt:NetworkTracing$private fun open: NetworkCall</ID>
+    <ID>ReturnCount:NetworkTracing.kt:NetworkTracing$private fun propagationFor: Map&lt;String, String&gt;</ID>
+    <ID>ReturnCount:RecordingJourney.kt:RecordingJourney$private fun admit: Pair&lt;TraceState, Boolean&gt;</ID>
+    <ID>ReturnCount:SampleHttpClient.kt:CartBusinessValidator$override fun inspect: BusinessResult?</ID>
+    <ID>ReturnCount:SchemaMigrator.kt:SchemaMigrator$public fun migrate: Outcome</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter$public fun import: ImportResult</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$fun run: ImportResult</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$private fun array: List&lt;JsonValue&gt;?</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$private fun failure: FailureInfo?</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$private fun id: String?</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$private fun long: Long?</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$private fun metadata: DiagnosticMetadata</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$private fun parseEvent: JourneyEvent?</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$private fun parseSpan: JourneySpan?</ID>
+    <ID>ReturnCount:TraceImporter.kt:TraceImporter.Session$private fun parseTrace: Pair&lt;JourneyTrace, List&lt;ExportedFinding&gt;&gt;?</ID>
+    <ID>ReturnCount:TraceMapper.kt:TraceMapper$private fun checkpointRows: List&lt;MetadataRowUi&gt;</ID>
+    <ID>ReturnCount:TraceMapper.kt:TraceMapper$private fun networkFailureLabel: String?</ID>
+    <ID>ReturnCount:TraceStore.kt:TraceStore$public suspend fun saveTrace: SaveOutcome</ID>
+    <ID>ThrowsCount:DatabaseTracing.kt:TracedTransactionScope$public fun &lt;N&gt; transaction: N</ID>
+    <ID>TooGenericExceptionCaught:DatabaseTracing.kt:DatabaseTracing$failure: Throwable</ID>
+    <ID>TooGenericExceptionCaught:DatabaseTracing.kt:TracedTransactionScope$failure: Exception</ID>
+    <ID>TooGenericExceptionCaught:DatabaseTracing.kt:TracedTransactionScope$rollbackSignal: Throwable</ID>
+    <ID>TooGenericExceptionCaught:DatabaseTracing.kt:failure: Throwable</ID>
+    <ID>TooGenericExceptionCaught:DiagnosticAnalyzer.kt:DiagnosticAnalyzer$error: Exception</ID>
+    <ID>TooGenericExceptionCaught:FlowTracing.kt:e: Throwable</ID>
+    <ID>TooGenericExceptionCaught:Journey.kt:Journey$t: Throwable</ID>
+    <ID>TooGenericExceptionCaught:JourneyScopeInterceptor.kt:JourneyScopeInterceptor$t: Throwable</ID>
+    <ID>TooGenericExceptionCaught:JourneyScopeNetwork.kt:t: Throwable</ID>
+    <ID>TooGenericExceptionCaught:JourneyTracer.kt:JourneyTracer$t: Throwable</ID>
+    <ID>TooGenericExceptionCaught:ProductViewModel.kt:ProductViewModel$unexpected: Throwable</ID>
+    <ID>TooGenericExceptionCaught:TraceStore.kt:TraceStore$t: Throwable</ID>
+    <ID>TooManyFunctions:DemoJourneys.kt:DemoJourneys</ID>
+    <ID>TooManyFunctions:Journey.kt:Journey</ID>
+    <ID>TooManyFunctions:JourneyScopeInterceptorTest.kt:JourneyScopeInterceptorTest</ID>
+    <ID>TooManyFunctions:JsonReader.kt:JsonReader</ID>
+    <ID>TooManyFunctions:NavigationTracer.kt:NavigationTracer</ID>
+    <ID>TooManyFunctions:RecordingJourney.kt:RecordingJourney : JourneyRecordedTrace</ID>
+    <ID>TooManyFunctions:TraceImporter.kt:TraceImporter$Session</ID>
+    <ID>TooManyFunctions:TraceMapper.kt:TraceMapper</ID>
+    <ID>TooManyFunctions:TraceStore.kt:TraceStore : JourneyStore</ID>
+    <ID>UnusedParameter:Journey.kt:Journey$category: SpanCategory = SpanCategory.CUSTOM</ID>
+    <ID>UnusedParameter:Journey.kt:Journey$metadata: DiagnosticMetadata = DiagnosticMetadata.Empty</ID>
+    <ID>UnusedParameter:Journey.kt:Journey$name: String</ID>
+    <ID>UnusedParameter:Journey.kt:Journey$parent: SpanHandle? = null</ID>
+    <ID>UnusedParameter:Journey.kt:Journey$reason: String</ID>
+    <ID>UnusedParameter:Journey.kt:Journey$reason: String? = null</ID>
+    <ID>UnusedParameter:Journey.kt:Journey$span: SpanHandle? = null</ID>
+    <ID>UnusedParameter:Journey.kt:Journey$throwable: Throwable</ID>
+    <ID>UnusedParameter:Journey.kt:SpanHandle$category: SpanCategory = SpanCategory.CUSTOM</ID>
+    <ID>UnusedParameter:Journey.kt:SpanHandle$metadata: DiagnosticMetadata = DiagnosticMetadata.Empty</ID>
+    <ID>UnusedParameter:Journey.kt:SpanHandle$name: String</ID>
+    <ID>UnusedParameter:Journey.kt:SpanHandle$status: SpanStatus = SpanStatus.OK</ID>
+    <ID>UnusedParameter:Journey.kt:SpanHandle$throwable: Throwable</ID>
+    <ID>UnusedParameter:JourneyScope.kt:JourneyScope$config: JourneyScopeConfig</ID>
+    <ID>UnusedParameter:JourneyTracer.kt:JourneyTracer$metadata: DiagnosticMetadata = DiagnosticMetadata.Empty</ID>
+    <ID>UnusedParameter:JourneyTracer.kt:JourneyTracer$name: String</ID>
+    <ID>UnusedParameter:JourneyTracer.kt:JourneyTracer$reason: String</ID>
+  </CurrentIssues>
+</SmellBaseline>

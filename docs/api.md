@@ -38,5 +38,5 @@ Tracing never changes a block's return value. Exceptions are recorded then rethr
 ## Data safety
 Metadata values are `String`/`Long`/`Double`/`Boolean` only (no `toString()` of arbitrary objects). Keys matching `RedactionPolicy.sensitiveKeyFragments` are replaced; total size is capped by `maxMetadataSize`. Failures record the exception class only; messages require `includeFailureMessages`, stack traces require `captureStackTraces`. Never put request bodies or credentials in metadata.
 
-## Extension points (interfaces only)
-`JourneyRecorder`, `JourneyExporter`, `JourneyStore`, `JourneyProcessor`.
+## Extension points
+`JourneyRecorder`, `JourneyExporter`, `JourneyStore`, `JourneyProcessor` are the SPI interfaces. `devscope-export` provides the shipped persistence, redaction and export implementation; see [export.md](export.md).

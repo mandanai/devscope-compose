@@ -4,6 +4,8 @@ import dev.journeyscope.core.model.SpanId
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
+/** `exclusive` is `inclusive` minus time spent in child spans; open spans are measured up to "now". */
+
 public data class SpanTiming(
     val spanId: SpanId,
     val inclusive: Duration,
@@ -16,6 +18,8 @@ public data class TimeGap(
     val offsetFromStart: Duration,
     val duration: Duration,
 )
+
+/** Derived timing of a trace; durations are monotonic, wall-clock fields are display only. */
 
 public data class JourneyTiming(
     val wallClockStartMillis: Long,

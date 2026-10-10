@@ -3,7 +3,9 @@ package dev.journeyscope.sample.shop
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-enum class SampleScenario(val label: String) {
+enum class SampleScenario(
+    val label: String,
+) {
     Normal("Normal"),
     SlowApi("Slow API"),
     BusinessFailure("Business failure"),
@@ -17,10 +19,11 @@ data class LatencyProfile(
     val slow: Duration = 2400.milliseconds,
     val cancelAfter: Duration = 300.milliseconds,
 ) {
-    fun networkFor(scenario: SampleScenario): Duration = when (scenario) {
-        SampleScenario.SlowApi, SampleScenario.Cancelled -> slow
-        else -> normal
-    }
+    fun networkFor(scenario: SampleScenario): Duration =
+        when (scenario) {
+            SampleScenario.SlowApi, SampleScenario.Cancelled -> slow
+            else -> normal
+        }
 
     companion object {
         val Default = LatencyProfile()

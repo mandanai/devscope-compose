@@ -20,6 +20,7 @@ import dev.journeyscope.ui.theme.JourneyColors
 import dev.journeyscope.ui.theme.JourneyScopeTheme
 import dev.journeyscope.ui.theme.defaultJourneyColors
 
+/** Self-contained, read-only trace inspector that renders on-device only. Defaults to the global [JourneyScope] recorder; pass [exportController] to enable history, import and sharing. */
 @Composable
 public fun JourneyScopeInspector(
     modifier: Modifier = Modifier,
@@ -32,12 +33,19 @@ public fun JourneyScopeInspector(
     onClose: (() -> Unit)? = null,
     exportController: JourneyExportController? = null,
 ) {
-    val presenter = remember(source, thresholds, analyzer, metadataPolicy, expectedSequences, exportController) {
-        val resolved = analyzer ?: DiagnosticAnalyzer(
-            DiagnosticConfig(slowJourney = thresholds.slowJourney, expectedSequences = expectedSequences),
-        )
-        InspectorPresenter(exportController?.let { source.withExport(it) } ?: source, TraceMapper(thresholds, metadataPolicy, resolved, expectedSequences))
-    }
+    val presenter =
+        remember(source, thresholds, analyzer, metadataPolicy, expectedSequences, exportController) {
+            val resolved =
+                analyzer ?: DiagnosticAnalyzer(
+                    DiagnosticConfig(slowJourney = thresholds.slowJourney, expectedSequences = expectedSequences),
+                )
+            InspectorPresenter(
+                exportController?.let {
+                    source.withExport(it)
+                } ?: source,
+                TraceMapper(thresholds, metadataPolicy, resolved, expectedSequences),
+            )
+        }
     JourneyScopeTheme(colors = colors) {
         JourneyInspectorScreen(presenter = presenter, onClose = onClose, modifier = modifier, exportController = exportController)
     }

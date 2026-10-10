@@ -12,7 +12,6 @@ import dev.journeyscope.export.persistence.JourneyPersistence
 import dev.journeyscope.export.policy.ExportPolicy
 import dev.journeyscope.export.share.ShareSink
 import dev.journeyscope.export.storage.createTraceFileSystem
-import dev.journeyscope.ui.export.exportFindings
 import dev.journeyscope.sample.shop.data.CartLocalDataSource
 import dev.journeyscope.sample.shop.data.CartRepository
 import dev.journeyscope.sample.shop.data.KtorCartApi
@@ -21,6 +20,7 @@ import dev.journeyscope.sample.shop.db.CartDatabase
 import dev.journeyscope.sample.shop.domain.AddToCartUseCase
 import dev.journeyscope.sample.shop.ui.Product
 import dev.journeyscope.sample.shop.ui.ProductViewModel
+import dev.journeyscope.ui.export.exportFindings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -38,11 +38,12 @@ object SampleGraph {
 
     val productViewModel: ProductViewModel by lazy {
         val database = CartDatabase(checkNotNull(driver) { "SampleGraph.configure(driver) was not called" })
-        val repository = CartRepository(
-            KtorCartApi(sampleHttpClient()),
-            CartLocalDataSource(database),
-            Dispatchers.Default.limitedParallelism(IO_PARALLELISM, "cart-io"),
-        )
+        val repository =
+            CartRepository(
+                KtorCartApi(sampleHttpClient()),
+                CartLocalDataSource(database),
+                Dispatchers.Default.limitedParallelism(IO_PARALLELISM, "cart-io"),
+            )
         ProductViewModel(
             product = Product(id = "sku-keyboard-01", name = "Mechanical Keyboard", price = "$129.00"),
             addToCartUseCase = AddToCartUseCase(repository),
@@ -52,15 +53,17 @@ object SampleGraph {
 }
 
 /** Applies only to Add to Cart journeys; other journeys are never judged against it. */
-val AddToCartCompletion = ExpectedSequence(
-    name = "Add to Cart completion",
-    steps = listOf(
-        ExpectedStep.category("Network request", SpanCategory.NETWORK),
-        ExpectedStep.category("Database write", SpanCategory.DATABASE, "cart.upsert"),
-        ExpectedStep.category("UI render checkpoint", SpanCategory.UI_RENDER),
-    ),
-    appliesTo = { it.name == "Add to Cart" },
-)
+val AddToCartCompletion =
+    ExpectedSequence(
+        name = "Add to Cart completion",
+        steps =
+            listOf(
+                ExpectedStep.category("Network request", SpanCategory.NETWORK),
+                ExpectedStep.category("Database write", SpanCategory.DATABASE, "cart.upsert"),
+                ExpectedStep.category("UI render checkpoint", SpanCategory.UI_RENDER),
+            ),
+        appliesTo = { it.name == "Add to Cart" },
+    )
 
 /** Opt-in persistence and export for the sample; stays off until a platform entry point calls [install]. */
 object SampleExport {
@@ -70,7 +73,10 @@ object SampleExport {
     var controller: JourneyExportController? = null
         private set
 
-    fun install(traceDirectory: String, shareSink: ShareSink?) {
+    fun install(
+        traceDirectory: String,
+        shareSink: ShareSink?,
+    ) {
         this.traceDirectory = traceDirectory
         this.shareSink = shareSink
     }
@@ -84,13 +90,14 @@ object SampleExport {
         val policy = ExportPolicy(persistenceEnabled = true, appVersion = SAMPLE_VERSION)
         val persistence = JourneyPersistence.install(config, policy, fileSystem = { createTraceFileSystem(directory) })
         JourneyScope.configure(config, persistence.recorder)
-        controller = JourneyExportController(
-            recorder = persistence.recorder,
-            store = persistence.store,
-            policy = policy,
-            shareSink = shareSink,
-            findings = DiagnosticAnalyzer().exportFindings(),
-        )
+        controller =
+            JourneyExportController(
+                recorder = persistence.recorder,
+                store = persistence.store,
+                policy = policy,
+                shareSink = shareSink,
+                findings = DiagnosticAnalyzer().exportFindings(),
+            )
     }
 
     private const val SAMPLE_VERSION = "sample"

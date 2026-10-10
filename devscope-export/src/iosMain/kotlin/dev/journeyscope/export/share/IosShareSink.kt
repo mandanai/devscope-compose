@@ -20,18 +20,19 @@ import platform.UIKit.UIWindowScene
 
 /** Presents the system share sheet from the foreground window; the file lives in the temporary directory. */
 public class IosShareSink : ShareSink {
-    override suspend fun share(report: ExportedReport): Boolean = withContext(Dispatchers.Main) {
-        val path = NSTemporaryDirectory() + report.fileName
-        val written = NSString.create(string = report.json).writeToFile(path, true, NSUTF8StringEncoding, null)
-        val presenter = if (written) topViewController() else null
-        if (presenter == null) {
-            false
-        } else {
-            val controller = UIActivityViewController(listOf(NSURL.fileURLWithPath(path)), null)
-            presenter.presentViewController(controller, true, null)
-            true
+    override suspend fun share(report: ExportedReport): Boolean =
+        withContext(Dispatchers.Main) {
+            val path = NSTemporaryDirectory() + report.fileName
+            val written = NSString.create(string = report.json).writeToFile(path, true, NSUTF8StringEncoding, null)
+            val presenter = if (written) topViewController() else null
+            if (presenter == null) {
+                false
+            } else {
+                val controller = UIActivityViewController(listOf(NSURL.fileURLWithPath(path)), null)
+                presenter.presentViewController(controller, true, null)
+                true
+            }
         }
-    }
 
     private fun topViewController(): UIViewController? {
         val scene = UIApplication.sharedApplication.connectedScenes.firstNotNullOfOrNull { it as? UIWindowScene }

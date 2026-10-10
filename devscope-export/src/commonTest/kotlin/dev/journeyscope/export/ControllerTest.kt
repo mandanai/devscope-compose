@@ -19,58 +19,76 @@ class ControllerTest {
     private val trace = sampleTrace()
     private val recorder = InMemoryJourneyRecorder().also { it.attach(Finished(trace)) }
 
-    private class Finished(private val trace: dev.journeyscope.core.model.JourneyTrace) : RecordedTrace {
+    private class Finished(
+        private val trace: dev.journeyscope.core.model.JourneyTrace,
+    ) : RecordedTrace {
         override val id = trace.id
         override val isFinished = true
+
         override fun snapshot() = trace
+
         override fun interrupt(reason: String) = Unit
+
         override fun detach() = Unit
     }
 
     @Test
-    fun previewReportsCountsAndRedactionWithoutSharing() = runTest {
-        var shared = 0
-        val controller = JourneyExportController(recorder, shareSink = ShareSink { shared++; true })
-        val preview = assertNotNull(controller.preview(setOf(trace.id.value)))
-        assertEquals(1, preview.traceCount)
-        assertEquals(trace.spans.size, preview.spanCount)
-        assertTrue(preview.redaction.droppedKeys > 0)
-        assertFalse(preview.json.contains("abcdefghijklmnop"))
-        assertEquals(0, shared)
-    }
+    fun previewReportsCountsAndRedactionWithoutSharing() =
+        runTest {
+            var shared = 0
+            val controller =
+                JourneyExportController(
+                    recorder,
+                    shareSink =
+                        ShareSink {
+                            shared++
+                            true
+                        },
+                )
+            val preview = assertNotNull(controller.preview(setOf(trace.id.value)))
+            assertEquals(1, preview.traceCount)
+            assertEquals(trace.spans.size, preview.spanCount)
+            assertTrue(preview.redaction.droppedKeys > 0)
+            assertFalse(preview.json.contains("abcdefghijklmnop"))
+            assertEquals(0, shared)
+        }
 
     @Test
-    fun unknownSelectionYieldsNothing() = runTest {
-        val controller = JourneyExportController(recorder)
-        assertNull(controller.preview(setOf("missing")))
-        assertIs<ExportOutcome.NothingSelected>(controller.export(emptySet()))
-    }
+    fun unknownSelectionYieldsNothing() =
+        runTest {
+            val controller = JourneyExportController(recorder)
+            assertNull(controller.preview(setOf("missing")))
+            assertIs<ExportOutcome.NothingSelected>(controller.export(emptySet()))
+        }
 
     @Test
-    fun exportRespectsByteLimitsAndSharingNeedsASink() = runTest {
-        val tight = JourneyExportController(recorder, policy = ExportPolicy(maxExportBytes = 100))
-        assertIs<ExportOutcome.TooLarge>(tight.export(setOf(trace.id.value)))
-        val controller = JourneyExportController(recorder)
-        val ready = assertIs<ExportOutcome.Ready>(controller.export(setOf(trace.id.value)))
-        assertFalse(controller.canShare)
-        assertFalse(controller.share(ready.report))
-    }
+    fun exportRespectsByteLimitsAndSharingNeedsASink() =
+        runTest {
+            val tight = JourneyExportController(recorder, policy = ExportPolicy(maxExportBytes = 100))
+            assertIs<ExportOutcome.TooLarge>(tight.export(setOf(trace.id.value)))
+            val controller = JourneyExportController(recorder)
+            val ready = assertIs<ExportOutcome.Ready>(controller.export(setOf(trace.id.value)))
+            assertFalse(controller.canShare)
+            assertFalse(controller.share(ready.report))
+        }
 
     @Test
-    fun importedReportsAreKeptSeparateFromTheRecorder() = runTest {
-        val controller = JourneyExportController(recorder)
-        val json = assertIs<ExportOutcome.Ready>(controller.export(setOf(trace.id.value))).report.json
-        val other = JourneyExportController(InMemoryJourneyRecorder())
-        assertIs<ImportResult.Accepted>(other.importReport(json))
-        assertEquals(1, other.importedTraces.value.size)
-        assertIs<ImportResult.Rejected>(other.importReport("{}"))
-        assertEquals(0, InMemoryJourneyRecorder().snapshot().size)
-    }
+    fun importedReportsAreKeptSeparateFromTheRecorder() =
+        runTest {
+            val controller = JourneyExportController(recorder)
+            val json = assertIs<ExportOutcome.Ready>(controller.export(setOf(trace.id.value))).report.json
+            val other = JourneyExportController(InMemoryJourneyRecorder())
+            assertIs<ImportResult.Accepted>(other.importReport(json))
+            assertEquals(1, other.importedTraces.value.size)
+            assertIs<ImportResult.Rejected>(other.importReport("{}"))
+            assertEquals(0, InMemoryJourneyRecorder().snapshot().size)
+        }
 
     @Test
-    fun clearHistoryEmptiesRecorderAndImports() = runTest {
-        val controller = JourneyExportController(recorder)
-        controller.clearHistory()
-        assertTrue(recorder.snapshot().isEmpty())
-    }
+    fun clearHistoryEmptiesRecorderAndImports() =
+        runTest {
+            val controller = JourneyExportController(recorder)
+            controller.clearHistory()
+            assertTrue(recorder.snapshot().isEmpty())
+        }
 }

@@ -17,7 +17,10 @@ import kotlin.time.Duration.Companion.seconds
 private val PreviewThresholds = InspectorThresholds(slowJourney = 1.seconds)
 
 @Composable
-private fun PreviewHost(traces: List<JourneyTrace>, dark: Boolean = false) {
+private fun PreviewHost(
+    traces: List<JourneyTrace>,
+    dark: Boolean = false,
+) {
     val source = remember(traces) { staticTraceSource(traces, DemoJourneys.NOW_NANOS) }
     Box(Modifier.fillMaxSize()) {
         JourneyScopeInspector(

@@ -13,7 +13,11 @@ class CartRepository(
     private val local: CartLocalDataSource,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
-    suspend fun add(productId: String, quantity: Int, scenario: SampleScenario): Int =
+    suspend fun add(
+        productId: String,
+        quantity: Int,
+        scenario: SampleScenario,
+    ): Int =
         traced("CartRepository.add", SpanCategory.REPOSITORY) {
             withContext(ioDispatcher) {
                 val response = remote.addItem(productId, quantity, scenario)
@@ -25,11 +29,12 @@ class CartRepository(
     private suspend fun validate(response: CartApiResponse) =
         traced("validateCartResponse", SpanCategory.BUSINESS_VALIDATION, diagnosticMetadata { put("rule", "item_accepted") }) {
             if (!response.accepted) {
-                val reason = if (response.rejectionReason == "OUT_OF_STOCK") {
-                    CartRejectedException.Reason.OutOfStock
-                } else {
-                    CartRejectedException.Reason.Unknown
-                }
+                val reason =
+                    if (response.rejectionReason == "OUT_OF_STOCK") {
+                        CartRejectedException.Reason.OutOfStock
+                    } else {
+                        CartRejectedException.Reason.Unknown
+                    }
                 throw CartRejectedException(reason)
             }
         }

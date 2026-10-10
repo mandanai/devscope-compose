@@ -1,0 +1,270 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <dev.journeyscope:devscope-diagnostics>
+final enum class dev.journeyscope.diagnostics/DiagnosticSeverity : kotlin/Enum<dev.journeyscope.diagnostics/DiagnosticSeverity> { // dev.journeyscope.diagnostics/DiagnosticSeverity|null[0]
+    enum entry Error // dev.journeyscope.diagnostics/DiagnosticSeverity.Error|null[0]
+    enum entry Info // dev.journeyscope.diagnostics/DiagnosticSeverity.Info|null[0]
+    enum entry Warning // dev.journeyscope.diagnostics/DiagnosticSeverity.Warning|null[0]
+
+    final val entries // dev.journeyscope.diagnostics/DiagnosticSeverity.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.journeyscope.diagnostics/DiagnosticSeverity> // dev.journeyscope.diagnostics/DiagnosticSeverity.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): dev.journeyscope.diagnostics/DiagnosticSeverity // dev.journeyscope.diagnostics/DiagnosticSeverity.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.journeyscope.diagnostics/DiagnosticSeverity> // dev.journeyscope.diagnostics/DiagnosticSeverity.values|values#static(){}[0]
+}
+
+abstract interface dev.journeyscope.diagnostics/DiagnosticRule { // dev.journeyscope.diagnostics/DiagnosticRule|null[0]
+    abstract val id // dev.journeyscope.diagnostics/DiagnosticRule.id|{}id[0]
+        abstract fun <get-id>(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticRule.id.<get-id>|<get-id>(){}[0]
+
+    abstract fun evaluate(dev.journeyscope.diagnostics/DiagnosticContext): kotlin.collections/List<dev.journeyscope.diagnostics/DiagnosticFinding> // dev.journeyscope.diagnostics/DiagnosticRule.evaluate|evaluate(dev.journeyscope.diagnostics.DiagnosticContext){}[0]
+}
+
+final class dev.journeyscope.diagnostics/CategoryTiming { // dev.journeyscope.diagnostics/CategoryTiming|null[0]
+    constructor <init>(dev.journeyscope.core.model/SpanCategory, kotlin.time/Duration, kotlin.time/Duration, kotlin/Long) // dev.journeyscope.diagnostics/CategoryTiming.<init>|<init>(dev.journeyscope.core.model.SpanCategory;kotlin.time.Duration;kotlin.time.Duration;kotlin.Long){}[0]
+
+    final val attributed // dev.journeyscope.diagnostics/CategoryTiming.attributed|{}attributed[0]
+        final fun <get-attributed>(): kotlin.time/Duration // dev.journeyscope.diagnostics/CategoryTiming.attributed.<get-attributed>|<get-attributed>(){}[0]
+    final val attributedNanos // dev.journeyscope.diagnostics/CategoryTiming.attributedNanos|{}attributedNanos[0]
+        final fun <get-attributedNanos>(): kotlin/Long // dev.journeyscope.diagnostics/CategoryTiming.attributedNanos.<get-attributedNanos>|<get-attributedNanos>(){}[0]
+    final val busy // dev.journeyscope.diagnostics/CategoryTiming.busy|{}busy[0]
+        final fun <get-busy>(): kotlin.time/Duration // dev.journeyscope.diagnostics/CategoryTiming.busy.<get-busy>|<get-busy>(){}[0]
+    final val category // dev.journeyscope.diagnostics/CategoryTiming.category|{}category[0]
+        final fun <get-category>(): dev.journeyscope.core.model/SpanCategory // dev.journeyscope.diagnostics/CategoryTiming.category.<get-category>|<get-category>(){}[0]
+
+    final fun component1(): dev.journeyscope.core.model/SpanCategory // dev.journeyscope.diagnostics/CategoryTiming.component1|component1(){}[0]
+    final fun component2(): kotlin.time/Duration // dev.journeyscope.diagnostics/CategoryTiming.component2|component2(){}[0]
+    final fun component3(): kotlin.time/Duration // dev.journeyscope.diagnostics/CategoryTiming.component3|component3(){}[0]
+    final fun component4(): kotlin/Long // dev.journeyscope.diagnostics/CategoryTiming.component4|component4(){}[0]
+    final fun copy(dev.journeyscope.core.model/SpanCategory = ..., kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin/Long = ...): dev.journeyscope.diagnostics/CategoryTiming // dev.journeyscope.diagnostics/CategoryTiming.copy|copy(dev.journeyscope.core.model.SpanCategory;kotlin.time.Duration;kotlin.time.Duration;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.journeyscope.diagnostics/CategoryTiming.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.journeyscope.diagnostics/CategoryTiming.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.journeyscope.diagnostics/CategoryTiming.toString|toString(){}[0]
+}
+
+final class dev.journeyscope.diagnostics/DiagnosticAnalyzer { // dev.journeyscope.diagnostics/DiagnosticAnalyzer|null[0]
+    constructor <init>(dev.journeyscope.diagnostics/DiagnosticConfig = ..., kotlin.collections/List<dev.journeyscope.diagnostics/DiagnosticRule> = ...) // dev.journeyscope.diagnostics/DiagnosticAnalyzer.<init>|<init>(dev.journeyscope.diagnostics.DiagnosticConfig;kotlin.collections.List<dev.journeyscope.diagnostics.DiagnosticRule>){}[0]
+
+    final val config // dev.journeyscope.diagnostics/DiagnosticAnalyzer.config|{}config[0]
+        final fun <get-config>(): dev.journeyscope.diagnostics/DiagnosticConfig // dev.journeyscope.diagnostics/DiagnosticAnalyzer.config.<get-config>|<get-config>(){}[0]
+
+    final fun analyze(dev.journeyscope.core.model/JourneyTrace, kotlin/Long = ...): dev.journeyscope.diagnostics/DiagnosticReport // dev.journeyscope.diagnostics/DiagnosticAnalyzer.analyze|analyze(dev.journeyscope.core.model.JourneyTrace;kotlin.Long){}[0]
+}
+
+final class dev.journeyscope.diagnostics/DiagnosticConfig { // dev.journeyscope.diagnostics/DiagnosticConfig|null[0]
+    constructor <init>(kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin.time/Duration = ..., kotlin/Double = ..., kotlin/Double = ..., kotlin/Double = ..., kotlin.collections/List<dev.journeyscope.core.expectation/ExpectedSequence> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Map<kotlin/String, dev.journeyscope.diagnostics/DiagnosticSeverity> = ..., kotlin/Int = ...) // dev.journeyscope.diagnostics/DiagnosticConfig.<init>|<init>(kotlin.time.Duration;kotlin.time.Duration;kotlin.time.Duration;kotlin.Int;kotlin.Int;kotlin.time.Duration;kotlin.Double;kotlin.Double;kotlin.Double;kotlin.collections.List<dev.journeyscope.core.expectation.ExpectedSequence>;kotlin.collections.Set<kotlin.String>;kotlin.collections.Map<kotlin.String,dev.journeyscope.diagnostics.DiagnosticSeverity>;kotlin.Int){}[0]
+
+    final val databaseSignificantShare // dev.journeyscope.diagnostics/DiagnosticConfig.databaseSignificantShare|{}databaseSignificantShare[0]
+        final fun <get-databaseSignificantShare>(): kotlin/Double // dev.journeyscope.diagnostics/DiagnosticConfig.databaseSignificantShare.<get-databaseSignificantShare>|<get-databaseSignificantShare>(){}[0]
+    final val disabledRules // dev.journeyscope.diagnostics/DiagnosticConfig.disabledRules|{}disabledRules[0]
+        final fun <get-disabledRules>(): kotlin.collections/Set<kotlin/String> // dev.journeyscope.diagnostics/DiagnosticConfig.disabledRules.<get-disabledRules>|<get-disabledRules>(){}[0]
+    final val dominantShare // dev.journeyscope.diagnostics/DiagnosticConfig.dominantShare|{}dominantShare[0]
+        final fun <get-dominantShare>(): kotlin/Double // dev.journeyscope.diagnostics/DiagnosticConfig.dominantShare.<get-dominantShare>|<get-dominantShare>(){}[0]
+    final val expectedSequences // dev.journeyscope.diagnostics/DiagnosticConfig.expectedSequences|{}expectedSequences[0]
+        final fun <get-expectedSequences>(): kotlin.collections/List<dev.journeyscope.core.expectation/ExpectedSequence> // dev.journeyscope.diagnostics/DiagnosticConfig.expectedSequences.<get-expectedSequences>|<get-expectedSequences>(){}[0]
+    final val gapFractionOfJourney // dev.journeyscope.diagnostics/DiagnosticConfig.gapFractionOfJourney|{}gapFractionOfJourney[0]
+        final fun <get-gapFractionOfJourney>(): kotlin/Double // dev.journeyscope.diagnostics/DiagnosticConfig.gapFractionOfJourney.<get-gapFractionOfJourney>|<get-gapFractionOfJourney>(){}[0]
+    final val maxRelatedSpans // dev.journeyscope.diagnostics/DiagnosticConfig.maxRelatedSpans|{}maxRelatedSpans[0]
+        final fun <get-maxRelatedSpans>(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticConfig.maxRelatedSpans.<get-maxRelatedSpans>|<get-maxRelatedSpans>(){}[0]
+    final val minGap // dev.journeyscope.diagnostics/DiagnosticConfig.minGap|{}minGap[0]
+        final fun <get-minGap>(): kotlin.time/Duration // dev.journeyscope.diagnostics/DiagnosticConfig.minGap.<get-minGap>|<get-minGap>(){}[0]
+    final val repeatedRequestMinCount // dev.journeyscope.diagnostics/DiagnosticConfig.repeatedRequestMinCount|{}repeatedRequestMinCount[0]
+        final fun <get-repeatedRequestMinCount>(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticConfig.repeatedRequestMinCount.<get-repeatedRequestMinCount>|<get-repeatedRequestMinCount>(){}[0]
+    final val sequentialDatabaseMinCount // dev.journeyscope.diagnostics/DiagnosticConfig.sequentialDatabaseMinCount|{}sequentialDatabaseMinCount[0]
+        final fun <get-sequentialDatabaseMinCount>(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticConfig.sequentialDatabaseMinCount.<get-sequentialDatabaseMinCount>|<get-sequentialDatabaseMinCount>(){}[0]
+    final val severityOverrides // dev.journeyscope.diagnostics/DiagnosticConfig.severityOverrides|{}severityOverrides[0]
+        final fun <get-severityOverrides>(): kotlin.collections/Map<kotlin/String, dev.journeyscope.diagnostics/DiagnosticSeverity> // dev.journeyscope.diagnostics/DiagnosticConfig.severityOverrides.<get-severityOverrides>|<get-severityOverrides>(){}[0]
+    final val slowDatabaseOperation // dev.journeyscope.diagnostics/DiagnosticConfig.slowDatabaseOperation|{}slowDatabaseOperation[0]
+        final fun <get-slowDatabaseOperation>(): kotlin.time/Duration // dev.journeyscope.diagnostics/DiagnosticConfig.slowDatabaseOperation.<get-slowDatabaseOperation>|<get-slowDatabaseOperation>(){}[0]
+    final val slowJourney // dev.journeyscope.diagnostics/DiagnosticConfig.slowJourney|{}slowJourney[0]
+        final fun <get-slowJourney>(): kotlin.time/Duration // dev.journeyscope.diagnostics/DiagnosticConfig.slowJourney.<get-slowJourney>|<get-slowJourney>(){}[0]
+    final val slowNetworkSpan // dev.journeyscope.diagnostics/DiagnosticConfig.slowNetworkSpan|{}slowNetworkSpan[0]
+        final fun <get-slowNetworkSpan>(): kotlin.time/Duration // dev.journeyscope.diagnostics/DiagnosticConfig.slowNetworkSpan.<get-slowNetworkSpan>|<get-slowNetworkSpan>(){}[0]
+
+    final fun component1(): kotlin.time/Duration // dev.journeyscope.diagnostics/DiagnosticConfig.component1|component1(){}[0]
+    final fun component10(): kotlin.collections/List<dev.journeyscope.core.expectation/ExpectedSequence> // dev.journeyscope.diagnostics/DiagnosticConfig.component10|component10(){}[0]
+    final fun component11(): kotlin.collections/Set<kotlin/String> // dev.journeyscope.diagnostics/DiagnosticConfig.component11|component11(){}[0]
+    final fun component12(): kotlin.collections/Map<kotlin/String, dev.journeyscope.diagnostics/DiagnosticSeverity> // dev.journeyscope.diagnostics/DiagnosticConfig.component12|component12(){}[0]
+    final fun component13(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticConfig.component13|component13(){}[0]
+    final fun component2(): kotlin.time/Duration // dev.journeyscope.diagnostics/DiagnosticConfig.component2|component2(){}[0]
+    final fun component3(): kotlin.time/Duration // dev.journeyscope.diagnostics/DiagnosticConfig.component3|component3(){}[0]
+    final fun component4(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticConfig.component4|component4(){}[0]
+    final fun component5(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticConfig.component5|component5(){}[0]
+    final fun component6(): kotlin.time/Duration // dev.journeyscope.diagnostics/DiagnosticConfig.component6|component6(){}[0]
+    final fun component7(): kotlin/Double // dev.journeyscope.diagnostics/DiagnosticConfig.component7|component7(){}[0]
+    final fun component8(): kotlin/Double // dev.journeyscope.diagnostics/DiagnosticConfig.component8|component8(){}[0]
+    final fun component9(): kotlin/Double // dev.journeyscope.diagnostics/DiagnosticConfig.component9|component9(){}[0]
+    final fun copy(kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin.time/Duration = ..., kotlin/Double = ..., kotlin/Double = ..., kotlin/Double = ..., kotlin.collections/List<dev.journeyscope.core.expectation/ExpectedSequence> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Map<kotlin/String, dev.journeyscope.diagnostics/DiagnosticSeverity> = ..., kotlin/Int = ...): dev.journeyscope.diagnostics/DiagnosticConfig // dev.journeyscope.diagnostics/DiagnosticConfig.copy|copy(kotlin.time.Duration;kotlin.time.Duration;kotlin.time.Duration;kotlin.Int;kotlin.Int;kotlin.time.Duration;kotlin.Double;kotlin.Double;kotlin.Double;kotlin.collections.List<dev.journeyscope.core.expectation.ExpectedSequence>;kotlin.collections.Set<kotlin.String>;kotlin.collections.Map<kotlin.String,dev.journeyscope.diagnostics.DiagnosticSeverity>;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.journeyscope.diagnostics/DiagnosticConfig.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticConfig.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticConfig.toString|toString(){}[0]
+}
+
+final class dev.journeyscope.diagnostics/DiagnosticContext { // dev.journeyscope.diagnostics/DiagnosticContext|null[0]
+    constructor <init>(dev.journeyscope.core.model/JourneyTrace, dev.journeyscope.diagnostics/TimingAnalysis, dev.journeyscope.diagnostics/DiagnosticConfig, kotlin/Long) // dev.journeyscope.diagnostics/DiagnosticContext.<init>|<init>(dev.journeyscope.core.model.JourneyTrace;dev.journeyscope.diagnostics.TimingAnalysis;dev.journeyscope.diagnostics.DiagnosticConfig;kotlin.Long){}[0]
+
+    final val config // dev.journeyscope.diagnostics/DiagnosticContext.config|{}config[0]
+        final fun <get-config>(): dev.journeyscope.diagnostics/DiagnosticConfig // dev.journeyscope.diagnostics/DiagnosticContext.config.<get-config>|<get-config>(){}[0]
+    final val nowNanos // dev.journeyscope.diagnostics/DiagnosticContext.nowNanos|{}nowNanos[0]
+        final fun <get-nowNanos>(): kotlin/Long // dev.journeyscope.diagnostics/DiagnosticContext.nowNanos.<get-nowNanos>|<get-nowNanos>(){}[0]
+    final val timing // dev.journeyscope.diagnostics/DiagnosticContext.timing|{}timing[0]
+        final fun <get-timing>(): dev.journeyscope.diagnostics/TimingAnalysis // dev.journeyscope.diagnostics/DiagnosticContext.timing.<get-timing>|<get-timing>(){}[0]
+    final val trace // dev.journeyscope.diagnostics/DiagnosticContext.trace|{}trace[0]
+        final fun <get-trace>(): dev.journeyscope.core.model/JourneyTrace // dev.journeyscope.diagnostics/DiagnosticContext.trace.<get-trace>|<get-trace>(){}[0]
+}
+
+final class dev.journeyscope.diagnostics/DiagnosticFinding { // dev.journeyscope.diagnostics/DiagnosticFinding|null[0]
+    constructor <init>(kotlin/String, dev.journeyscope.diagnostics/DiagnosticSeverity, dev.journeyscope.diagnostics/DiagnosticCategory, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin/String? = ..., kotlin.collections/List<kotlin/String> = ..., kotlin.collections/List<dev.journeyscope.core.model/SpanId> = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // dev.journeyscope.diagnostics/DiagnosticFinding.<init>|<init>(kotlin.String;dev.journeyscope.diagnostics.DiagnosticSeverity;dev.journeyscope.diagnostics.DiagnosticCategory;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.String?;kotlin.collections.List<kotlin.String>;kotlin.collections.List<dev.journeyscope.core.model.SpanId>;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+    final val category // dev.journeyscope.diagnostics/DiagnosticFinding.category|{}category[0]
+        final fun <get-category>(): dev.journeyscope.diagnostics/DiagnosticCategory // dev.journeyscope.diagnostics/DiagnosticFinding.category.<get-category>|<get-category>(){}[0]
+    final val evidence // dev.journeyscope.diagnostics/DiagnosticFinding.evidence|{}evidence[0]
+        final fun <get-evidence>(): kotlin.collections/List<kotlin/String> // dev.journeyscope.diagnostics/DiagnosticFinding.evidence.<get-evidence>|<get-evidence>(){}[0]
+    final val inference // dev.journeyscope.diagnostics/DiagnosticFinding.inference|{}inference[0]
+        final fun <get-inference>(): kotlin/String? // dev.journeyscope.diagnostics/DiagnosticFinding.inference.<get-inference>|<get-inference>(){}[0]
+    final val metrics // dev.journeyscope.diagnostics/DiagnosticFinding.metrics|{}metrics[0]
+        final fun <get-metrics>(): kotlin.collections/Map<kotlin/String, kotlin/String> // dev.journeyscope.diagnostics/DiagnosticFinding.metrics.<get-metrics>|<get-metrics>(){}[0]
+    final val nextSteps // dev.journeyscope.diagnostics/DiagnosticFinding.nextSteps|{}nextSteps[0]
+        final fun <get-nextSteps>(): kotlin.collections/List<kotlin/String> // dev.journeyscope.diagnostics/DiagnosticFinding.nextSteps.<get-nextSteps>|<get-nextSteps>(){}[0]
+    final val relatedSpanIds // dev.journeyscope.diagnostics/DiagnosticFinding.relatedSpanIds|{}relatedSpanIds[0]
+        final fun <get-relatedSpanIds>(): kotlin.collections/List<dev.journeyscope.core.model/SpanId> // dev.journeyscope.diagnostics/DiagnosticFinding.relatedSpanIds.<get-relatedSpanIds>|<get-relatedSpanIds>(){}[0]
+    final val ruleId // dev.journeyscope.diagnostics/DiagnosticFinding.ruleId|{}ruleId[0]
+        final fun <get-ruleId>(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticFinding.ruleId.<get-ruleId>|<get-ruleId>(){}[0]
+    final val severity // dev.journeyscope.diagnostics/DiagnosticFinding.severity|{}severity[0]
+        final fun <get-severity>(): dev.journeyscope.diagnostics/DiagnosticSeverity // dev.journeyscope.diagnostics/DiagnosticFinding.severity.<get-severity>|<get-severity>(){}[0]
+    final val title // dev.journeyscope.diagnostics/DiagnosticFinding.title|{}title[0]
+        final fun <get-title>(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticFinding.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticFinding.component1|component1(){}[0]
+    final fun component2(): dev.journeyscope.diagnostics/DiagnosticSeverity // dev.journeyscope.diagnostics/DiagnosticFinding.component2|component2(){}[0]
+    final fun component3(): dev.journeyscope.diagnostics/DiagnosticCategory // dev.journeyscope.diagnostics/DiagnosticFinding.component3|component3(){}[0]
+    final fun component4(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticFinding.component4|component4(){}[0]
+    final fun component5(): kotlin.collections/List<kotlin/String> // dev.journeyscope.diagnostics/DiagnosticFinding.component5|component5(){}[0]
+    final fun component6(): kotlin/String? // dev.journeyscope.diagnostics/DiagnosticFinding.component6|component6(){}[0]
+    final fun component7(): kotlin.collections/List<kotlin/String> // dev.journeyscope.diagnostics/DiagnosticFinding.component7|component7(){}[0]
+    final fun component8(): kotlin.collections/List<dev.journeyscope.core.model/SpanId> // dev.journeyscope.diagnostics/DiagnosticFinding.component8|component8(){}[0]
+    final fun component9(): kotlin.collections/Map<kotlin/String, kotlin/String> // dev.journeyscope.diagnostics/DiagnosticFinding.component9|component9(){}[0]
+    final fun copy(kotlin/String = ..., dev.journeyscope.diagnostics/DiagnosticSeverity = ..., dev.journeyscope.diagnostics/DiagnosticCategory = ..., kotlin/String = ..., kotlin.collections/List<kotlin/String> = ..., kotlin/String? = ..., kotlin.collections/List<kotlin/String> = ..., kotlin.collections/List<dev.journeyscope.core.model/SpanId> = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...): dev.journeyscope.diagnostics/DiagnosticFinding // dev.journeyscope.diagnostics/DiagnosticFinding.copy|copy(kotlin.String;dev.journeyscope.diagnostics.DiagnosticSeverity;dev.journeyscope.diagnostics.DiagnosticCategory;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.String?;kotlin.collections.List<kotlin.String>;kotlin.collections.List<dev.journeyscope.core.model.SpanId>;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.journeyscope.diagnostics/DiagnosticFinding.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticFinding.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticFinding.toString|toString(){}[0]
+}
+
+final class dev.journeyscope.diagnostics/DiagnosticReport { // dev.journeyscope.diagnostics/DiagnosticReport|null[0]
+    constructor <init>(kotlin.collections/List<dev.journeyscope.diagnostics/DiagnosticFinding>, dev.journeyscope.diagnostics/TimingAnalysis, kotlin.collections/List<dev.journeyscope.diagnostics/RuleFailure> = ...) // dev.journeyscope.diagnostics/DiagnosticReport.<init>|<init>(kotlin.collections.List<dev.journeyscope.diagnostics.DiagnosticFinding>;dev.journeyscope.diagnostics.TimingAnalysis;kotlin.collections.List<dev.journeyscope.diagnostics.RuleFailure>){}[0]
+
+    final val findings // dev.journeyscope.diagnostics/DiagnosticReport.findings|{}findings[0]
+        final fun <get-findings>(): kotlin.collections/List<dev.journeyscope.diagnostics/DiagnosticFinding> // dev.journeyscope.diagnostics/DiagnosticReport.findings.<get-findings>|<get-findings>(){}[0]
+    final val ruleFailures // dev.journeyscope.diagnostics/DiagnosticReport.ruleFailures|{}ruleFailures[0]
+        final fun <get-ruleFailures>(): kotlin.collections/List<dev.journeyscope.diagnostics/RuleFailure> // dev.journeyscope.diagnostics/DiagnosticReport.ruleFailures.<get-ruleFailures>|<get-ruleFailures>(){}[0]
+    final val timing // dev.journeyscope.diagnostics/DiagnosticReport.timing|{}timing[0]
+        final fun <get-timing>(): dev.journeyscope.diagnostics/TimingAnalysis // dev.journeyscope.diagnostics/DiagnosticReport.timing.<get-timing>|<get-timing>(){}[0]
+}
+
+final class dev.journeyscope.diagnostics/RuleFailure { // dev.journeyscope.diagnostics/RuleFailure|null[0]
+    constructor <init>(kotlin/String, kotlin/String) // dev.journeyscope.diagnostics/RuleFailure.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val errorType // dev.journeyscope.diagnostics/RuleFailure.errorType|{}errorType[0]
+        final fun <get-errorType>(): kotlin/String // dev.journeyscope.diagnostics/RuleFailure.errorType.<get-errorType>|<get-errorType>(){}[0]
+    final val ruleId // dev.journeyscope.diagnostics/RuleFailure.ruleId|{}ruleId[0]
+        final fun <get-ruleId>(): kotlin/String // dev.journeyscope.diagnostics/RuleFailure.ruleId.<get-ruleId>|<get-ruleId>(){}[0]
+
+    final fun component1(): kotlin/String // dev.journeyscope.diagnostics/RuleFailure.component1|component1(){}[0]
+    final fun component2(): kotlin/String // dev.journeyscope.diagnostics/RuleFailure.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ...): dev.journeyscope.diagnostics/RuleFailure // dev.journeyscope.diagnostics/RuleFailure.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.journeyscope.diagnostics/RuleFailure.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.journeyscope.diagnostics/RuleFailure.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.journeyscope.diagnostics/RuleFailure.toString|toString(){}[0]
+}
+
+final class dev.journeyscope.diagnostics/SpanOverlap { // dev.journeyscope.diagnostics/SpanOverlap|null[0]
+    constructor <init>(dev.journeyscope.core.model/SpanId, dev.journeyscope.core.model/SpanId, kotlin.time/Duration) // dev.journeyscope.diagnostics/SpanOverlap.<init>|<init>(dev.journeyscope.core.model.SpanId;dev.journeyscope.core.model.SpanId;kotlin.time.Duration){}[0]
+
+    final val first // dev.journeyscope.diagnostics/SpanOverlap.first|{}first[0]
+        final fun <get-first>(): dev.journeyscope.core.model/SpanId // dev.journeyscope.diagnostics/SpanOverlap.first.<get-first>|<get-first>(){}[0]
+    final val overlap // dev.journeyscope.diagnostics/SpanOverlap.overlap|{}overlap[0]
+        final fun <get-overlap>(): kotlin.time/Duration // dev.journeyscope.diagnostics/SpanOverlap.overlap.<get-overlap>|<get-overlap>(){}[0]
+    final val second // dev.journeyscope.diagnostics/SpanOverlap.second|{}second[0]
+        final fun <get-second>(): dev.journeyscope.core.model/SpanId // dev.journeyscope.diagnostics/SpanOverlap.second.<get-second>|<get-second>(){}[0]
+
+    final fun component1(): dev.journeyscope.core.model/SpanId // dev.journeyscope.diagnostics/SpanOverlap.component1|component1(){}[0]
+    final fun component2(): dev.journeyscope.core.model/SpanId // dev.journeyscope.diagnostics/SpanOverlap.component2|component2(){}[0]
+    final fun component3(): kotlin.time/Duration // dev.journeyscope.diagnostics/SpanOverlap.component3|component3(){}[0]
+    final fun copy(dev.journeyscope.core.model/SpanId = ..., dev.journeyscope.core.model/SpanId = ..., kotlin.time/Duration = ...): dev.journeyscope.diagnostics/SpanOverlap // dev.journeyscope.diagnostics/SpanOverlap.copy|copy(dev.journeyscope.core.model.SpanId;dev.journeyscope.core.model.SpanId;kotlin.time.Duration){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.journeyscope.diagnostics/SpanOverlap.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.journeyscope.diagnostics/SpanOverlap.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.journeyscope.diagnostics/SpanOverlap.toString|toString(){}[0]
+}
+
+final class dev.journeyscope.diagnostics/TimingAnalysis { // dev.journeyscope.diagnostics/TimingAnalysis|null[0]
+    final val categories // dev.journeyscope.diagnostics/TimingAnalysis.categories|{}categories[0]
+        final fun <get-categories>(): kotlin.collections/List<dev.journeyscope.diagnostics/CategoryTiming> // dev.journeyscope.diagnostics/TimingAnalysis.categories.<get-categories>|<get-categories>(){}[0]
+    final val criticalPath // dev.journeyscope.diagnostics/TimingAnalysis.criticalPath|{}criticalPath[0]
+        final fun <get-criticalPath>(): kotlin.collections/List<dev.journeyscope.core.model/SpanId>? // dev.journeyscope.diagnostics/TimingAnalysis.criticalPath.<get-criticalPath>|<get-criticalPath>(){}[0]
+    final val isComplete // dev.journeyscope.diagnostics/TimingAnalysis.isComplete|{}isComplete[0]
+        final fun <get-isComplete>(): kotlin/Boolean // dev.journeyscope.diagnostics/TimingAnalysis.isComplete.<get-isComplete>|<get-isComplete>(){}[0]
+    final val isSequential // dev.journeyscope.diagnostics/TimingAnalysis.isSequential|{}isSequential[0]
+        final fun <get-isSequential>(): kotlin/Boolean // dev.journeyscope.diagnostics/TimingAnalysis.isSequential.<get-isSequential>|<get-isSequential>(){}[0]
+    final val maxConcurrency // dev.journeyscope.diagnostics/TimingAnalysis.maxConcurrency|{}maxConcurrency[0]
+        final fun <get-maxConcurrency>(): kotlin/Int // dev.journeyscope.diagnostics/TimingAnalysis.maxConcurrency.<get-maxConcurrency>|<get-maxConcurrency>(){}[0]
+    final val operations // dev.journeyscope.diagnostics/TimingAnalysis.operations|{}operations[0]
+        final fun <get-operations>(): kotlin.collections/List<dev.journeyscope.core.model/SpanId> // dev.journeyscope.diagnostics/TimingAnalysis.operations.<get-operations>|<get-operations>(){}[0]
+    final val overlaps // dev.journeyscope.diagnostics/TimingAnalysis.overlaps|{}overlaps[0]
+        final fun <get-overlaps>(): kotlin.collections/List<dev.journeyscope.diagnostics/SpanOverlap> // dev.journeyscope.diagnostics/TimingAnalysis.overlaps.<get-overlaps>|<get-overlaps>(){}[0]
+    final val slowestSpan // dev.journeyscope.diagnostics/TimingAnalysis.slowestSpan|{}slowestSpan[0]
+        final fun <get-slowestSpan>(): dev.journeyscope.core.model/SpanId? // dev.journeyscope.diagnostics/TimingAnalysis.slowestSpan.<get-slowestSpan>|<get-slowestSpan>(){}[0]
+    final val spans // dev.journeyscope.diagnostics/TimingAnalysis.spans|{}spans[0]
+        final fun <get-spans>(): kotlin.collections/List<dev.journeyscope.core.timing/SpanTiming> // dev.journeyscope.diagnostics/TimingAnalysis.spans.<get-spans>|<get-spans>(){}[0]
+    final val total // dev.journeyscope.diagnostics/TimingAnalysis.total|{}total[0]
+        final fun <get-total>(): kotlin.time/Duration // dev.journeyscope.diagnostics/TimingAnalysis.total.<get-total>|<get-total>(){}[0]
+    final val totalNanos // dev.journeyscope.diagnostics/TimingAnalysis.totalNanos|{}totalNanos[0]
+        final fun <get-totalNanos>(): kotlin/Long // dev.journeyscope.diagnostics/TimingAnalysis.totalNanos.<get-totalNanos>|<get-totalNanos>(){}[0]
+    final val untracked // dev.journeyscope.diagnostics/TimingAnalysis.untracked|{}untracked[0]
+        final fun <get-untracked>(): kotlin.time/Duration // dev.journeyscope.diagnostics/TimingAnalysis.untracked.<get-untracked>|<get-untracked>(){}[0]
+    final val untrackedNanos // dev.journeyscope.diagnostics/TimingAnalysis.untrackedNanos|{}untrackedNanos[0]
+        final fun <get-untrackedNanos>(): kotlin/Long // dev.journeyscope.diagnostics/TimingAnalysis.untrackedNanos.<get-untrackedNanos>|<get-untrackedNanos>(){}[0]
+
+    final fun share(dev.journeyscope.core.model/SpanCategory): kotlin/Double // dev.journeyscope.diagnostics/TimingAnalysis.share|share(dev.journeyscope.core.model.SpanCategory){}[0]
+}
+
+final value class dev.journeyscope.diagnostics/DiagnosticCategory { // dev.journeyscope.diagnostics/DiagnosticCategory|null[0]
+    constructor <init>(kotlin/String) // dev.journeyscope.diagnostics/DiagnosticCategory.<init>|<init>(kotlin.String){}[0]
+
+    final val name // dev.journeyscope.diagnostics/DiagnosticCategory.name|{}name[0]
+        final fun <get-name>(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticCategory.name.<get-name>|<get-name>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.journeyscope.diagnostics/DiagnosticCategory.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.journeyscope.diagnostics/DiagnosticCategory.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.journeyscope.diagnostics/DiagnosticCategory.toString|toString(){}[0]
+
+    final object Companion { // dev.journeyscope.diagnostics/DiagnosticCategory.Companion|null[0]
+        final val Business // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Business|{}Business[0]
+            final fun <get-Business>(): dev.journeyscope.diagnostics/DiagnosticCategory // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Business.<get-Business>|<get-Business>(){}[0]
+        final val Database // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Database|{}Database[0]
+            final fun <get-Database>(): dev.journeyscope.diagnostics/DiagnosticCategory // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Database.<get-Database>|<get-Database>(){}[0]
+        final val Instrumentation // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Instrumentation|{}Instrumentation[0]
+            final fun <get-Instrumentation>(): dev.journeyscope.diagnostics/DiagnosticCategory // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Instrumentation.<get-Instrumentation>|<get-Instrumentation>(){}[0]
+        final val Network // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Network|{}Network[0]
+            final fun <get-Network>(): dev.journeyscope.diagnostics/DiagnosticCategory // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Network.<get-Network>|<get-Network>(){}[0]
+        final val Performance // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Performance|{}Performance[0]
+            final fun <get-Performance>(): dev.journeyscope.diagnostics/DiagnosticCategory // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Performance.<get-Performance>|<get-Performance>(){}[0]
+        final val Reliability // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Reliability|{}Reliability[0]
+            final fun <get-Reliability>(): dev.journeyscope.diagnostics/DiagnosticCategory // dev.journeyscope.diagnostics/DiagnosticCategory.Companion.Reliability.<get-Reliability>|<get-Reliability>(){}[0]
+    }
+}
+
+final object dev.journeyscope.diagnostics/DiagnosticRules { // dev.journeyscope.diagnostics/DiagnosticRules|null[0]
+    final fun default(): kotlin.collections/List<dev.journeyscope.diagnostics/DiagnosticRule> // dev.journeyscope.diagnostics/DiagnosticRules.default|default(){}[0]
+}
+
+final object dev.journeyscope.diagnostics/Percentages { // dev.journeyscope.diagnostics/Percentages|null[0]
+    final fun distribute(kotlin.collections/List<kotlin/Long>, kotlin/Long): kotlin.collections/List<kotlin/Int> // dev.journeyscope.diagnostics/Percentages.distribute|distribute(kotlin.collections.List<kotlin.Long>;kotlin.Long){}[0]
+    final fun format(kotlin/Long, kotlin/Long): kotlin/String // dev.journeyscope.diagnostics/Percentages.format|format(kotlin.Long;kotlin.Long){}[0]
+}
+
+final fun dev.journeyscope.diagnostics/analyzeTiming(dev.journeyscope.core.model/JourneyTrace, kotlin/Long = ...): dev.journeyscope.diagnostics/TimingAnalysis // dev.journeyscope.diagnostics/analyzeTiming|analyzeTiming(dev.journeyscope.core.model.JourneyTrace;kotlin.Long){}[0]

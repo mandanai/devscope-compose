@@ -17,7 +17,12 @@ public data class CategoryTiming(
     val attributedNanos: Long,
 )
 
-public data class SpanOverlap(val first: SpanId, val second: SpanId, val overlap: Duration)
+/** Concurrent, non-nested spans and how long they ran together. */
+public data class SpanOverlap(
+    val first: SpanId,
+    val second: SpanId,
+    val overlap: Duration,
+)
 
 /**
  * Attribution rule: every instant is charged to exactly one active span, the deepest, then the
@@ -40,13 +45,16 @@ public class TimingAnalysis internal constructor(
 ) {
     public val isSequential: Boolean get() = overlaps.isEmpty()
 
-    public fun share(category: SpanCategory): Double =
-        if (totalNanos <= 0L) 0.0 else (categories.firstOrNull { it.category == category }?.attributedNanos ?: 0L).toDouble() / totalNanos
+    public fun share(category: SpanCategory): Double = if (totalNanos <= 0L) 0.0 else (categories.firstOrNull { it.category == category }?.attributedNanos ?: 0L).toDouble() / totalNanos
 }
 
 private const val MAX_DEPTH = 64
 
-public fun analyzeTiming(trace: JourneyTrace, nowNanos: Long = trace.lastObservedNanos): TimingAnalysis {
+/** Open spans are measured up to [nowNanos]; [TimingAnalysis.isComplete] is false when the trace has not ended. */
+public fun analyzeTiming(
+    trace: JourneyTrace,
+    nowNanos: Long = trace.lastObservedNanos,
+): TimingAnalysis {
     val start = trace.startNanos
     val end = trace.endNanos ?: nowNanos
     val total = (end - start).coerceAtLeast(0)
@@ -54,16 +62,22 @@ public fun analyzeTiming(trace: JourneyTrace, nowNanos: Long = trace.lastObserve
 
     val ids = trace.spans.associateBy { it.id }
     val depthCache = HashMap<SpanId, Int>()
-    fun depth(span: JourneySpan): Int = depthCache.getOrPut(span.id) {
-        var depth = 0
-        var cursor = span.parentId
-        while (cursor != null && depth < MAX_DEPTH && cursor in ids) {
-            depth++
-            cursor = ids.getValue(cursor).parentId
+
+    fun depth(span: JourneySpan): Int =
+        depthCache.getOrPut(span.id) {
+            var depth = 0
+            var cursor = span.parentId
+            while (cursor != null && depth < MAX_DEPTH && cursor in ids) {
+                depth++
+                cursor = ids.getValue(cursor).parentId
+            }
+            depth
         }
-        depth
-    }
-    fun isAncestor(ancestor: SpanId, of: JourneySpan): Boolean {
+
+    fun isAncestor(
+        ancestor: SpanId,
+        of: JourneySpan,
+    ): Boolean {
         var cursor = of.parentId
         var hops = 0
         while (cursor != null && hops++ < MAX_DEPTH) {
@@ -73,11 +87,16 @@ public fun analyzeTiming(trace: JourneyTrace, nowNanos: Long = trace.lastObserve
         return false
     }
 
-    class Clipped(val span: JourneySpan, val from: Long, val to: Long)
-    val clipped = trace.spans
-        .map { Clipped(it, maxOf(it.startNanos, start), minOf(it.endNanos ?: end, end)) }
-        .filter { it.to > it.from }
-        .sortedWith(compareBy({ it.from }, { it.span.sequence }))
+    class Clipped(
+        val span: JourneySpan,
+        val from: Long,
+        val to: Long,
+    )
+    val clipped =
+        trace.spans
+            .map { Clipped(it, maxOf(it.startNanos, start), minOf(it.endNanos ?: end, end)) }
+            .filter { it.to > it.from }
+            .sortedWith(compareBy({ it.from }, { it.span.sequence }))
 
     val boundaries = (listOf(start, end) + clipped.flatMap { listOf(it.from, it.to) }).distinct().sorted()
     val attributed = LinkedHashMap<SpanCategory, Long>()
@@ -114,28 +133,34 @@ public fun analyzeTiming(trace: JourneyTrace, nowNanos: Long = trace.lastObserve
         busy[category] = covered
     }
 
-    val overlaps = buildList {
-        for (i in clipped.indices) for (j in i + 1 until clipped.size) {
-            val a = clipped[i]
-            val b = clipped[j]
-            if (isAncestor(a.span.id, b.span) || isAncestor(b.span.id, a.span)) continue
-            val overlap = minOf(a.to, b.to) - maxOf(a.from, b.from)
-            if (overlap > 0) add(SpanOverlap(a.span.id, b.span.id, overlap.nanoseconds))
+    val overlaps =
+        buildList {
+            for (i in clipped.indices) {
+                for (j in i + 1 until clipped.size) {
+                    val a = clipped[i]
+                    val b = clipped[j]
+                    if (isAncestor(a.span.id, b.span) || isAncestor(b.span.id, a.span)) continue
+                    val overlap = minOf(a.to, b.to) - maxOf(a.from, b.from)
+                    if (overlap > 0) add(SpanOverlap(a.span.id, b.span.id, overlap.nanoseconds))
+                }
+            }
         }
-    }
 
-    val slowest = coreTiming.spans
-        .filter { !it.isOpen && it.exclusive > Duration.ZERO }
-        .maxByOrNull { it.exclusive }
-        ?.spanId
+    val slowest =
+        coreTiming.spans
+            .filter { !it.isOpen && it.exclusive > Duration.ZERO }
+            .maxByOrNull { it.exclusive }
+            ?.spanId
 
     return TimingAnalysis(
         total = total.nanoseconds,
         totalNanos = total,
         isComplete = trace.endNanos != null,
-        categories = attributed.map { (category, nanos) ->
-            CategoryTiming(category, nanos.nanoseconds, (busy[category] ?: 0L).nanoseconds, nanos)
-        }.sortedByDescending { it.attributedNanos },
+        categories =
+            attributed
+                .map { (category, nanos) ->
+                    CategoryTiming(category, nanos.nanoseconds, (busy[category] ?: 0L).nanoseconds, nanos)
+                }.sortedByDescending { it.attributedNanos },
         untracked = untracked.nanoseconds,
         untrackedNanos = untracked,
         spans = coreTiming.spans,

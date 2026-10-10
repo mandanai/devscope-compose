@@ -72,12 +72,13 @@ internal fun JourneyDurationBreakdown(
     val colors = JourneyTheme.colors
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(10.dp)
-                .clip(RoundedCornerShape(percent = 50))
-                .background(colors.divider)
-                .semantics { contentDescription = "Duration breakdown: ${breakdown.spokenDescription}" },
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+                    .clip(RoundedCornerShape(percent = 50))
+                    .background(colors.divider)
+                    .semantics { contentDescription = "Duration breakdown: ${breakdown.spokenDescription}" },
         ) {
             breakdown.segments.forEach { segment ->
                 Box(
@@ -97,21 +98,26 @@ internal fun JourneyDurationBreakdown(
 }
 
 @Composable
-private fun LegendItem(segment: DurationSegmentUi, onClick: ((JourneyCategory) -> Unit)?) {
+private fun LegendItem(
+    segment: DurationSegmentUi,
+    onClick: ((JourneyCategory) -> Unit)?,
+) {
     val colors = JourneyTheme.colors
     val description = "${segment.category.label}, ${segment.label}, ${segment.percent} percent"
-    val clickable = if (onClick != null) {
-        Modifier.clip(RoundedCornerShape(8.dp)).clickable(
-            onClickLabel = "Show slowest ${segment.category.label} step",
-            role = Role.Button,
-        ) { onClick(segment.category) }
-    } else {
-        Modifier
-    }
+    val clickable =
+        if (onClick != null) {
+            Modifier.clip(RoundedCornerShape(8.dp)).clickable(
+                onClickLabel = "Show slowest ${segment.category.label} step",
+                role = Role.Button,
+            ) { onClick(segment.category) }
+        } else {
+            Modifier
+        }
     Row(
-        modifier = clickable
-            .padding(vertical = 6.dp)
-            .clearAndSetSemantics { contentDescription = description },
+        modifier =
+            clickable
+                .padding(vertical = 6.dp)
+                .clearAndSetSemantics { contentDescription = description },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {

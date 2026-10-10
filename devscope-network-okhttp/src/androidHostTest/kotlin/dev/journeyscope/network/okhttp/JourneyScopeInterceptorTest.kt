@@ -43,15 +43,26 @@ class JourneyScopeInterceptorTest {
     @AfterTest
     fun stop() = server.close()
 
-    private fun client(trace: NetworkTraceConfig = NetworkTraceConfig(), configure: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
-        OkHttpClient.Builder()
+    private fun client(
+        trace: NetworkTraceConfig = NetworkTraceConfig(),
+        configure: OkHttpClient.Builder.() -> Unit = {},
+    ): OkHttpClient =
+        OkHttpClient
+            .Builder()
             .addInterceptor(JourneyScopeInterceptor(NetworkTracing(trace) { tracer }))
             .apply(configure)
             .build()
 
-    private fun Journey.requestFor(path: String, headers: Map<String, String> = emptyMap()): Request =
-        Request.Builder().url(server.url(path)).apply { headers.forEach { (k, v) -> header(k, v) } }
-            .journeyContext(context()[TraceContext]).build()
+    private fun Journey.requestFor(
+        path: String,
+        headers: Map<String, String> = emptyMap(),
+    ): Request =
+        Request
+            .Builder()
+            .url(server.url(path))
+            .apply { headers.forEach { (k, v) -> header(k, v) } }
+            .journeyContext(context()[TraceContext])
+            .build()
 
     private fun Journey.networkSpans(): List<JourneySpan> = checkNotNull(snapshot()).spans.filter { it.category == SpanCategory.NETWORK }
 
@@ -69,7 +80,10 @@ class JourneyScopeInterceptorTest {
         assertEquals(SpanStatus.OK, span.status)
         assertEquals(MetadataValue.Integer(200), span.metadata["http.status"])
         assertEquals("token", span.text("http.query.keys"))
-        assertFalse(span.metadata.entries.values.any { (it as? MetadataValue.Text)?.value?.contains("secret") == true })
+        assertFalse(
+            span.metadata.entries.values
+                .any { (it as? MetadataValue.Text)?.value?.contains("secret") == true },
+        )
     }
 
     @Test
@@ -88,13 +102,20 @@ class JourneyScopeInterceptorTest {
     @Test
     fun businessFailureUsesPeekedBodyAndCallerStillReadsIt() {
         val json = """{"returnCode":"1001"}"""
-        val trace = NetworkTraceConfig(
-            bodyCapture = BodyCapture(),
-            businessValidator = { _, response ->
-                if (response.bodySnippet?.contains("\"1001\"") == true) BusinessResult(BusinessStatus.SESSION_EXPIRED, "1001") else null
-            },
+        val trace =
+            NetworkTraceConfig(
+                bodyCapture = BodyCapture(),
+                businessValidator = { _, response ->
+                    if (response.bodySnippet?.contains("\"1001\"") == true) BusinessResult(BusinessStatus.SESSION_EXPIRED, "1001") else null
+                },
+            )
+        server.enqueue(
+            MockResponse
+                .Builder()
+                .addHeader("Content-Type", "application/json")
+                .body(json)
+                .build(),
         )
-        server.enqueue(MockResponse.Builder().addHeader("Content-Type", "application/json").body(json).build())
         val journey = tracer.startJourney("j")
 
         val body = client(trace).newCall(journey.requestFor("/s")).execute().use { it.body.string() }
@@ -108,7 +129,13 @@ class JourneyScopeInterceptorTest {
     @Test
     fun streamingBodyIsNotBufferedByTheInterceptor() {
         val trace = NetworkTraceConfig(bodyCapture = BodyCapture(), businessValidator = { _, _ -> error("must not run on a snippet") })
-        server.enqueue(MockResponse.Builder().addHeader("Content-Type", "text/event-stream").body("data: 1\n\n").build())
+        server.enqueue(
+            MockResponse
+                .Builder()
+                .addHeader("Content-Type", "text/event-stream")
+                .body("data: 1\n\n")
+                .build(),
+        )
         val journey = tracer.startJourney("j")
 
         val body = client(trace).newCall(journey.requestFor("/events")).execute().use { it.body.string() }
@@ -136,7 +163,10 @@ class JourneyScopeInterceptorTest {
         val journey = tracer.startJourney("j")
         val call = client().newCall(journey.requestFor("/hang"))
 
-        Thread { Thread.sleep(150); call.cancel() }.start()
+        Thread {
+            Thread.sleep(150)
+            call.cancel()
+        }.start()
         assertFailsWith<IOException> { call.execute() }
 
         val span = journey.networkSpans().single()
@@ -173,21 +203,23 @@ class JourneyScopeInterceptorTest {
     }
 
     @Test
-    fun concurrentCallsKeepTheirOwnJourneys() = runTest {
-        repeat(6) { server.enqueue(MockResponse.Builder().build()) }
-        val a = tracer.startJourney("a")
-        val b = tracer.startJourney("b")
-        val client = client()
+    fun concurrentCallsKeepTheirOwnJourneys() =
+        runTest {
+            repeat(6) { server.enqueue(MockResponse.Builder().build()) }
+            val a = tracer.startJourney("a")
+            val b = tracer.startJourney("b")
+            val client = client()
 
-        val threads = listOf(a, b).map { journey ->
-            Thread { repeat(3) { client.newCall(journey.requestFor("/${journey.name}")).execute().close() } }.apply { start() }
+            val threads =
+                listOf(a, b).map { journey ->
+                    Thread { repeat(3) { client.newCall(journey.requestFor("/${journey.name}")).execute().close() } }.apply { start() }
+                }
+            threads.forEach { it.join() }
+
+            assertEquals(setOf("GET ${server.hostName}/a"), a.networkSpans().map { it.name }.toSet())
+            assertEquals(3, a.networkSpans().size)
+            assertEquals(3, b.networkSpans().size)
         }
-        threads.forEach { it.join() }
-
-        assertEquals(setOf("GET ${server.hostName}/a"), a.networkSpans().map { it.name }.toSet())
-        assertEquals(3, a.networkSpans().size)
-        assertEquals(3, b.networkSpans().size)
-    }
 
     @Test
     fun propagationHeaderReachesOnlyTrustedHostAndOriginalRequestIsUnchanged() {

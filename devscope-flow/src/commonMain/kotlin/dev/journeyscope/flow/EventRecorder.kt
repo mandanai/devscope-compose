@@ -12,7 +12,11 @@ internal class EventRecorder(
     private val ambient: TraceContext?,
     private val source: (() -> Journey?)?,
 ) {
-    fun record(name: String, category: SpanCategory, metadata: DiagnosticMetadata) {
+    fun record(
+        name: String,
+        category: SpanCategory,
+        metadata: DiagnosticMetadata,
+    ) {
         try {
             if (ambient != null) {
                 ambient.recordEvent(name, category, metadata)
@@ -32,11 +36,12 @@ internal object CollectorIds {
 }
 
 internal fun <T> FlowTraceOptions<T>.summarize(value: T): String {
-    val text = try {
-        formatter.format(value)
-    } catch (ignored: Throwable) {
-        "<unformattable>"
-    }
+    val text =
+        try {
+            formatter.format(value)
+        } catch (ignored: Throwable) {
+            "<unformattable>"
+        }
     return text.take(maxSummaryLength)
 }
 
@@ -46,10 +51,11 @@ internal fun streamMetadata(
     event: String,
     detail: String,
     block: DiagnosticMetadata.Builder.() -> Unit = {},
-): DiagnosticMetadata = diagnosticMetadata {
-    put("state.stream", stream)
-    put("flow.kind", kind)
-    put("state.event", event)
-    put("detail", detail)
-    block()
-}
+): DiagnosticMetadata =
+    diagnosticMetadata {
+        put("state.stream", stream)
+        put("flow.kind", kind)
+        put("state.event", event)
+        put("detail", detail)
+        block()
+    }

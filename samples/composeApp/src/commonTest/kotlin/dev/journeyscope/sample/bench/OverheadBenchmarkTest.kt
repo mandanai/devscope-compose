@@ -12,7 +12,10 @@ class OverheadBenchmarkTest {
         val enabled = results.getValue(BenchmarkMode.ENABLED)
         assertEquals(0, disabled.journeysRecorded)
         assertTrue(enabled.journeysRecorded > 0)
-        assertTrue(disabled.nanosPerJourney < enabled.nanosPerJourney, "disabled=${disabled.nanosPerJourney}ns enabled=${enabled.nanosPerJourney}ns")
+        assertTrue(
+            disabled.nanosPerJourney < enabled.nanosPerJourney,
+            "disabled=${disabled.nanosPerJourney}ns enabled=${enabled.nanosPerJourney}ns",
+        )
         println(results.values.joinToString("\n") { "${it.mode}: ${it.nanosPerJourney} ns/journey" })
     }
 }

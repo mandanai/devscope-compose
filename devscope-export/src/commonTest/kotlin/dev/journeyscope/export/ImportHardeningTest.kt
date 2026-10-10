@@ -13,8 +13,10 @@ import kotlin.test.assertTrue
 class ImportHardeningTest {
     private val valid = TraceReportWriter.write(listOf(RedactionPipeline().redact(sampleTrace())))
 
-    private fun rejected(text: String, limits: ImportLimits = ImportLimits()): List<String> =
-        assertIs<ImportResult.Rejected>(TraceImporter(limits).import(text)).issues
+    private fun rejected(
+        text: String,
+        limits: ImportLimits = ImportLimits(),
+    ): List<String> = assertIs<ImportResult.Rejected>(TraceImporter(limits).import(text)).issues
 
     @Test
     fun rejectsMalformedAndTruncatedJson() {
@@ -50,10 +52,11 @@ class ImportHardeningTest {
         assertTrue(rejected(dangling).any { it.contains("missing parent") })
 
         val root = trace.spans.first { it.parentId == null }
-        val cyclic = valid.replace(
-            "\"id\":\"${root.id}\",",
-            "\"id\":\"${root.id}\",\"parentId\":\"${child.id}\",",
-        )
+        val cyclic =
+            valid.replace(
+                "\"id\":\"${root.id}\",",
+                "\"id\":\"${root.id}\",\"parentId\":\"${child.id}\",",
+            )
         assertTrue(rejected(cyclic).any { it.contains("cycle") || it.contains("starts before") })
     }
 

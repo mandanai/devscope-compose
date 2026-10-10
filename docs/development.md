@@ -21,4 +21,4 @@ Deployment target is iOS 16.0.
 ```
 
 ## Publishing
-Group and version come from `gradle.properties` (`GROUP`, `VERSION_NAME`). `./gradlew publishToMavenLocal` for a local check. Signing and remote repositories are not configured yet.
+Group and version come from `gradle.properties` (`GROUP`, `VERSION_NAME`). `./gradlew publishToMavenLocal` for a local check. Remote upload and signing activate only when Maven Central credentials are supplied; see [publishing.md](publishing.md).

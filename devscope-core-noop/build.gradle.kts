@@ -3,19 +3,21 @@ plugins {
     id("journeyscope.publishing")
 }
 
-val sharedCoreSources = listOf(
-    "JourneyScopeConfig.kt",
-    "model/DiagnosticMetadata.kt",
-    "model/Status.kt",
-    "model/Ids.kt",
-)
+val sharedCoreSources =
+    listOf(
+        "JourneyScopeConfig.kt",
+        "model/DiagnosticMetadata.kt",
+        "model/Status.kt",
+        "model/Ids.kt",
+    )
 
-val syncSharedCore = tasks.register<Sync>("syncSharedCoreSources") {
-    from(project(":devscope-core").layout.projectDirectory.dir("src/commonMain/kotlin/dev/journeyscope/core")) {
-        include(sharedCoreSources)
+val syncSharedCore =
+    tasks.register<Sync>("syncSharedCoreSources") {
+        from(project(":devscope-core").layout.projectDirectory.dir("src/commonMain/kotlin/dev/journeyscope/core")) {
+            include(sharedCoreSources)
+        }
+        into(layout.buildDirectory.dir("generated/sharedCore/dev/journeyscope/core"))
     }
-    into(layout.buildDirectory.dir("generated/sharedCore/dev/journeyscope/core"))
-}
 
 kotlin {
     sourceSets {
@@ -29,7 +31,7 @@ kotlin {
 }
 
 tasks.configureEach {
-    if (name.startsWith("compile") || name.endsWith("SourcesJar") || name.startsWith("ksp") || name == "assemble") {
+    if (name.startsWith("compile") || name.endsWith("sourcesJar", ignoreCase = true) || name.startsWith("ksp") || name == "assemble") {
         dependsOn(syncSharedCore)
     }
 }

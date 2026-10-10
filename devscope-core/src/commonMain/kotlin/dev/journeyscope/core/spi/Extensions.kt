@@ -3,9 +3,13 @@ package dev.journeyscope.core.spi
 import dev.journeyscope.core.model.JourneyTrace
 import dev.journeyscope.core.model.TraceId
 
+/** Sends finished traces to an external sink. */
+
 public fun interface JourneyExporter {
     public suspend fun export(trace: JourneyTrace)
 }
+
+/** Persistence for traces. */
 
 public interface JourneyStore {
     public suspend fun save(trace: JourneyTrace)

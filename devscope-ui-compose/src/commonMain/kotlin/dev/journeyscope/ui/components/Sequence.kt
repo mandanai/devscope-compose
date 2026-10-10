@@ -16,7 +16,10 @@ import dev.journeyscope.ui.model.SequenceCheckUi
 import dev.journeyscope.ui.theme.JourneyTheme
 
 @Composable
-internal fun ExpectedSequenceSection(sequences: List<SequenceCheckUi>, modifier: Modifier = Modifier) {
+internal fun ExpectedSequenceSection(
+    sequences: List<SequenceCheckUi>,
+    modifier: Modifier = Modifier,
+) {
     val colors = JourneyTheme.colors
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         HorizontalDivider(color = colors.divider)

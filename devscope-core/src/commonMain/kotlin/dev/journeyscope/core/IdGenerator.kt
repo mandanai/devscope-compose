@@ -4,6 +4,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 import kotlin.random.Random
 
+/** Source of identifiers for traces, spans and events. */
+
 public fun interface IdGenerator {
     public fun nextId(): String
 }

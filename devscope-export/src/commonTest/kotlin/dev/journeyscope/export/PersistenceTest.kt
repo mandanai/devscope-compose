@@ -24,86 +24,120 @@ class PersistenceTest {
     private val config = JourneyScopeConfig(enabled = true)
 
     @Test
-    fun disabledSdkOrDisabledPolicyTouchesNoStorage() = runTest {
-        var created = 0
-        val factory = { created++; FakeFileSystem() }
-        val sdkOff = JourneyPersistence.install(JourneyScopeConfig(enabled = false), ExportPolicy(persistenceEnabled = true), fileSystem = factory)
-        val policyOff = JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = false), fileSystem = factory)
-        assertEquals(0, created)
-        assertFalse(sdkOff.isPersisting)
-        assertFalse(policyOff.isPersisting)
-        val tracer = JourneyTracer(JourneyScopeConfig(enabled = false), sdkOff.recorder)
-        tracer.startJourney("x").finish()
-        assertTrue(sdkOff.recorder.snapshot().isEmpty())
-    }
+    fun disabledSdkOrDisabledPolicyTouchesNoStorage() =
+        runTest {
+            var created = 0
+            val factory = {
+                created++
+                FakeFileSystem()
+            }
+            val sdkOff =
+                JourneyPersistence.install(
+                    JourneyScopeConfig(enabled = false),
+                    ExportPolicy(persistenceEnabled = true),
+                    fileSystem = factory,
+                )
+            val policyOff = JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = false), fileSystem = factory)
+            assertEquals(0, created)
+            assertFalse(sdkOff.isPersisting)
+            assertFalse(policyOff.isPersisting)
+            val tracer = JourneyTracer(JourneyScopeConfig(enabled = false), sdkOff.recorder)
+            tracer.startJourney("x").finish()
+            assertTrue(sdkOff.recorder.snapshot().isEmpty())
+        }
 
     @Test
-    fun finishedJourneysArePersistedOffTheCallerPath() = runTest {
-        val fs = FakeFileSystem()
-        val persistence = JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = true), fileSystem = { fs }, isEnabled = { true }, clock = FakeClock())
-        val tracer = JourneyTracer(config, persistence.recorder, FakeClock(), CountingIds("p"))
-        tracer.startJourney("one").finish()
-        tracer.startJourney("two").finish()
-        persistence.flush()
-        assertEquals(2, fs.files.size)
-        assertEquals(2, persistence.store?.loadAll()?.size)
-        persistence.close()
-    }
+    fun finishedJourneysArePersistedOffTheCallerPath() =
+        runTest {
+            val fs = FakeFileSystem()
+            val persistence =
+                JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = true), fileSystem = {
+                    fs
+                }, isEnabled = { true }, clock = FakeClock())
+            val tracer = JourneyTracer(config, persistence.recorder, FakeClock(), CountingIds("p"))
+            tracer.startJourney("one").finish()
+            tracer.startJourney("two").finish()
+            persistence.flush()
+            assertEquals(2, fs.files.size)
+            assertEquals(2, persistence.store?.loadAll()?.size)
+            persistence.close()
+        }
 
     @Test
-    fun interruptedJourneysAreSavedAsInterrupted() = runTest {
-        val fs = FakeFileSystem()
-        val persistence = JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = true), fileSystem = { fs }, isEnabled = { true }, clock = FakeClock())
-        val tracer = JourneyTracer(config, persistence.recorder, FakeClock(), CountingIds("i"))
-        tracer.startJourney("running")
-        tracer.interruptActive("backgrounded")
-        persistence.flush()
-        assertEquals(TraceStatus.INTERRUPTED, persistence.store?.loadAll()?.single()?.status)
-        persistence.close()
-    }
+    fun interruptedJourneysAreSavedAsInterrupted() =
+        runTest {
+            val fs = FakeFileSystem()
+            val persistence =
+                JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = true), fileSystem = {
+                    fs
+                }, isEnabled = { true }, clock = FakeClock())
+            val tracer = JourneyTracer(config, persistence.recorder, FakeClock(), CountingIds("i"))
+            tracer.startJourney("running")
+            tracer.interruptActive("backgrounded")
+            persistence.flush()
+            assertEquals(
+                TraceStatus.INTERRUPTED,
+                persistence.store
+                    ?.loadAll()
+                    ?.single()
+                    ?.status,
+            )
+            persistence.close()
+        }
 
     @Test
-    fun runningJourneysAreNeverWrittenPartially() = runTest {
-        val fs = FakeFileSystem()
-        val persistence = JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = true), fileSystem = { fs }, isEnabled = { true }, clock = FakeClock())
-        val tracer = JourneyTracer(config, persistence.recorder, FakeClock(), CountingIds("r"))
-        val journey = tracer.startJourney("in-flight")
-        journey.recordEvent("tick")
-        persistence.flush()
-        assertTrue(fs.files.isEmpty())
-        journey.finish()
-        persistence.close()
-    }
+    fun runningJourneysAreNeverWrittenPartially() =
+        runTest {
+            val fs = FakeFileSystem()
+            val persistence =
+                JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = true), fileSystem = {
+                    fs
+                }, isEnabled = { true }, clock = FakeClock())
+            val tracer = JourneyTracer(config, persistence.recorder, FakeClock(), CountingIds("r"))
+            val journey = tracer.startJourney("in-flight")
+            journey.recordEvent("tick")
+            persistence.flush()
+            assertTrue(fs.files.isEmpty())
+            journey.finish()
+            persistence.close()
+        }
 
     @Test
-    fun disablingTheSdkStopsPersistingWithoutClosing() = runTest {
-        val fs = FakeFileSystem()
-        var enabled = true
-        val store = TraceStore(fs, ExportPolicy(persistenceEnabled = true), FakeClock(), StorageListener.None, Dispatchers.Unconfined)
-        val recorder = PersistingJourneyRecorder(InMemoryJourneyRecorder(), store, 4, isEnabled = { enabled }, dispatcher = Dispatchers.Unconfined)
-        val tracer = JourneyTracer(config, recorder, FakeClock(), CountingIds("d"))
-        enabled = false
-        tracer.startJourney("ignored").finish()
-        recorder.flush()
-        assertTrue(fs.files.isEmpty())
-        recorder.close()
-    }
+    fun disablingTheSdkStopsPersistingWithoutClosing() =
+        runTest {
+            val fs = FakeFileSystem()
+            var enabled = true
+            val store = TraceStore(fs, ExportPolicy(persistenceEnabled = true), FakeClock(), StorageListener.None, Dispatchers.Unconfined)
+            val recorder =
+                PersistingJourneyRecorder(InMemoryJourneyRecorder(), store, 4, isEnabled = { enabled }, dispatcher = Dispatchers.Unconfined)
+            val tracer = JourneyTracer(config, recorder, FakeClock(), CountingIds("d"))
+            enabled = false
+            tracer.startJourney("ignored").finish()
+            recorder.flush()
+            assertTrue(fs.files.isEmpty())
+            recorder.close()
+        }
 
     @Test
-    fun fullQueueDropsOldestWithoutBlockingWriters() = runTest {
-        val events = ArrayList<StorageEvent>()
-        val fs = FakeFileSystem()
-        val store = TraceStore(fs, ExportPolicy(persistenceEnabled = true), FakeClock(), StorageListener.None, Dispatchers.Unconfined)
-        val recorder = PersistingJourneyRecorder(
-            InMemoryJourneyRecorder(), store, 2, StorageListener { events += it },
-            dispatcher = StandardTestDispatcher(testScheduler),
-            isEnabled = { true },
-        )
-        val tracer = JourneyTracer(config, recorder, FakeClock(), CountingIds("q"))
-        repeat(20) { tracer.startJourney("j$it").finish() }
-        assertEquals(18, events.count { it is StorageEvent.QueueOverflow })
-        advanceUntilIdle()
-        assertEquals(2, fs.files.size)
-        recorder.close()
-    }
+    fun fullQueueDropsOldestWithoutBlockingWriters() =
+        runTest {
+            val events = ArrayList<StorageEvent>()
+            val fs = FakeFileSystem()
+            val store = TraceStore(fs, ExportPolicy(persistenceEnabled = true), FakeClock(), StorageListener.None, Dispatchers.Unconfined)
+            val recorder =
+                PersistingJourneyRecorder(
+                    InMemoryJourneyRecorder(),
+                    store,
+                    2,
+                    StorageListener { events += it },
+                    dispatcher = StandardTestDispatcher(testScheduler),
+                    isEnabled = { true },
+                )
+            val tracer = JourneyTracer(config, recorder, FakeClock(), CountingIds("q"))
+            repeat(20) { tracer.startJourney("j$it").finish() }
+            assertEquals(18, events.count { it is StorageEvent.QueueOverflow })
+            advanceUntilIdle()
+            assertEquals(2, fs.files.size)
+            recorder.close()
+        }
 }

@@ -10,6 +10,11 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
+/**
+ * Creates journeys under one fixed [JourneyScopeConfig] and records them into [recorder].
+ * It never throws into application code: recorder faults are swallowed.
+ */
+
 public class JourneyTracer(
     public val config: JourneyScopeConfig = JourneyScopeConfig(),
     public val recorder: JourneyRecorder = InMemoryJourneyRecorder(config.maxTraces),
@@ -19,20 +24,30 @@ public class JourneyTracer(
 ) {
     private val deps = EngineDeps(config, clock, recorder, idGenerator)
 
-    public fun createJourney(name: String, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty): Journey {
+    /** Returns a CREATED journey, or an inert one when disabled or sampled out by `samplingRate`. */
+
+    public fun createJourney(
+        name: String,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    ): Journey {
         if (!config.enabled || !isSampled()) return NoopJourney
-        val journey = RecordingJourney(
-            id = TraceId(deps.newId("t")),
-            name = deps.sanitizer.label(name),
-            deps = deps,
-            metadata = deps.sanitizer.metadata(metadata),
-        )
+        val journey =
+            RecordingJourney(
+                id = TraceId(deps.newId("t")),
+                name = deps.sanitizer.label(name),
+                deps = deps,
+                metadata = deps.sanitizer.metadata(metadata),
+            )
         safely { recorder.attach(journey) }
         return journey
     }
 
-    public fun startJourney(name: String, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty): Journey =
-        createJourney(name, metadata).also { it.start() }
+    /** Creates a journey and starts it immediately. */
+
+    public fun startJourney(
+        name: String,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    ): Journey = createJourney(name, metadata).also { it.start() }
 
     /** Runs [block] in a journey, finishing it as COMPLETED, CANCELLED or FAILED and rethrowing any exception. */
     public suspend fun <T> withJourney(

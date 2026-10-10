@@ -22,12 +22,19 @@ public class AndroidShareSink(
             factory != null -> {
                 val dir = File(context.cacheDir, EXPORT_DIR).apply { mkdirs() }
                 val file = File(dir, report.fileName).apply { writeText(report.json, Charsets.UTF_8) }
-                send.setType(TraceSchema.MIME_TYPE)
+                send
+                    .setType(TraceSchema.MIME_TYPE)
                     .putExtra(Intent.EXTRA_STREAM, factory(file))
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            report.sizeBytes <= maxInlineTextBytes -> send.setType("text/plain").putExtra(Intent.EXTRA_TEXT, report.json)
-            else -> return false
+
+            report.sizeBytes <= maxInlineTextBytes -> {
+                send.setType("text/plain").putExtra(Intent.EXTRA_TEXT, report.json)
+            }
+
+            else -> {
+                return false
+            }
         }
         context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         return true

@@ -59,7 +59,12 @@ fun ProductDetailScreen(
 
     Surface(modifier = modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(
-            modifier = Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState()).padding(24.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .safeDrawingPadding()
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -85,11 +90,12 @@ fun ProductDetailScreen(
             Text("Debug scenario", style = MaterialTheme.typography.titleSmall)
             SampleScenario.entries.forEach { option ->
                 Row(
-                    modifier = Modifier.fillMaxWidth().selectable(
-                        selected = option == scenario,
-                        onClick = { scenarioName = option.name },
-                        role = Role.RadioButton,
-                    ),
+                    modifier =
+                        Modifier.fillMaxWidth().selectable(
+                            selected = option == scenario,
+                            onClick = { scenarioName = option.name },
+                            role = Role.RadioButton,
+                        ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     RadioButton(selected = option == scenario, onClick = null)
@@ -100,9 +106,10 @@ fun ProductDetailScreen(
     }
 }
 
-private fun statusLine(state: CartUiState): String = when (state.phase) {
-    CartPhase.Idle -> "Ready"
-    CartPhase.Adding -> "Adding… (${state.pending} in flight)"
-    CartPhase.Added -> "Added to cart"
-    CartPhase.Failed, CartPhase.Cancelled -> state.message ?: "Failed"
-}
+private fun statusLine(state: CartUiState): String =
+    when (state.phase) {
+        CartPhase.Idle -> "Ready"
+        CartPhase.Adding -> "Adding… (${state.pending} in flight)"
+        CartPhase.Added -> "Added to cart"
+        CartPhase.Failed, CartPhase.Cancelled -> state.message ?: "Failed"
+    }

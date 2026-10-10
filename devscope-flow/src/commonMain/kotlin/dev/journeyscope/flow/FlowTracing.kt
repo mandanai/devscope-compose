@@ -193,7 +193,11 @@ private suspend fun <T> collectTraced(
     }
 }
 
-private fun EventRecorder.recordLifecycle(name: String, collectorId: String, state: CollectorLifecycleState) {
+private fun EventRecorder.recordLifecycle(
+    name: String,
+    collectorId: String,
+    state: CollectorLifecycleState,
+) {
     record(
         "$name lifecycle ${state.name.lowercase()}",
         SpanCategory.LIFECYCLE,

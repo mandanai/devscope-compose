@@ -18,7 +18,10 @@ import androidx.compose.ui.unit.dp
 import dev.journeyscope.ui.theme.JourneyTheme
 
 @Composable
-private fun CenteredMessage(modifier: Modifier, content: @Composable () -> Unit) {
+private fun CenteredMessage(
+    modifier: Modifier,
+    content: @Composable () -> Unit,
+) {
     Column(
         modifier = modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
@@ -41,7 +44,11 @@ internal fun JourneyEmptyState(
 }
 
 @Composable
-internal fun JourneyErrorState(reason: String, onRetry: () -> Unit, modifier: Modifier = Modifier) {
+internal fun JourneyErrorState(
+    reason: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     CenteredMessage(modifier) {
         Text("Couldn't load journeys", style = MaterialTheme.typography.titleMedium, color = JourneyTheme.colors.failure)
         Text(reason, style = MaterialTheme.typography.bodyMedium, color = JourneyTheme.colors.textSecondary, textAlign = TextAlign.Center)

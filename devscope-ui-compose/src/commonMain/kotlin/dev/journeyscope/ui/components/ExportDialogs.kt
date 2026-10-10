@@ -28,27 +28,43 @@ private const val RAW_PREVIEW_CHARS = 4_000
 @Composable
 internal fun ExportDialogHost(state: ExportUiState) {
     when (val dialog = state.dialog) {
-        ExportDialog.None -> Unit
-        is ExportDialog.Review -> ReviewDialog(dialog, canShare = state.controller.canShare, state = state)
-        ExportDialog.Import -> ImportDialog(onImport = state::import, onDismiss = state::dismiss)
-        ExportDialog.ConfirmClear -> AlertDialog(
-            onDismissRequest = state::dismiss,
-            title = { Text("Clear history?") },
-            text = { Text("Removes recorded, saved and imported journeys from this device. This cannot be undone.") },
-            confirmButton = { TextButton(onClick = state::clear) { Text("Clear") } },
-            dismissButton = { TextButton(onClick = state::dismiss) { Text("Cancel") } },
-        )
-        is ExportDialog.Notice -> AlertDialog(
-            onDismissRequest = state::dismiss,
-            title = { Text(dialog.title) },
-            text = { LineList(dialog.lines) },
-            confirmButton = { TextButton(onClick = state::dismiss) { Text("OK") } },
-        )
+        ExportDialog.None -> {}
+
+        is ExportDialog.Review -> {
+            ReviewDialog(dialog, canShare = state.controller.canShare, state = state)
+        }
+
+        ExportDialog.Import -> {
+            ImportDialog(onImport = state::import, onDismiss = state::dismiss)
+        }
+
+        ExportDialog.ConfirmClear -> {
+            AlertDialog(
+                onDismissRequest = state::dismiss,
+                title = { Text("Clear history?") },
+                text = { Text("Removes recorded, saved and imported journeys from this device. This cannot be undone.") },
+                confirmButton = { TextButton(onClick = state::clear) { Text("Clear") } },
+                dismissButton = { TextButton(onClick = state::dismiss) { Text("Cancel") } },
+            )
+        }
+
+        is ExportDialog.Notice -> {
+            AlertDialog(
+                onDismissRequest = state::dismiss,
+                title = { Text(dialog.title) },
+                text = { LineList(dialog.lines) },
+                confirmButton = { TextButton(onClick = state::dismiss) { Text("OK") } },
+            )
+        }
     }
 }
 
 @Composable
-private fun ReviewDialog(dialog: ExportDialog.Review, canShare: Boolean, state: ExportUiState) {
+private fun ReviewDialog(
+    dialog: ExportDialog.Review,
+    canShare: Boolean,
+    state: ExportUiState,
+) {
     val preview = dialog.preview
     AlertDialog(
         onDismissRequest = state::dismiss,
@@ -62,7 +78,8 @@ private fun ReviewDialog(dialog: ExportDialog.Review, canShare: Boolean, state: 
                     TextButton(onClick = state::toggleRaw) { Text(if (dialog.showRaw) "Hide report contents" else "Show report contents") }
                     if (dialog.showRaw) {
                         Text(
-                            preview.json.take(RAW_PREVIEW_CHARS) + if (preview.json.length > RAW_PREVIEW_CHARS) "\n… (truncated for review)" else "",
+                            preview.json.take(RAW_PREVIEW_CHARS) +
+                                if (preview.json.length > RAW_PREVIEW_CHARS) "\n… (truncated for review)" else "",
                             style = MaterialTheme.typography.bodySmall,
                             color = JourneyTheme.colors.textSecondary,
                             modifier = Modifier.fillMaxWidth().heightIn(max = 240.dp),
@@ -84,30 +101,39 @@ private fun ReviewDialog(dialog: ExportDialog.Review, canShare: Boolean, state: 
 private fun PreviewSummary(preview: ExportPreview) {
     val colors = JourneyTheme.colors
     val redaction = preview.redaction
-    val lines = buildList {
-        add("${preview.traceCount} journey(s), ${preview.spanCount} spans, ${preview.eventCount} events")
-        add("Size: ${preview.sizeBytes / BYTES_PER_KB + 1} KB")
-        add("Fields removed or masked: ${redaction.totalRedactions}")
-        add("Request/response bodies: excluded")
-        if (preview.includedMetadataKeys.isNotEmpty()) add("Metadata included: ${preview.includedMetadataKeys.joinToString()}")
-        if (preview.exceedsLimits) add("This selection exceeds the export limits; choose fewer journeys.")
-        add("Nothing is sent anywhere until you pick a destination.")
-    }
+    val lines =
+        buildList {
+            add("${preview.traceCount} journey(s), ${preview.spanCount} spans, ${preview.eventCount} events")
+            add("Size: ${preview.sizeBytes / BYTES_PER_KB + 1} KB")
+            add("Fields removed or masked: ${redaction.totalRedactions}")
+            add("Request/response bodies: excluded")
+            if (preview.includedMetadataKeys.isNotEmpty()) add("Metadata included: ${preview.includedMetadataKeys.joinToString()}")
+            if (preview.exceedsLimits) add("This selection exceeds the export limits; choose fewer journeys.")
+            add("Nothing is sent anywhere until you pick a destination.")
+        }
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         lines.forEach { Text(it, style = MaterialTheme.typography.bodyMedium, color = colors.textPrimary) }
     }
 }
 
 @Composable
-private fun ImportDialog(onImport: (String) -> Unit, onDismiss: () -> Unit) {
+private fun ImportDialog(
+    onImport: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
     var text by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Import journey report") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Paste a JourneyScope report. It is validated and treated as untrusted data.", style = MaterialTheme.typography.bodySmall)
-                OutlinedTextField(value = text, onValueChange = { text = it }, modifier = Modifier.fillMaxWidth().heightIn(max = 220.dp), label = { Text("Report JSON") })
+                Text(
+                    "Paste a JourneyScope report. It is validated and treated as untrusted data.",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                OutlinedTextField(value = text, onValueChange = {
+                    text = it
+                }, modifier = Modifier.fillMaxWidth().heightIn(max = 220.dp), label = { Text("Report JSON") })
             }
         },
         confirmButton = { TextButton(onClick = { onImport(text) }, enabled = text.isNotBlank()) { Text("Import") } },

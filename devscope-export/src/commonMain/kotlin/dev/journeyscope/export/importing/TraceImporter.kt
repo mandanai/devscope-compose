@@ -33,23 +33,27 @@ public class TraceImporter(
 ) {
     public fun import(text: String): ImportResult {
         if (text.length > limits.maxBytes) return reject("document exceeds ${limits.maxBytes} bytes")
-        val root = try {
-            JsonReader.parse(text, JsonLimits(limits.maxBytes, limits.maxDepth, MAX_NODES, limits.maxStringLength))
-        } catch (e: JsonException) {
-            return reject("malformed JSON: ${e.message}")
-        }
+        val root =
+            try {
+                JsonReader.parse(text, JsonLimits(limits.maxBytes, limits.maxDepth, MAX_NODES, limits.maxStringLength))
+            } catch (e: JsonException) {
+                return reject("malformed JSON: ${e.message}")
+            }
         if (root !is JsonValue.Obj) return reject("root must be an object")
         if ((root.fields[Keys.SCHEMA] as? JsonValue.Text)?.value != TraceSchema.NAME) return reject("not a ${TraceSchema.NAME} document")
-        val document = when (val outcome = migrator.migrate(root)) {
-            is SchemaMigrator.Outcome.Ready -> outcome.document
-            is SchemaMigrator.Outcome.Unsupported -> return reject(outcome.reason)
-        }
+        val document =
+            when (val outcome = migrator.migrate(root)) {
+                is SchemaMigrator.Outcome.Ready -> outcome.document
+                is SchemaMigrator.Outcome.Unsupported -> return reject(outcome.reason)
+            }
         return Session(document).run()
     }
 
     private fun reject(issue: String): ImportResult = ImportResult.Rejected(listOf(issue))
 
-    private inner class Session(private val document: JsonValue.Obj) {
+    private inner class Session(
+        private val document: JsonValue.Obj,
+    ) {
         private val issues = ArrayList<String>()
         private val warnings = ArrayList<String>()
 
@@ -70,12 +74,15 @@ public class TraceImporter(
             val seen = HashSet<String>()
             traceValues.forEachIndexed { index, value ->
                 val label = "traces[$index]"
-                val parsed = (value as? JsonValue.Obj)?.let { parseTrace(it, label, slowThreshold) } ?: run {
-                    if (value !is JsonValue.Obj) issue("$label must be an object")
-                    null
-                }
+                val parsed =
+                    (value as? JsonValue.Obj)?.let { parseTrace(it, label, slowThreshold) } ?: run {
+                        if (value !is JsonValue.Obj) issue("$label must be an object")
+                        null
+                    }
                 if (parsed != null) {
-                    if (!seen.add(parsed.first.id.value)) issue("$label: duplicate trace id") else {
+                    if (!seen.add(parsed.first.id.value)) {
+                        issue("$label: duplicate trace id")
+                    } else {
                         traces += parsed.first
                         findings[parsed.first.id.value] = parsed.second
                     }
@@ -84,16 +91,26 @@ public class TraceImporter(
             return finish(traces, findings)
         }
 
-        private fun finish(traces: List<JourneyTrace>, findings: Map<String, List<ExportedFinding>>): ImportResult {
+        private fun finish(
+            traces: List<JourneyTrace>,
+            findings: Map<String, List<ExportedFinding>>,
+        ): ImportResult {
             if (issues.isNotEmpty()) return ImportResult.Rejected(issues.toList())
             val safe = traces.map { redaction.redact(it).trace }
             return ImportResult.Accepted(safe, findings, warnings.toList())
         }
 
-        private fun slowThreshold() = ((document.fields[Keys.CONFIG] as? JsonValue.Obj)?.fields?.get("slowJourneyThresholdMillis") as? JsonValue.Integer)
-            ?.value?.takeIf { it in 1..MAX_THRESHOLD_MILLIS }?.milliseconds ?: DEFAULT_SLOW
+        private fun slowThreshold() =
+            ((document.fields[Keys.CONFIG] as? JsonValue.Obj)?.fields?.get("slowJourneyThresholdMillis") as? JsonValue.Integer)
+                ?.value
+                ?.takeIf { it in 1..MAX_THRESHOLD_MILLIS }
+                ?.milliseconds ?: DEFAULT_SLOW
 
-        private fun parseTrace(obj: JsonValue.Obj, label: String, slowThreshold: kotlin.time.Duration): Pair<JourneyTrace, List<ExportedFinding>>? {
+        private fun parseTrace(
+            obj: JsonValue.Obj,
+            label: String,
+            slowThreshold: kotlin.time.Duration,
+        ): Pair<JourneyTrace, List<ExportedFinding>>? {
             val before = issues.size
             unknownFields(obj, Keys.TRACE, label)
             val id = id(obj, Keys.ID, label)
@@ -117,20 +134,34 @@ public class TraceImporter(
 
             if (!status.isTerminal) warnings += "$label: in-progress journey imported as INTERRUPTED"
             val finalStatus = if (status.isTerminal) status else TraceStatus.INTERRUPTED
-            val closedSpans = spans.map {
-                if (it.endNanos != null) it else it.copy(endNanos = duration, status = SpanStatus.INTERRUPTED, endedBySystem = true)
-            }
-            val raw = JourneyTrace(
-                id = TraceId(id), name = name, status = finalStatus,
-                startNanos = 0, startWallMillis = startWall,
-                endNanos = duration, endWallMillis = endWall,
-                spans = closedSpans, events = events, failure = failure, metadata = metadata,
-                droppedItems = dropped.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), summary = null,
-            )
+            val closedSpans =
+                spans.map {
+                    if (it.endNanos != null) it else it.copy(endNanos = duration, status = SpanStatus.INTERRUPTED, endedBySystem = true)
+                }
+            val raw =
+                JourneyTrace(
+                    id = TraceId(id),
+                    name = name,
+                    status = finalStatus,
+                    startNanos = 0,
+                    startWallMillis = startWall,
+                    endNanos = duration,
+                    endWallMillis = endWall,
+                    spans = closedSpans,
+                    events = events,
+                    failure = failure,
+                    metadata = metadata,
+                    droppedItems = dropped.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(),
+                    summary = null,
+                )
             return raw.copy(summary = summarize(raw, slowThreshold)) to findings(obj, label)
         }
 
-        private fun parseSpan(value: JsonValue, label: String, duration: Long): JourneySpan? {
+        private fun parseSpan(
+            value: JsonValue,
+            label: String,
+            duration: Long,
+        ): JourneySpan? {
             val obj = value as? JsonValue.Obj ?: return null.also { issue("$label must be an object") }
             val before = issues.size
             unknownFields(obj, Keys.SPAN, label)
@@ -147,13 +178,32 @@ public class TraceImporter(
             val system = (obj.fields[Keys.ENDED_BY_SYSTEM] as? JsonValue.Bool)?.value ?: false
             val metadata = metadata(obj, label)
             if (start != null && end != null && end < start) issue("$label: end before start")
-            if (issues.size > before || id == null || name == null || category == null || sequence == null || start == null || status == null) return null
+            if (issues.size > before || id == null || name == null || category == null || sequence == null || start == null ||
+                status == null
+            ) {
+                return null
+            }
             return JourneySpan(
-                SpanId(id), parent?.let(::SpanId), name, category, sequence, start, startWall ?: 0, end, status, failure, system, metadata,
+                SpanId(id),
+                parent?.let(::SpanId),
+                name,
+                category,
+                sequence,
+                start,
+                startWall ?: 0,
+                end,
+                status,
+                failure,
+                system,
+                metadata,
             )
         }
 
-        private fun parseEvent(value: JsonValue, label: String, duration: Long): JourneyEvent? {
+        private fun parseEvent(
+            value: JsonValue,
+            label: String,
+            duration: Long,
+        ): JourneyEvent? {
             val obj = value as? JsonValue.Obj ?: return null.also { issue("$label must be an object") }
             val before = issues.size
             unknownFields(obj, Keys.EVENT, label)
@@ -169,7 +219,11 @@ public class TraceImporter(
             return JourneyEvent(EventId(id), name, category, sequence, offset, wall ?: 0, spanId?.let(::SpanId), metadata)
         }
 
-        private fun validateGraph(label: String, spans: List<JourneySpan>, events: List<JourneyEvent>) {
+        private fun validateGraph(
+            label: String,
+            spans: List<JourneySpan>,
+            events: List<JourneyEvent>,
+        ) {
             val byId = HashMap<SpanId, JourneySpan>()
             for (span in spans) if (byId.put(span.id, span) != null) issue("$label: duplicate span id ${span.id}")
             for (span in spans) {
@@ -181,7 +235,11 @@ public class TraceImporter(
                     if (span.startNanos < parent.startNanos) issue("$label: span ${span.id} starts before its parent")
                     val parentEnd = parent.endNanos
                     val spanEnd = span.endNanos
-                    if (parentEnd != null && spanEnd != null && spanEnd > parentEnd) warnings += "$label: span ${span.id} outlives its parent"
+                    if (parentEnd != null && spanEnd != null &&
+                        spanEnd > parentEnd
+                    ) {
+                        warnings += "$label: span ${span.id} outlives its parent"
+                    }
                 }
             }
             for (span in spans) {
@@ -198,25 +256,40 @@ public class TraceImporter(
             val eventIds = HashSet<EventId>()
             for (event in events) {
                 if (!eventIds.add(event.id)) issue("$label: duplicate event id ${event.id}")
-                if (event.spanId != null && event.spanId !in byId) issue("$label: event ${event.id} references missing span ${event.spanId}")
+                if (event.spanId != null &&
+                    event.spanId !in byId
+                ) {
+                    issue("$label: event ${event.id} references missing span ${event.spanId}")
+                }
             }
             val sequences = HashSet<Long>()
             for (s in spans) if (!sequences.add(s.sequence)) warnings += "$label: duplicate sequence ${s.sequence}"
             for (e in events) if (!sequences.add(e.sequence)) warnings += "$label: duplicate sequence ${e.sequence}"
         }
 
-        private fun summarize(trace: JourneyTrace, slowThreshold: kotlin.time.Duration): JourneySummary {
+        private fun summarize(
+            trace: JourneyTrace,
+            slowThreshold: kotlin.time.Duration,
+        ): JourneySummary {
             val timing = trace.timing()
             return JourneySummary(
-                name = trace.name, status = trace.status, duration = timing.duration,
-                spanCount = trace.spans.size, eventCount = trace.events.size,
+                name = trace.name,
+                status = trace.status,
+                duration = timing.duration,
+                spanCount = trace.spans.size,
+                eventCount = trace.events.size,
                 failedSpanCount = trace.spans.count { it.status == SpanStatus.FAILED },
-                droppedItems = trace.droppedItems, isSlow = timing.duration >= slowThreshold,
-                criticalPathDuration = timing.criticalPathDuration, failureType = trace.failure?.type,
+                droppedItems = trace.droppedItems,
+                isSlow = timing.duration >= slowThreshold,
+                criticalPathDuration = timing.criticalPathDuration,
+                failureType = trace.failure?.type,
             )
         }
 
-        private fun findings(obj: JsonValue.Obj, label: String): List<ExportedFinding> {
+        private fun findings(
+            obj: JsonValue.Obj,
+            label: String,
+        ): List<ExportedFinding> {
             val items = (obj.fields[Keys.FINDINGS] as? JsonValue.Array)?.items ?: return emptyList()
             if (items.size > MAX_FINDINGS) {
                 warnings += "$label: findings truncated to $MAX_FINDINGS"
@@ -231,7 +304,10 @@ public class TraceImporter(
             }
         }
 
-        private fun failure(obj: JsonValue.Obj, label: String): FailureInfo? {
+        private fun failure(
+            obj: JsonValue.Obj,
+            label: String,
+        ): FailureInfo? {
             val failure = obj.fields[Keys.FAILURE] ?: return null
             val type = ((failure as? JsonValue.Obj)?.fields?.get(Keys.FAILURE_TYPE) as? JsonValue.Text)?.value
             if (type == null || type.length > limits.maxStringLength) {
@@ -241,9 +317,13 @@ public class TraceImporter(
             return FailureInfo(type)
         }
 
-        private fun metadata(obj: JsonValue.Obj, label: String): DiagnosticMetadata {
+        private fun metadata(
+            obj: JsonValue.Obj,
+            label: String,
+        ): DiagnosticMetadata {
             val raw = obj.fields[Keys.METADATA] ?: return DiagnosticMetadata.Empty
-            val fields = (raw as? JsonValue.Obj)?.fields ?: return DiagnosticMetadata.Empty.also { issue("$label.metadata must be an object") }
+            val fields =
+                (raw as? JsonValue.Obj)?.fields ?: return DiagnosticMetadata.Empty.also { issue("$label.metadata must be an object") }
             if (fields.size > limits.maxMetadataEntries) {
                 issue("$label.metadata has more than ${limits.maxMetadataEntries} entries")
                 return DiagnosticMetadata.Empty
@@ -261,15 +341,21 @@ public class TraceImporter(
             return DiagnosticMetadata(entries, truncated)
         }
 
-        private fun metadataValue(value: JsonValue): MetadataValue? = when (value) {
-            is JsonValue.Text -> if (value.value.length <= limits.maxStringLength) MetadataValue.Text(value.value) else null
-            is JsonValue.Integer -> MetadataValue.Integer(value.value)
-            is JsonValue.Decimal -> MetadataValue.Decimal(value.value)
-            is JsonValue.Bool -> MetadataValue.Flag(value.value)
-            else -> null
-        }
+        private fun metadataValue(value: JsonValue): MetadataValue? =
+            when (value) {
+                is JsonValue.Text -> if (value.value.length <= limits.maxStringLength) MetadataValue.Text(value.value) else null
+                is JsonValue.Integer -> MetadataValue.Integer(value.value)
+                is JsonValue.Decimal -> MetadataValue.Decimal(value.value)
+                is JsonValue.Bool -> MetadataValue.Flag(value.value)
+                else -> null
+            }
 
-        private fun array(obj: JsonValue.Obj, key: String, label: String, max: Int): List<JsonValue>? {
+        private fun array(
+            obj: JsonValue.Obj,
+            key: String,
+            label: String,
+            max: Int,
+        ): List<JsonValue>? {
             val items = (obj.fields[key] as? JsonValue.Array)?.items
             if (items == null) {
                 issue("$label.$key must be an array")
@@ -282,7 +368,12 @@ public class TraceImporter(
             return items
         }
 
-        private fun id(obj: JsonValue.Obj, key: String, label: String, required: Boolean = true): String? {
+        private fun id(
+            obj: JsonValue.Obj,
+            key: String,
+            label: String,
+            required: Boolean = true,
+        ): String? {
             val value = obj.fields[key]
             if (value == null || value == JsonValue.Null) {
                 if (required) issue("$label.$key is required")
@@ -296,7 +387,11 @@ public class TraceImporter(
             return text
         }
 
-        private fun text(obj: JsonValue.Obj, key: String, label: String): String? {
+        private fun text(
+            obj: JsonValue.Obj,
+            key: String,
+            label: String,
+        ): String? {
             val text = (obj.fields[key] as? JsonValue.Text)?.value
             if (text == null || text.length > limits.maxStringLength) {
                 issue("$label.$key must be a string of at most ${limits.maxStringLength} characters")
@@ -305,7 +400,10 @@ public class TraceImporter(
             return text
         }
 
-        private fun category(obj: JsonValue.Obj, label: String): SpanCategory? {
+        private fun category(
+            obj: JsonValue.Obj,
+            label: String,
+        ): SpanCategory? {
             val text = (obj.fields[Keys.CATEGORY] as? JsonValue.Text)?.value
             if (text == null || !CATEGORY_PATTERN.matches(text)) {
                 issue("$label.category is invalid")
@@ -314,7 +412,14 @@ public class TraceImporter(
             return SpanCategory(text)
         }
 
-        private fun long(obj: JsonValue.Obj, key: String, label: String, min: Long, max: Long = Long.MAX_VALUE, required: Boolean = true): Long? {
+        private fun long(
+            obj: JsonValue.Obj,
+            key: String,
+            label: String,
+            min: Long,
+            max: Long = Long.MAX_VALUE,
+            required: Boolean = true,
+        ): Long? {
             val value = obj.fields[key]
             if (value == null || value == JsonValue.Null) {
                 if (required) issue("$label.$key is required")
@@ -328,14 +433,22 @@ public class TraceImporter(
             return number
         }
 
-        private inline fun <reified E : Enum<E>> enumValue(obj: JsonValue.Obj, key: String, label: String): E? {
+        private inline fun <reified E : Enum<E>> enumValue(
+            obj: JsonValue.Obj,
+            key: String,
+            label: String,
+        ): E? {
             val name = (obj.fields[key] as? JsonValue.Text)?.value
             val match = enumValues<E>().firstOrNull { it.name == name }
             if (match == null) issue("$label.$key is not a supported value")
             return match
         }
 
-        private fun unknownFields(obj: JsonValue.Obj, known: Set<String>, label: String) {
+        private fun unknownFields(
+            obj: JsonValue.Obj,
+            known: Set<String>,
+            label: String,
+        ) {
             val unknown = obj.fields.keys.filterNot { it in known }
             if (unknown.isEmpty()) return
             val message = "$label has unsupported fields: ${unknown.take(MAX_LISTED_UNKNOWN).joinToString()}"

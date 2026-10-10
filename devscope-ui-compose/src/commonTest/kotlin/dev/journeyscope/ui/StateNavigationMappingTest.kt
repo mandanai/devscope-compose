@@ -6,8 +6,8 @@ import dev.journeyscope.core.expectation.ExpectedSequence
 import dev.journeyscope.core.expectation.ExpectedStep
 import dev.journeyscope.core.model.SpanCategory
 import dev.journeyscope.core.model.diagnosticMetadata
-import dev.journeyscope.ui.demo.DemoJourneys
 import dev.journeyscope.diagnostics.DiagnosticAnalyzer
+import dev.journeyscope.ui.demo.DemoJourneys
 import dev.journeyscope.ui.mapping.InspectorThresholds
 import dev.journeyscope.ui.mapping.MetadataDisplayPolicy
 import dev.journeyscope.ui.mapping.TraceMapper
@@ -20,8 +20,7 @@ import kotlin.test.assertTrue
 class StateNavigationMappingTest {
     private val tracer = JourneyTracer(JourneyScopeConfig(enabled = true))
 
-    private fun mapper(sequences: List<ExpectedSequence> = emptyList()) =
-        TraceMapper(InspectorThresholds(), MetadataDisplayPolicy.Default, DiagnosticAnalyzer(), sequences)
+    private fun mapper(sequences: List<ExpectedSequence> = emptyList()) = TraceMapper(InspectorThresholds(), MetadataDisplayPolicy.Default, DiagnosticAnalyzer(), sequences)
 
     @Test
     fun stateAndNavigationEventsAppearInTheTimeline() {
@@ -68,14 +67,15 @@ class StateNavigationMappingTest {
         journey.recordEvent("Button Click", SpanCategory.UI_INTERACTION)
         journey.recordEvent("state observed", SpanCategory.STATE)
         journey.finish()
-        val sequence = ExpectedSequence(
-            "add-to-cart",
-            listOf(
-                ExpectedStep.named("Click", "Button Click"),
-                ExpectedStep.category("State", SpanCategory.STATE),
-                ExpectedStep.category("Navigation", SpanCategory.NAVIGATION),
-            ),
-        )
+        val sequence =
+            ExpectedSequence(
+                "add-to-cart",
+                listOf(
+                    ExpectedStep.named("Click", "Button Click"),
+                    ExpectedStep.category("State", SpanCategory.STATE),
+                    ExpectedStep.category("Navigation", SpanCategory.NAVIGATION),
+                ),
+            )
         val detail = mapper(listOf(sequence)).detail(checkNotNull(journey.snapshot()), 0L)
         val check = detail.sequences.single()
         assertEquals(listOf(true, true, false), check.steps.map { it.observed })

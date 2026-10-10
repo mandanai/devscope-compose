@@ -61,6 +61,7 @@ public class PersistingJourneyRecorder(
         pending.first { it == 0 }
     }
 
+    /** Cancels the writer and discards pending traces; idempotent. */
     public fun close() {
         if (!closed.compareAndSet(expect = false, update = true)) return
         queue.close()

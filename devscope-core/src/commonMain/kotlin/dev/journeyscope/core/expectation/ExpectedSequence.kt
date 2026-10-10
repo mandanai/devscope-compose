@@ -12,6 +12,8 @@ public class SequenceItem internal constructor(
     internal val sequence: Long,
 )
 
+/** One step an application expects to observe, identified by [label] and a match predicate. */
+
 public class ExpectedStep(
     public val label: String,
     private val matcher: (SequenceItem) -> Boolean,
@@ -19,17 +21,34 @@ public class ExpectedStep(
     internal fun matches(item: SequenceItem): Boolean = matcher(item)
 
     public companion object {
-        public fun named(label: String, namePrefix: String): ExpectedStep =
-            ExpectedStep(label) { it.name.startsWith(namePrefix) }
+        /** Matches items whose name starts with [namePrefix]. */
+        public fun named(
+            label: String,
+            namePrefix: String,
+        ): ExpectedStep = ExpectedStep(label) { it.name.startsWith(namePrefix) }
 
-        public fun category(label: String, category: SpanCategory, namePrefix: String = ""): ExpectedStep =
-            ExpectedStep(label) { it.category == category && it.name.startsWith(namePrefix) }
+        /** Matches items of [category] whose name starts with [namePrefix]. */
+
+        public fun category(
+            label: String,
+            category: SpanCategory,
+            namePrefix: String = "",
+        ): ExpectedStep = ExpectedStep(label) { it.category == category && it.name.startsWith(namePrefix) }
     }
 }
 
-public data class StepCheck(public val label: String, public val observed: Boolean)
+public data class StepCheck(
+    public val label: String,
+    public val observed: Boolean,
+)
 
-public data class SequenceCheck(public val name: String, public val steps: List<StepCheck>) {
+/** Result of evaluating one [ExpectedSequence] against a trace. */
+
+public data class SequenceCheck(
+    public val name: String,
+    public val steps: List<StepCheck>,
+) {
+    /** Labels of the steps that were not observed. */
     public val missing: List<String> get() = steps.filterNot { it.observed }.map { it.label }
 }
 
@@ -44,17 +63,21 @@ public class ExpectedSequence(
 ) {
     public fun appliesTo(trace: JourneyTrace): Boolean = appliesTo.invoke(trace)
 
+    /** Steps must appear in order; each one matches the first later item, by sequence, that satisfies it. */
+
     public fun evaluate(trace: JourneyTrace): SequenceCheck {
-        val items = buildList {
-            trace.spans.forEach { add(SequenceItem(it.name, it.category, it.metadata, it.sequence)) }
-            trace.events.forEach { add(SequenceItem(it.name, it.category, it.metadata, it.sequence)) }
-        }.sortedBy { it.sequence }
+        val items =
+            buildList {
+                trace.spans.forEach { add(SequenceItem(it.name, it.category, it.metadata, it.sequence)) }
+                trace.events.forEach { add(SequenceItem(it.name, it.category, it.metadata, it.sequence)) }
+            }.sortedBy { it.sequence }
         var last = Long.MIN_VALUE
-        val checks = steps.map { step ->
-            val hit = items.firstOrNull { it.sequence > last && step.matches(it) }
-            if (hit != null) last = hit.sequence
-            StepCheck(step.label, hit != null)
-        }
+        val checks =
+            steps.map { step ->
+                val hit = items.firstOrNull { it.sequence > last && step.matches(it) }
+                if (hit != null) last = hit.sequence
+                StepCheck(step.label, hit != null)
+            }
         return SequenceCheck(name, checks)
     }
 }

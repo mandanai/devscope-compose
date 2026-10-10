@@ -22,19 +22,22 @@ import kotlin.test.assertTrue
 
 class NetworkMappingTest {
     private val tracer = JourneyTracer(JourneyScopeConfig(enabled = true))
-    private val tracing = NetworkTracing(
-        NetworkTraceConfig(
-            headerAllowlist = setOf("x-request-id", "authorization"),
-            businessValidator = { _, _ -> BusinessResult(BusinessStatus.SESSION_EXPIRED, "1001") },
-        ),
-    ) { tracer }
+    private val tracing =
+        NetworkTracing(
+            NetworkTraceConfig(
+                headerAllowlist = setOf("x-request-id", "authorization"),
+                businessValidator = { _, _ -> BusinessResult(BusinessStatus.SESSION_EXPIRED, "1001") },
+            ),
+        ) { tracer }
 
     private fun detail(block: (dev.journeyscope.core.network.NetworkCall) -> Unit): dev.journeyscope.ui.model.JourneyDetailUi {
         val journey = tracer.startJourney("Checkout")
-        val request = NetworkRequestInfo(
-            "POST", "https://api.shop.com/orders?token=secret",
-            mapOf("X-Request-Id" to listOf("r-1"), "Authorization" to listOf("Bearer top-secret")),
-        )
+        val request =
+            NetworkRequestInfo(
+                "POST",
+                "https://api.shop.com/orders?token=secret",
+                mapOf("X-Request-Id" to listOf("r-1"), "Authorization" to listOf("Bearer top-secret")),
+            )
         block(tracing.begin(request, journey.context()[TraceContext]))
         journey.finish()
         val mapper = TraceMapper(InspectorThresholds(), MetadataDisplayPolicy.Default, DiagnosticAnalyzer())

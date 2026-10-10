@@ -9,6 +9,8 @@ import dev.journeyscope.core.model.TraceStatus
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
+/** Inert release-build journey: every call is a no-op and blocks still run. */
+
 public class Journey internal constructor() {
     public val id: TraceId = TraceId("noop")
     public val name: String = "noop"
@@ -41,6 +43,8 @@ public class Journey internal constructor() {
 
     public fun interrupt(reason: String) {}
 
+    /** Runs [block] with an inert handle. */
+
     public fun <T> trace(
         name: String,
         category: SpanCategory = SpanCategory.CUSTOM,
@@ -48,6 +52,8 @@ public class Journey internal constructor() {
         parent: SpanHandle? = null,
         block: (SpanHandle) -> T,
     ): T = block(SpanHandle.INERT)
+
+    /** Runs [block] directly. */
 
     public suspend fun <T> traceSuspend(
         name: String,
@@ -61,13 +67,21 @@ public class Journey internal constructor() {
     }
 }
 
+/** Inert release-build span handle. */
+
 public class SpanHandle internal constructor() {
     public val id: SpanId = SpanId("noop")
     public val isRecording: Boolean = false
 
-    public fun end(status: SpanStatus = SpanStatus.OK, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty) {}
+    public fun end(
+        status: SpanStatus = SpanStatus.OK,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    ) {}
 
-    public fun fail(throwable: Throwable, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty) {}
+    public fun fail(
+        throwable: Throwable,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    ) {}
 
     public fun recordEvent(
         name: String,

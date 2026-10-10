@@ -1,7 +1,10 @@
 package dev.journeyscope.export.json
 
 /** Strict RFC 8259 parser with hard limits; input is untrusted and never evaluated. */
-internal class JsonReader private constructor(private val text: String, private val limits: JsonLimits) {
+internal class JsonReader private constructor(
+    private val text: String,
+    private val limits: JsonLimits,
+) {
     private var pos = 0
     private var nodes = 0
 
@@ -47,12 +50,18 @@ internal class JsonReader private constructor(private val text: String, private 
             fields[key] = parseValue(depth + 1)
             skipWhitespace()
             when (peek()) {
-                ',' -> pos++
+                ',' -> {
+                    pos++
+                }
+
                 '}' -> {
                     pos++
                     return JsonValue.Obj(fields)
                 }
-                else -> fail("expected ',' or '}'")
+
+                else -> {
+                    fail("expected ',' or '}'")
+                }
             }
         }
     }
@@ -70,12 +79,18 @@ internal class JsonReader private constructor(private val text: String, private 
             items += parseValue(depth + 1)
             skipWhitespace()
             when (peek()) {
-                ',' -> pos++
+                ',' -> {
+                    pos++
+                }
+
                 ']' -> {
                     pos++
                     return JsonValue.Array(items)
                 }
-                else -> fail("expected ',' or ']'")
+
+                else -> {
+                    fail("expected ',' or ']'")
+                }
             }
         }
     }
@@ -99,21 +114,48 @@ internal class JsonReader private constructor(private val text: String, private 
     private fun parseEscape(): Char {
         if (pos >= text.length) fail("unterminated escape")
         return when (val e = text[pos++]) {
-            '"' -> '"'
-            '\\' -> '\\'
-            '/' -> '/'
-            'b' -> '\b'
-            'f' -> '\u000C'
-            'n' -> '\n'
-            'r' -> '\r'
-            't' -> '\t'
+            '"' -> {
+                '"'
+            }
+
+            '\\' -> {
+                '\\'
+            }
+
+            '/' -> {
+                '/'
+            }
+
+            'b' -> {
+                '\b'
+            }
+
+            'f' -> {
+                '\u000C'
+            }
+
+            'n' -> {
+                '\n'
+            }
+
+            'r' -> {
+                '\r'
+            }
+
+            't' -> {
+                '\t'
+            }
+
             'u' -> {
                 if (pos + HEX_WIDTH > text.length) fail("bad unicode escape")
                 val code = text.substring(pos, pos + HEX_WIDTH).toIntOrNull(HEX_RADIX) ?: fail("bad unicode escape")
                 pos += HEX_WIDTH
                 code.toChar()
             }
-            else -> fail("bad escape '$e'")
+
+            else -> {
+                fail("bad escape '$e'")
+            }
         }
     }
 
@@ -150,7 +192,10 @@ internal class JsonReader private constructor(private val text: String, private 
         if (pos == start) fail("expected digit")
     }
 
-    private fun literal(word: String, value: JsonValue): JsonValue {
+    private fun literal(
+        word: String,
+        value: JsonValue,
+    ): JsonValue {
         if (!text.startsWith(word, pos)) fail("bad literal")
         pos += word.length
         return value
@@ -173,7 +218,10 @@ internal class JsonReader private constructor(private val text: String, private 
         private const val HEX_WIDTH = 4
         private const val HEX_RADIX = 16
 
-        fun parse(text: String, limits: JsonLimits): JsonValue {
+        fun parse(
+            text: String,
+            limits: JsonLimits,
+        ): JsonValue {
             if (text.length > limits.maxBytes) throw JsonException("document exceeds ${limits.maxBytes} bytes")
             return JsonReader(text, limits).parseDocument()
         }

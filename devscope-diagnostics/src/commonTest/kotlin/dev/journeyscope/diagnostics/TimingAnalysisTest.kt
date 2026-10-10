@@ -18,8 +18,18 @@ class TimingAnalysisTest {
         val network = timing.categories.first { it.category == SpanCategory.NETWORK }
         assertEquals(940, network.attributed.inWholeMilliseconds)
         assertEquals("74.3%", Percentages.format(network.attributedNanos, timing.totalNanos))
-        assertEquals(150, timing.categories.first { it.category == SpanCategory.DATABASE }.attributed.inWholeMilliseconds)
-        assertEquals(110, timing.categories.first { it.category == SpanCategory.UI_RENDER }.attributed.inWholeMilliseconds)
+        assertEquals(
+            150,
+            timing.categories
+                .first { it.category == SpanCategory.DATABASE }
+                .attributed.inWholeMilliseconds,
+        )
+        assertEquals(
+            110,
+            timing.categories
+                .first { it.category == SpanCategory.UI_RENDER }
+                .attributed.inWholeMilliseconds,
+        )
         assertEquals(timing.totalNanos, timing.categories.sumOf { it.attributedNanos } + timing.untrackedNanos)
         assertTrue(timing.isSequential)
         assertEquals(1, timing.maxConcurrency)
@@ -27,50 +37,83 @@ class TimingAnalysisTest {
 
     @Test
     fun nestedSpansAreNotDoubleCounted() {
-        val trace = TraceBuilder()
-            .span("repo", SpanCategory.REPOSITORY, 0, 100)
-            .span("api", SpanCategory.NETWORK, 10, 60, parent = "repo")
-            .span("db", SpanCategory.DATABASE, 75, 20, parent = "repo")
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("repo", SpanCategory.REPOSITORY, 0, 100)
+                .span("api", SpanCategory.NETWORK, 10, 60, parent = "repo")
+                .span("db", SpanCategory.DATABASE, 75, 20, parent = "repo")
+                .build()
 
         val timing = analyzeTiming(trace)
 
         assertEquals(100, timing.categories.sumOf { it.attributed.inWholeMilliseconds })
-        assertEquals(20, timing.categories.first { it.category == SpanCategory.REPOSITORY }.attributed.inWholeMilliseconds)
+        assertEquals(
+            20,
+            timing.categories
+                .first { it.category == SpanCategory.REPOSITORY }
+                .attributed.inWholeMilliseconds,
+        )
         assertTrue(timing.isSequential)
-        assertEquals(20, timing.spans.first { it.spanId == SpanId("repo") }.exclusive.inWholeMilliseconds)
+        assertEquals(
+            20,
+            timing.spans
+                .first { it.spanId == SpanId("repo") }
+                .exclusive.inWholeMilliseconds,
+        )
     }
 
     @Test
     fun overlappingSpansNeverExceedTotalAndAreFlagged() {
-        val trace = TraceBuilder()
-            .span("a", SpanCategory.NETWORK, 0, 500)
-            .span("b", SpanCategory.NETWORK, 200, 500)
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("a", SpanCategory.NETWORK, 0, 500)
+                .span("b", SpanCategory.NETWORK, 200, 500)
+                .build()
 
         val timing = analyzeTiming(trace)
 
         assertEquals(700, timing.total.inWholeMilliseconds)
-        assertEquals(700, timing.categories.single().attributed.inWholeMilliseconds)
-        assertEquals(700, timing.categories.single().busy.inWholeMilliseconds)
+        assertEquals(
+            700,
+            timing.categories
+                .single()
+                .attributed.inWholeMilliseconds,
+        )
+        assertEquals(
+            700,
+            timing.categories
+                .single()
+                .busy.inWholeMilliseconds,
+        )
         assertFalse(timing.isSequential)
         assertEquals(1, timing.overlaps.size)
-        assertEquals(300, timing.overlaps.single().overlap.inWholeMilliseconds)
+        assertEquals(
+            300,
+            timing.overlaps
+                .single()
+                .overlap.inWholeMilliseconds,
+        )
         assertEquals(2, timing.maxConcurrency)
         assertNull(timing.criticalPath)
     }
 
     @Test
     fun concurrentNetworkRequestsAreChargedOnceToWallClock() {
-        val trace = TraceBuilder()
-            .span("a", SpanCategory.NETWORK, 0, 400)
-            .span("b", SpanCategory.NETWORK, 0, 400)
-            .span("c", SpanCategory.NETWORK, 0, 400)
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("a", SpanCategory.NETWORK, 0, 400)
+                .span("b", SpanCategory.NETWORK, 0, 400)
+                .span("c", SpanCategory.NETWORK, 0, 400)
+                .build()
 
         val timing = analyzeTiming(trace)
 
-        assertEquals(400, timing.categories.single().attributed.inWholeMilliseconds)
+        assertEquals(
+            400,
+            timing.categories
+                .single()
+                .attributed.inWholeMilliseconds,
+        )
         assertEquals(3, timing.overlaps.size)
         assertEquals(3, timing.maxConcurrency)
     }
@@ -89,10 +132,11 @@ class TimingAnalysisTest {
 
     @Test
     fun slowestSpanUsesExclusiveTime() {
-        val trace = TraceBuilder()
-            .span("wrapper", SpanCategory.REPOSITORY, 0, 1000)
-            .span("api", SpanCategory.NETWORK, 0, 950, parent = "wrapper")
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("wrapper", SpanCategory.REPOSITORY, 0, 1000)
+                .span("api", SpanCategory.NETWORK, 0, 950, parent = "wrapper")
+                .build()
         assertEquals(SpanId("api"), analyzeTiming(trace).slowestSpan)
     }
 

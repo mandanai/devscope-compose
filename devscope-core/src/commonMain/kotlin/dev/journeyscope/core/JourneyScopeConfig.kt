@@ -3,6 +3,11 @@ package dev.journeyscope.core
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+/**
+ * Decides which diagnostic data may be recorded: values under keys containing any of `sensitiveKeyFragments` (case-insensitive) are replaced by `replacement`.
+ * Failure messages are dropped unless `includeFailureMessages` is true.
+ */
+
 public data class RedactionPolicy(
     val sensitiveKeyFragments: Set<String> = DEFAULT_SENSITIVE_FRAGMENTS,
     val replacement: String = "[REDACTED]",
@@ -14,25 +19,47 @@ public data class RedactionPolicy(
     }
 
     public companion object {
-        public val DEFAULT_SENSITIVE_FRAGMENTS: Set<String> = setOf(
-            "password", "passwd", "secret", "token", "authorization", "auth", "cookie",
-            "session", "apikey", "api_key", "credential", "ssn", "card", "cvv", "pin",
-        )
+        public val DEFAULT_SENSITIVE_FRAGMENTS: Set<String> =
+            setOf(
+                "password",
+                "passwd",
+                "secret",
+                "token",
+                "authorization",
+                "auth",
+                "cookie",
+                "session",
+                "apikey",
+                "api_key",
+                "credential",
+                "ssn",
+                "card",
+                "cvv",
+                "pin",
+            )
 
         public val Default: RedactionPolicy = RedactionPolicy()
     }
 }
 
+/**
+ * Immutable tracing configuration; everything is off or bounded by default, and invalid limits throw [IllegalArgumentException].
+ * Once a trace hits `maxEventsPerTrace` or `maxEventsPerSecond`, further items are dropped and counted in `droppedItems`.
+ */
+
 public data class JourneyScopeConfig(
     val enabled: Boolean = false,
     val maxTraces: Int = 50,
     val maxEventsPerTrace: Int = 500,
+    /** Stack traces are truncated to `maxMetadataSize` and recorded only when true. */
     val captureStackTraces: Boolean = false,
     val recordFailures: Boolean = true,
     val slowJourneyThreshold: Duration = 2.seconds,
     val samplingRate: Double = 1.0,
+    /** Character budget per metadata set, applied after redaction. */
     val maxMetadataSize: Int = 1024,
     val redactionPolicy: RedactionPolicy = RedactionPolicy.Default,
+    /** Null means no rate limit. */
     val maxEventsPerSecond: Int? = null,
 ) {
     init {

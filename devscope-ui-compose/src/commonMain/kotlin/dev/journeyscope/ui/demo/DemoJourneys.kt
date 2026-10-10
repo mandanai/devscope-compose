@@ -29,56 +29,75 @@ private const val LARGE_GROUPS = 250
 public object DemoJourneys {
     internal const val NOW_NANOS: Long = BASE_NANOS + 100_000 * NANOS_PER_MILLI
 
+    /** Static source over the fixtures, for previews and demos. */
     public val source: JourneyTraceSource by lazy { staticTraceSource(all, NOW_NANOS) }
 
     internal val all: List<JourneyTrace> by lazy {
         listOf(
-            addToCart(), addToCartThenCart(), openProduct(), checkoutFailed(), parallelRequests(), addToCartWithoutCheckpoint(),
-            syncOrdersRunning(), syncProfileRunning(), coldStartEmpty(), importCatalogLarge(),
+            addToCart(),
+            addToCartThenCart(),
+            openProduct(),
+            checkoutFailed(),
+            parallelRequests(),
+            addToCartWithoutCheckpoint(),
+            syncOrdersRunning(),
+            syncProfileRunning(),
+            coldStartEmpty(),
+            importCatalogLarge(),
         )
     }
 
     internal fun addToCart(): JourneyTrace {
-        val stages = listOf(
-            Stage("Button Click", SpanCategory.UI_INTERACTION, 0, "ProductDetailScreen · Add to Cart"),
-            Stage("ViewModel Action", SpanCategory.VIEW_MODEL, 12, "ProductViewModel.addToCart()"),
-            Stage("UseCase Execute", SpanCategory.USE_CASE, 34, "AddToCartUseCase"),
-            Stage("API Request", SpanCategory.NETWORK, 940, "POST /cart/items · HTTP 200"),
-            Stage("Business Validation", SpanCategory.BUSINESS_VALIDATION, 4, "returnCode = 0000"),
-            Stage("Database Update", SpanCategory.DATABASE, 150, "CartEntity insert/update"),
-            Stage("UI State Emission", SpanCategory.STATE_EMISSION, 15, "CartUiState.Success"),
-            Stage("UI Render Checkpoint", SpanCategory.UI_RENDER, 110, "Cart count updated"),
-        )
+        val stages =
+            listOf(
+                Stage("Button Click", SpanCategory.UI_INTERACTION, 0, "ProductDetailScreen · Add to Cart"),
+                Stage("ViewModel Action", SpanCategory.VIEW_MODEL, 12, "ProductViewModel.addToCart()"),
+                Stage("UseCase Execute", SpanCategory.USE_CASE, 34, "AddToCartUseCase"),
+                Stage("API Request", SpanCategory.NETWORK, 940, "POST /cart/items · HTTP 200"),
+                Stage("Business Validation", SpanCategory.BUSINESS_VALIDATION, 4, "returnCode = 0000"),
+                Stage("Database Update", SpanCategory.DATABASE, 150, "CartEntity insert/update"),
+                Stage("UI State Emission", SpanCategory.STATE_EMISSION, 15, "CartUiState.Success"),
+                Stage("UI Render Checkpoint", SpanCategory.UI_RENDER, 110, "Cart count updated"),
+            )
         return sequentialTrace("CART-1024", "Add to Cart", 0, stages, TraceStatus.COMPLETED, demoSource = true)
     }
 
     internal fun addToCartThenCart(): JourneyTrace {
         val base = addToCart()
         val at = { millis: Long -> BASE_NANOS + millis * NANOS_PER_MILLI }
-        val events = listOf(
-            event(
-                "nav-e1", "cart-ui-state state observed", SpanCategory.STATE, at(1_150), 100,
-                diagnosticMetadata {
-                    put("state.stream", "cart-ui-state")
-                    put("state.event", "observed")
-                    put("state.previous", "Adding")
-                    put("state.current", "Added · 1")
-                    put("collector.id", "c1")
-                    put("detail", "Adding → Added · 1")
-                },
-            ),
-            event(
-                "nav-e2", "Navigate: product/{arg} → cart", SpanCategory.NAVIGATION, at(1_260), 101,
-                diagnosticMetadata {
-                    put("nav.action", "Navigate")
-                    put("nav.from", "product/{arg}")
-                    put("nav.to", "cart")
-                    put("nav.stack.before", "product/{arg}")
-                    put("nav.stack.after", "product/{arg} > cart")
-                    put("detail", "product/{arg} → cart · stack 1 → 2")
-                },
-            ),
-        )
+        val events =
+            listOf(
+                event(
+                    "nav-e1",
+                    "cart-ui-state state observed",
+                    SpanCategory.STATE,
+                    at(1_150),
+                    100,
+                    diagnosticMetadata {
+                        put("state.stream", "cart-ui-state")
+                        put("state.event", "observed")
+                        put("state.previous", "Adding")
+                        put("state.current", "Added · 1")
+                        put("collector.id", "c1")
+                        put("detail", "Adding → Added · 1")
+                    },
+                ),
+                event(
+                    "nav-e2",
+                    "Navigate: product/{arg} → cart",
+                    SpanCategory.NAVIGATION,
+                    at(1_260),
+                    101,
+                    diagnosticMetadata {
+                        put("nav.action", "Navigate")
+                        put("nav.from", "product/{arg}")
+                        put("nav.to", "cart")
+                        put("nav.stack.before", "product/{arg}")
+                        put("nav.stack.after", "product/{arg} > cart")
+                        put("detail", "product/{arg} → cart · stack 1 → 2")
+                    },
+                ),
+            )
         return base.copy(
             id = TraceId("CART-1025"),
             name = "Add to Cart → Cart",
@@ -90,37 +109,43 @@ public object DemoJourneys {
     internal fun slowJourney(): JourneyTrace = addToCart()
 
     /** Expectation the inspector demo applies to journeys named "Add to Cart…". */
-    public val addToCartCompletion: ExpectedSequence = ExpectedSequence(
-        name = "Add to Cart completion",
-        steps = listOf(
-            ExpectedStep.category("API request", SpanCategory.NETWORK),
-            ExpectedStep.category("UI render checkpoint", SpanCategory.UI_RENDER),
-        ),
-        appliesTo = { it.name.startsWith("Add to Cart") },
-    )
+    public val addToCartCompletion: ExpectedSequence =
+        ExpectedSequence(
+            name = "Add to Cart completion",
+            steps =
+                listOf(
+                    ExpectedStep.category("API request", SpanCategory.NETWORK),
+                    ExpectedStep.category("UI render checkpoint", SpanCategory.UI_RENDER),
+                ),
+            appliesTo = { it.name.startsWith("Add to Cart") },
+        )
 
     /** Three overlapping requests: wall-clock attribution counts the shared time once and flags the overlap. */
     internal fun parallelRequests(): JourneyTrace {
         val start = BASE_NANOS + 9_000 * NANOS_PER_MILLI
+
         fun at(ms: Long) = start + ms * NANOS_PER_MILLI
-        val spans = listOf(
-            span("PAR-0", "Button Click", SpanCategory.UI_INTERACTION, at(0), 0, 0, "HomeScreen · Refresh"),
-            span("PAR-1", "GET /profile", SpanCategory.NETWORK, at(10), 600, 1, "GET /profile · HTTP 200"),
-            span("PAR-2", "GET /orders", SpanCategory.NETWORK, at(20), 900, 2, "GET /orders · HTTP 200"),
-            span("PAR-3", "GET /offers", SpanCategory.NETWORK, at(30), 450, 3, "GET /offers · HTTP 200"),
-            span("PAR-4", "Render Home", SpanCategory.UI_RENDER, at(920), 80, 4, "HomeScreen"),
-        )
+        val spans =
+            listOf(
+                span("PAR-0", "Button Click", SpanCategory.UI_INTERACTION, at(0), 0, 0, "HomeScreen · Refresh"),
+                span("PAR-1", "GET /profile", SpanCategory.NETWORK, at(10), 600, 1, "GET /profile · HTTP 200"),
+                span("PAR-2", "GET /orders", SpanCategory.NETWORK, at(20), 900, 2, "GET /orders · HTTP 200"),
+                span("PAR-3", "GET /offers", SpanCategory.NETWORK, at(30), 450, 3, "GET /offers · HTTP 200"),
+                span("PAR-4", "Render Home", SpanCategory.UI_RENDER, at(920), 80, 4, "HomeScreen"),
+            )
         return finish(id = "PAR-2001", name = "Refresh Home", start = start, end = at(1_000), startMillis = 9_000, spans = spans, events = emptyList())
     }
 
     /** State was emitted but the render checkpoint never arrived, so the expected completion step is missing. */
     internal fun addToCartWithoutCheckpoint(): JourneyTrace {
         val start = BASE_NANOS + 12_000 * NANOS_PER_MILLI
+
         fun at(ms: Long) = start + ms * NANOS_PER_MILLI
-        val spans = listOf(
-            span("NCP-0", "ProductViewModel.addToCart", SpanCategory.VIEW_MODEL, at(0), 300, 0, "ViewModel action"),
-            span("NCP-1", "POST api.shop.example/cart/items", SpanCategory.NETWORK, at(20), 240, 1, "POST /cart/items · HTTP 200", parent = "NCP-0"),
-        )
+        val spans =
+            listOf(
+                span("NCP-0", "ProductViewModel.addToCart", SpanCategory.VIEW_MODEL, at(0), 300, 0, "ViewModel action"),
+                span("NCP-1", "POST api.shop.example/cart/items", SpanCategory.NETWORK, at(20), 240, 1, "POST /cart/items · HTTP 200", parent = "NCP-0"),
+            )
         val events = listOf(event("NCP-e0", "CartUiState emitted", SpanCategory.STATE_EMISSION, at(310), 2))
         return finish(id = "NCP-3001", name = "Add to Cart (no checkpoint)", start = start, end = at(320), startMillis = 12_000, spans = spans, events = events)
     }
@@ -134,79 +159,129 @@ public object DemoJourneys {
         spans: List<JourneySpan>,
         events: List<JourneyEvent>,
     ): JourneyTrace {
-        val trace = JourneyTrace(
-            id = TraceId(id), name = name, status = TraceStatus.COMPLETED, startNanos = start,
-            startWallMillis = BASE_WALL_MILLIS + startMillis, endNanos = end,
-            endWallMillis = BASE_WALL_MILLIS + startMillis + (end - start) / NANOS_PER_MILLI,
-            spans = spans, events = events, failure = null, metadata = demoMetadata(), droppedItems = 0, summary = null,
-        )
+        val trace =
+            JourneyTrace(
+                id = TraceId(id),
+                name = name,
+                status = TraceStatus.COMPLETED,
+                startNanos = start,
+                startWallMillis = BASE_WALL_MILLIS + startMillis,
+                endNanos = end,
+                endWallMillis = BASE_WALL_MILLIS + startMillis + (end - start) / NANOS_PER_MILLI,
+                spans = spans,
+                events = events,
+                failure = null,
+                metadata = demoMetadata(),
+                droppedItems = 0,
+                summary = null,
+            )
         val timing = trace.timing()
         return trace.copy(
-            summary = JourneySummary(
-                name = name, status = TraceStatus.COMPLETED, duration = timing.duration, spanCount = spans.size, eventCount = events.size,
-                failedSpanCount = 0, droppedItems = 0, isSlow = timing.duration >= 1_000.milliseconds,
-                criticalPathDuration = timing.criticalPathDuration, failureType = null,
-            ),
+            summary =
+                JourneySummary(
+                    name = name,
+                    status = TraceStatus.COMPLETED,
+                    duration = timing.duration,
+                    spanCount = spans.size,
+                    eventCount = events.size,
+                    failedSpanCount = 0,
+                    droppedItems = 0,
+                    isSlow = timing.duration >= 1_000.milliseconds,
+                    criticalPathDuration = timing.criticalPathDuration,
+                    failureType = null,
+                ),
         )
     }
 
-    internal fun openProduct(): JourneyTrace = sequentialTrace(
-        id = "PROD-2201",
-        name = "Open Product",
-        startMillis = 2_000,
-        stages = listOf(
-            Stage("Product Tap", SpanCategory.UI_INTERACTION, 0, "ProductListScreen · item tap"),
-            Stage("Load Product", SpanCategory.NETWORK, 180, "GET /products/42 · HTTP 200"),
-            Stage("Render Product", SpanCategory.UI_RENDER, 70, "ProductDetailScreen"),
-        ),
-        status = TraceStatus.COMPLETED,
-    )
+    internal fun openProduct(): JourneyTrace =
+        sequentialTrace(
+            id = "PROD-2201",
+            name = "Open Product",
+            startMillis = 2_000,
+            stages =
+                listOf(
+                    Stage("Product Tap", SpanCategory.UI_INTERACTION, 0, "ProductListScreen · item tap"),
+                    Stage("Load Product", SpanCategory.NETWORK, 180, "GET /products/42 · HTTP 200"),
+                    Stage("Render Product", SpanCategory.UI_RENDER, 70, "ProductDetailScreen"),
+                ),
+            status = TraceStatus.COMPLETED,
+        )
 
     internal fun checkoutFailed(): JourneyTrace {
-        val trace = sequentialTrace(
-            id = "ORD-7781",
-            name = "Checkout",
-            startMillis = 4_000,
-            stages = listOf(
-                Stage("Button Click", SpanCategory.UI_INTERACTION, 0, "CartScreen · Checkout"),
-                Stage("Create Order", SpanCategory.NETWORK, 1_800, "POST /orders · HTTP 503", SpanStatus.FAILED, FailureInfo("IOException", "Service unavailable")),
-            ),
-            status = TraceStatus.FAILED,
-        )
+        val trace =
+            sequentialTrace(
+                id = "ORD-7781",
+                name = "Checkout",
+                startMillis = 4_000,
+                stages =
+                    listOf(
+                        Stage("Button Click", SpanCategory.UI_INTERACTION, 0, "CartScreen · Checkout"),
+                        Stage("Create Order", SpanCategory.NETWORK, 1_800, "POST /orders · HTTP 503", SpanStatus.FAILED, FailureInfo("IOException", "Service unavailable")),
+                    ),
+                status = TraceStatus.FAILED,
+            )
         return trace.copy(failure = FailureInfo("IOException", "Service unavailable"))
     }
 
     internal fun syncOrdersRunning(): JourneyTrace {
         val start = BASE_NANOS + 99_100 * NANOS_PER_MILLI
-        val spans = listOf(
-            span("sync-1", "Read Local Orders", SpanCategory.DATABASE, start, 120, 0, "OrderDao.pending()"),
-            span("sync-2", "Upload Orders", SpanCategory.NETWORK, start + 120 * NANOS_PER_MILLI, null, 1, "POST /orders/sync", SpanStatus.RUNNING),
-        )
+        val spans =
+            listOf(
+                span("sync-1", "Read Local Orders", SpanCategory.DATABASE, start, 120, 0, "OrderDao.pending()"),
+                span("sync-2", "Upload Orders", SpanCategory.NETWORK, start + 120 * NANOS_PER_MILLI, null, 1, "POST /orders/sync", SpanStatus.RUNNING),
+            )
         return JourneyTrace(
-            id = TraceId("SYNC-3310"), name = "Sync Orders", status = TraceStatus.RUNNING,
-            startNanos = start, startWallMillis = BASE_WALL_MILLIS + 99_100, endNanos = null, endWallMillis = null,
-            spans = spans, events = emptyList(), failure = null, metadata = demoMetadata(), droppedItems = 0, summary = null,
+            id = TraceId("SYNC-3310"),
+            name = "Sync Orders",
+            status = TraceStatus.RUNNING,
+            startNanos = start,
+            startWallMillis = BASE_WALL_MILLIS + 99_100,
+            endNanos = null,
+            endWallMillis = null,
+            spans = spans,
+            events = emptyList(),
+            failure = null,
+            metadata = demoMetadata(),
+            droppedItems = 0,
+            summary = null,
         )
     }
 
     internal fun syncProfileRunning(): JourneyTrace {
         val start = BASE_NANOS + 99_600 * NANOS_PER_MILLI
         return JourneyTrace(
-            id = TraceId("SYNC-3311"), name = "Sync Profile", status = TraceStatus.RUNNING,
-            startNanos = start, startWallMillis = BASE_WALL_MILLIS + 99_600, endNanos = null, endWallMillis = null,
+            id = TraceId("SYNC-3311"),
+            name = "Sync Profile",
+            status = TraceStatus.RUNNING,
+            startNanos = start,
+            startWallMillis = BASE_WALL_MILLIS + 99_600,
+            endNanos = null,
+            endWallMillis = null,
             spans = listOf(span("prof-1", "Fetch Profile", SpanCategory.NETWORK, start, null, 0, "GET /me", SpanStatus.RUNNING)),
             events = listOf(event("prof-e1", "Refresh Requested", SpanCategory.UI_INTERACTION, start, 0)),
-            failure = null, metadata = demoMetadata(), droppedItems = 0, summary = null,
+            failure = null,
+            metadata = demoMetadata(),
+            droppedItems = 0,
+            summary = null,
         )
     }
 
     internal fun coldStartEmpty(): JourneyTrace {
         val start = BASE_NANOS + 8_000 * NANOS_PER_MILLI
         return JourneyTrace(
-            id = TraceId("START-1"), name = "Cold Start", status = TraceStatus.COMPLETED,
-            startNanos = start, startWallMillis = BASE_WALL_MILLIS + 8_000, endNanos = start + 50 * NANOS_PER_MILLI,
-            endWallMillis = BASE_WALL_MILLIS + 8_050, spans = emptyList(), events = emptyList(),
-            failure = null, metadata = demoMetadata(), droppedItems = 0, summary = null,
+            id = TraceId("START-1"),
+            name = "Cold Start",
+            status = TraceStatus.COMPLETED,
+            startNanos = start,
+            startWallMillis = BASE_WALL_MILLIS + 8_000,
+            endNanos = start + 50 * NANOS_PER_MILLI,
+            endWallMillis = BASE_WALL_MILLIS + 8_050,
+            spans = emptyList(),
+            events = emptyList(),
+            failure = null,
+            metadata = demoMetadata(),
+            droppedItems = 0,
+            summary = null,
         )
     }
 
@@ -224,10 +299,19 @@ public object DemoJourneys {
             offset += 90
         }
         return JourneyTrace(
-            id = TraceId("IMP-9000"), name = "Import Catalog", status = TraceStatus.COMPLETED,
-            startNanos = start, startWallMillis = BASE_WALL_MILLIS + 10_000, endNanos = start + offset * NANOS_PER_MILLI,
-            endWallMillis = BASE_WALL_MILLIS + 10_000 + offset, spans = spans, events = emptyList(),
-            failure = null, metadata = demoMetadata(), droppedItems = 0, summary = null,
+            id = TraceId("IMP-9000"),
+            name = "Import Catalog",
+            status = TraceStatus.COMPLETED,
+            startNanos = start,
+            startWallMillis = BASE_WALL_MILLIS + 10_000,
+            endNanos = start + offset * NANOS_PER_MILLI,
+            endWallMillis = BASE_WALL_MILLIS + 10_000 + offset,
+            spans = spans,
+            events = emptyList(),
+            failure = null,
+            metadata = demoMetadata(),
+            droppedItems = 0,
+            summary = null,
         )
     }
 
@@ -250,25 +334,42 @@ public object DemoJourneys {
     ): JourneyTrace {
         val start = BASE_NANOS + startMillis * NANOS_PER_MILLI
         var cursor = start
-        val spans = stages.mapIndexed { index, stage ->
-            span("$id-$index", stage.name, stage.category, cursor, stage.durationMillis, index.toLong(), stage.detail, stage.status, stage.failure)
-                .also { cursor += stage.durationMillis * NANOS_PER_MILLI }
-        }
-        val trace = JourneyTrace(
-            id = TraceId(id), name = name, status = status,
-            startNanos = start, startWallMillis = BASE_WALL_MILLIS + startMillis, endNanos = cursor,
-            endWallMillis = BASE_WALL_MILLIS + startMillis + (cursor - start) / NANOS_PER_MILLI,
-            spans = spans, events = emptyList(), failure = null,
-            metadata = if (demoSource) demoMetadata() else DiagnosticMetadata.Empty, droppedItems = 0, summary = null,
-        )
+        val spans =
+            stages.mapIndexed { index, stage ->
+                span("$id-$index", stage.name, stage.category, cursor, stage.durationMillis, index.toLong(), stage.detail, stage.status, stage.failure)
+                    .also { cursor += stage.durationMillis * NANOS_PER_MILLI }
+            }
+        val trace =
+            JourneyTrace(
+                id = TraceId(id),
+                name = name,
+                status = status,
+                startNanos = start,
+                startWallMillis = BASE_WALL_MILLIS + startMillis,
+                endNanos = cursor,
+                endWallMillis = BASE_WALL_MILLIS + startMillis + (cursor - start) / NANOS_PER_MILLI,
+                spans = spans,
+                events = emptyList(),
+                failure = null,
+                metadata = if (demoSource) demoMetadata() else DiagnosticMetadata.Empty,
+                droppedItems = 0,
+                summary = null,
+            )
         val timing = trace.timing()
         return trace.copy(
-            summary = JourneySummary(
-                name = name, status = status, duration = timing.duration, spanCount = spans.size, eventCount = 0,
-                failedSpanCount = spans.count { it.status == SpanStatus.FAILED }, droppedItems = 0,
-                isSlow = timing.duration >= 1_000.milliseconds, criticalPathDuration = timing.criticalPathDuration,
-                failureType = null,
-            ),
+            summary =
+                JourneySummary(
+                    name = name,
+                    status = status,
+                    duration = timing.duration,
+                    spanCount = spans.size,
+                    eventCount = 0,
+                    failedSpanCount = spans.count { it.status == SpanStatus.FAILED },
+                    droppedItems = 0,
+                    isSlow = timing.duration >= 1_000.milliseconds,
+                    criticalPathDuration = timing.criticalPathDuration,
+                    failureType = null,
+                ),
         )
     }
 
@@ -283,12 +384,25 @@ public object DemoJourneys {
         status: SpanStatus = SpanStatus.OK,
         failure: FailureInfo? = null,
         parent: String? = null,
-    ): JourneySpan = JourneySpan(
-        id = SpanId(id), parentId = parent?.let(::SpanId), name = name, category = category, sequence = sequence,
-        startNanos = startNanos, startWallMillis = BASE_WALL_MILLIS + (startNanos - BASE_NANOS) / NANOS_PER_MILLI,
-        endNanos = durationMillis?.let { startNanos + it * NANOS_PER_MILLI }, status = status, failure = failure,
-        endedBySystem = false, metadata = diagnosticMetadata { put(MetadataDisplayPolicy.DETAIL_KEY, detail); put("thread", "main") },
-    )
+    ): JourneySpan =
+        JourneySpan(
+            id = SpanId(id),
+            parentId = parent?.let(::SpanId),
+            name = name,
+            category = category,
+            sequence = sequence,
+            startNanos = startNanos,
+            startWallMillis = BASE_WALL_MILLIS + (startNanos - BASE_NANOS) / NANOS_PER_MILLI,
+            endNanos = durationMillis?.let { startNanos + it * NANOS_PER_MILLI },
+            status = status,
+            failure = failure,
+            endedBySystem = false,
+            metadata =
+                diagnosticMetadata {
+                    put(MetadataDisplayPolicy.DETAIL_KEY, detail)
+                    put("thread", "main")
+                },
+        )
 
     private fun event(
         id: String,
@@ -297,10 +411,17 @@ public object DemoJourneys {
         atNanos: Long,
         sequence: Long,
         metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
-    ): JourneyEvent = JourneyEvent(
-        id = EventId(id), name = name, category = category, sequence = sequence, atNanos = atNanos,
-        atWallMillis = BASE_WALL_MILLIS + (atNanos - BASE_NANOS) / NANOS_PER_MILLI, spanId = null, metadata = metadata,
-    )
+    ): JourneyEvent =
+        JourneyEvent(
+            id = EventId(id),
+            name = name,
+            category = category,
+            sequence = sequence,
+            atNanos = atNanos,
+            atWallMillis = BASE_WALL_MILLIS + (atNanos - BASE_NANOS) / NANOS_PER_MILLI,
+            spanId = null,
+            metadata = metadata,
+        )
 
     private fun demoMetadata(): DiagnosticMetadata = diagnosticMetadata { put(MetadataDisplayPolicy.SOURCE_KEY, "Demo data") }
 }

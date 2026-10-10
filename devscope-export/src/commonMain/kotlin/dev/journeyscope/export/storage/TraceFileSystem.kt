@@ -1,6 +1,11 @@
 package dev.journeyscope.export.storage
 
-public data class StoredFile(val name: String, val sizeBytes: Long, val modifiedMillis: Long)
+/** A file in a [TraceFileSystem] with its size and last-modified time in epoch milliseconds. */
+public data class StoredFile(
+    val name: String,
+    val sizeBytes: Long,
+    val modifiedMillis: Long,
+)
 
 /** Flat directory of small text files; implementations must make [writeAtomically] all-or-nothing. */
 public interface TraceFileSystem {
@@ -8,7 +13,10 @@ public interface TraceFileSystem {
 
     public fun read(name: String): String?
 
-    public fun writeAtomically(name: String, content: String)
+    public fun writeAtomically(
+        name: String,
+        content: String,
+    )
 
     public fun delete(name: String): Boolean
 }

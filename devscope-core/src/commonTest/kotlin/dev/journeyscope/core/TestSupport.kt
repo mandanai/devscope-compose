@@ -41,13 +41,14 @@ fun testTracer(
     config: JourneyScopeConfig = JourneyScopeConfig(enabled = true),
     clock: FakeJourneyClock = FakeJourneyClock(),
     random: Random = Random.Default,
-): JourneyTracer = JourneyTracer(
-    config = config,
-    recorder = InMemoryJourneyRecorder(config.maxTraces),
-    clock = clock,
-    idGenerator = SequentialIds(),
-    random = random,
-)
+): JourneyTracer =
+    JourneyTracer(
+        config = config,
+        recorder = InMemoryJourneyRecorder(config.maxTraces),
+        clock = clock,
+        idGenerator = SequentialIds(),
+        random = random,
+    )
 
 fun Journey.trace(): JourneyTrace = checkNotNull(snapshot()) { "journey is not recording" }
 

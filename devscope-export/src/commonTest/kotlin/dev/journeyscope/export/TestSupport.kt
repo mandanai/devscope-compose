@@ -14,8 +14,12 @@ import dev.journeyscope.export.storage.TraceFileSystem
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-class FakeClock(var nanos: Long = 0, var wall: Long = 1_700_000_000_000L) : JourneyClock {
+class FakeClock(
+    var nanos: Long = 0,
+    var wall: Long = 1_700_000_000_000L,
+) : JourneyClock {
     override fun monotonicNanos(): Long = nanos
+
     override fun wallClockMillis(): Long = wall
 
     fun advance(by: Duration) {
@@ -24,8 +28,11 @@ class FakeClock(var nanos: Long = 0, var wall: Long = 1_700_000_000_000L) : Jour
     }
 }
 
-class CountingIds(private val prefix: String = "n") : IdGenerator {
+class CountingIds(
+    private val prefix: String = "n",
+) : IdGenerator {
     private var counter = 0L
+
     override fun nextId(): String = "$prefix${counter++}"
 }
 
@@ -39,7 +46,10 @@ class FakeFileSystem : TraceFileSystem {
 
     override fun read(name: String): String? = files[name]
 
-    override fun writeAtomically(name: String, content: String) {
+    override fun writeAtomically(
+        name: String,
+        content: String,
+    ) {
         if (failWrites) error("disk full")
         writeCount++
         files[name] = content

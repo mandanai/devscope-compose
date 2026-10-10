@@ -36,7 +36,11 @@ public class TraceContext internal constructor(
     ): SpanHandle = journey.openSpan(name, category, metadata, spanId)
 }
 
+/** Null when the calling coroutine is not bound to a journey. */
+
 public suspend fun currentTraceContext(): TraceContext? = coroutineContext[TraceContext]
+
+/** Launches with the journey (and optional [parent] span) bound, so work in the new coroutine nests correctly. */
 
 public fun CoroutineScope.launchInJourney(
     journey: Journey,

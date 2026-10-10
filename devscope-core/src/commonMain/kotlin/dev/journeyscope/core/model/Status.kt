@@ -2,22 +2,27 @@ package dev.journeyscope.core.model
 
 import kotlin.jvm.JvmInline
 
+/** Journey lifecycle: CREATED, then RUNNING, then exactly one terminal state, which is final. */
+
 public enum class TraceStatus {
     CREATED,
     RUNNING,
     COMPLETED,
     FAILED,
     CANCELLED,
+
+    /** Ended by the host (backgrounded, killed, reconfigured) rather than by the application. */
     INTERRUPTED,
     ;
 
     public val isTerminal: Boolean get() = this != CREATED && this != RUNNING
 
-    internal fun canTransitionTo(target: TraceStatus): Boolean = when (this) {
-        CREATED -> target == RUNNING || target == CANCELLED || target == INTERRUPTED
-        RUNNING -> target.isTerminal
-        else -> false
-    }
+    internal fun canTransitionTo(target: TraceStatus): Boolean =
+        when (this) {
+            CREATED -> target == RUNNING || target == CANCELLED || target == INTERRUPTED
+            RUNNING -> target.isTerminal
+            else -> false
+        }
 }
 
 public enum class SpanStatus {
@@ -32,7 +37,9 @@ public enum class SpanStatus {
 }
 
 @JvmInline
-public value class SpanCategory(public val name: String) {
+public value class SpanCategory(
+    public val name: String,
+) {
     override fun toString(): String = name
 
     public companion object {

@@ -6,12 +6,19 @@ import dev.journeyscope.diagnostics.DiagnosticSeverity
 internal enum class StatusKind { Created, Running, Completed, Slow, Failed, Cancelled, Interrupted }
 
 @Immutable
-internal data class StatusUi(val kind: StatusKind, val label: String)
+internal data class StatusUi(
+    val kind: StatusKind,
+    val label: String,
+)
 
 internal enum class RowState { Ok, Running, Failed, Cancelled, Interrupted, Event }
 
 @Immutable
-internal data class MetadataRowUi(val key: String, val value: String, val hidden: Boolean)
+internal data class MetadataRowUi(
+    val key: String,
+    val value: String,
+    val hidden: Boolean,
+)
 
 @Immutable
 internal data class TimelineRowUi(
@@ -50,7 +57,10 @@ internal data class DurationBreakdownUi(
 )
 
 @Immutable
-internal data class RelatedRowUi(val rowId: String, val label: String)
+internal data class RelatedRowUi(
+    val rowId: String,
+    val label: String,
+)
 
 @Immutable
 internal data class DiagnosticUi(
@@ -97,10 +107,16 @@ internal data class JourneyDetailUi(
 )
 
 @Immutable
-internal data class SequenceStepUi(val label: String, val observed: Boolean)
+internal data class SequenceStepUi(
+    val label: String,
+    val observed: Boolean,
+)
 
 @Immutable
-internal data class SequenceCheckUi(val name: String, val steps: List<SequenceStepUi>) {
+internal data class SequenceCheckUi(
+    val name: String,
+    val steps: List<SequenceStepUi>,
+) {
     val missingCount: Int get() = steps.count { !it.observed }
 }
 

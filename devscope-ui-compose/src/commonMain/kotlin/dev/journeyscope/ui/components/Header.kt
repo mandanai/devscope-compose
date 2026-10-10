@@ -26,7 +26,12 @@ import dev.journeyscope.ui.model.StatusUi
 import dev.journeyscope.ui.theme.JourneyTheme
 
 @Composable
-internal fun JourneyHeader(title: String, subtitle: String, status: StatusUi, modifier: Modifier = Modifier) {
+internal fun JourneyHeader(
+    title: String,
+    subtitle: String,
+    status: StatusUi,
+    modifier: Modifier = Modifier,
+) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
@@ -43,20 +48,25 @@ internal fun JourneyHeader(title: String, subtitle: String, status: StatusUi, mo
 }
 
 @Composable
-internal fun JourneyStatusBadge(status: StatusUi, modifier: Modifier = Modifier) {
+internal fun JourneyStatusBadge(
+    status: StatusUi,
+    modifier: Modifier = Modifier,
+) {
     val colors = JourneyTheme.colors
-    val (container, content) = when (status.kind) {
-        StatusKind.Slow -> colors.bottleneckContainer to colors.bottleneck
-        StatusKind.Failed -> colors.failureContainer to colors.failure
-        StatusKind.Running -> colors.runningContainer to colors.running
-        StatusKind.Completed -> colors.successContainer to colors.success
-        StatusKind.Created, StatusKind.Cancelled, StatusKind.Interrupted -> colors.divider to colors.textSecondary
-    }
+    val (container, content) =
+        when (status.kind) {
+            StatusKind.Slow -> colors.bottleneckContainer to colors.bottleneck
+            StatusKind.Failed -> colors.failureContainer to colors.failure
+            StatusKind.Running -> colors.runningContainer to colors.running
+            StatusKind.Completed -> colors.successContainer to colors.success
+            StatusKind.Created, StatusKind.Cancelled, StatusKind.Interrupted -> colors.divider to colors.textSecondary
+        }
     Row(
-        modifier = modifier
-            .background(container, RoundedCornerShape(percent = 50))
-            .padding(horizontal = 12.dp, vertical = 6.dp)
-            .semantics(mergeDescendants = true) { contentDescription = "Status: ${status.label}" },
+        modifier =
+            modifier
+                .background(container, RoundedCornerShape(percent = 50))
+                .padding(horizontal = 12.dp, vertical = 6.dp)
+                .semantics(mergeDescendants = true) { contentDescription = "Status: ${status.label}" },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(Modifier.size(8.dp).background(content, CircleShape))

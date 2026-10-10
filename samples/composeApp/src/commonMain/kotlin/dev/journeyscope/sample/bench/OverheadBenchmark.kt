@@ -14,11 +14,19 @@ import kotlin.time.TimeSource
 
 enum class BenchmarkMode { DISABLED, ENABLED, ENABLED_WITH_REDACTION, ENABLED_WITH_PERSISTENCE }
 
-data class BenchmarkResult(val mode: BenchmarkMode, val nanosPerJourney: Long, val journeysRecorded: Int)
+data class BenchmarkResult(
+    val mode: BenchmarkMode,
+    val nanosPerJourney: Long,
+    val journeysRecorded: Int,
+)
 
 /** Caller-side cost of one journey with `spansPerJourney` spans and an event each; persistence work is excluded by design. */
 object OverheadBenchmark {
-    fun run(journeys: Int = 2_000, spansPerJourney: Int = 5, warmup: Int = 200): List<BenchmarkResult> =
+    fun run(
+        journeys: Int = 2_000,
+        spansPerJourney: Int = 5,
+        warmup: Int = 200,
+    ): List<BenchmarkResult> =
         BenchmarkMode.entries.map { mode ->
             val (tracer, recorderSize, close) = setup(mode)
             repeat(warmup) { journey(tracer, spansPerJourney, mode) }
@@ -30,7 +38,11 @@ object OverheadBenchmark {
             BenchmarkResult(mode, elapsed / journeys, recorded)
         }
 
-    private fun journey(tracer: JourneyTracer, spans: Int, mode: BenchmarkMode) {
+    private fun journey(
+        tracer: JourneyTracer,
+        spans: Int,
+        mode: BenchmarkMode,
+    ) {
         val journey = tracer.startJourney("bench")
         repeat(spans) { i ->
             journey.trace("span-$i", SpanCategory.CUSTOM) { journey.recordEvent("event-$i") }
@@ -39,12 +51,19 @@ object OverheadBenchmark {
         if (mode == BenchmarkMode.ENABLED_WITH_REDACTION) journey.snapshot()?.let { REDACTION.redact(it) }
     }
 
-    private data class Setup(val tracer: JourneyTracer, val recorded: () -> Int, val close: () -> Unit)
+    private data class Setup(
+        val tracer: JourneyTracer,
+        val recorded: () -> Int,
+        val close: () -> Unit,
+    )
 
     private fun setup(mode: BenchmarkMode): Setup {
         val config = JourneyScopeConfig(enabled = mode != BenchmarkMode.DISABLED, maxTraces = MAX_TRACES)
         if (mode == BenchmarkMode.ENABLED_WITH_PERSISTENCE) {
-            val persistence = JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = true), fileSystem = { DiscardingFileSystem }, isEnabled = { true })
+            val persistence =
+                JourneyPersistence.install(config, ExportPolicy(persistenceEnabled = true), fileSystem = {
+                    DiscardingFileSystem
+                }, isEnabled = { true })
             return Setup(JourneyTracer(config, persistence.recorder), { persistence.recorder.snapshot().size }) {
                 runBlocking { persistence.flush() }
                 persistence.close()
@@ -59,8 +78,14 @@ object OverheadBenchmark {
 
     private object DiscardingFileSystem : TraceFileSystem {
         override fun list(): List<StoredFile> = emptyList()
+
         override fun read(name: String): String? = null
-        override fun writeAtomically(name: String, content: String) = Unit
+
+        override fun writeAtomically(
+            name: String,
+            content: String,
+        ) = Unit
+
         override fun delete(name: String): Boolean = false
     }
 }

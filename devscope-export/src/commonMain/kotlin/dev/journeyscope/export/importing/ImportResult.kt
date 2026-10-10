@@ -3,6 +3,7 @@ package dev.journeyscope.export.importing
 import dev.journeyscope.core.model.JourneyTrace
 import dev.journeyscope.export.schema.ExportedFinding
 
+/** Hard bounds applied while parsing an untrusted report; exceeding any rejects the document. */
 public data class ImportLimits(
     val maxBytes: Int = 2 * 1024 * 1024,
     val maxTraces: Int = 20,
@@ -20,12 +21,17 @@ public data class ImportLimits(
     }
 }
 
+/** Outcome of importing a report; failures are values, never exceptions. */
 public sealed class ImportResult {
+    /** Imported content after validation and re-redaction; [warnings] lists non-fatal repairs. */
     public data class Accepted(
         val traces: List<JourneyTrace>,
         val findings: Map<String, List<ExportedFinding>>,
         val warnings: List<String>,
     ) : ImportResult()
 
-    public data class Rejected(val issues: List<String>) : ImportResult()
+    /** No trace was imported; [issues] are capped and contain no raw document content. */
+    public data class Rejected(
+        val issues: List<String>,
+    ) : ImportResult()
 }

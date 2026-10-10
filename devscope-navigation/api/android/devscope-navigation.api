@@ -1,0 +1,49 @@
+public final class dev/journeyscope/navigation/NavigationAction : java/lang/Enum {
+	public static final field BackStackSnapshot Ldev/journeyscope/navigation/NavigationAction;
+	public static final field DestinationEntered Ldev/journeyscope/navigation/NavigationAction;
+	public static final field DestinationExited Ldev/journeyscope/navigation/NavigationAction;
+	public static final field Navigate Ldev/journeyscope/navigation/NavigationAction;
+	public static final field Pop Ldev/journeyscope/navigation/NavigationAction;
+	public static final field Replace Ldev/journeyscope/navigation/NavigationAction;
+	public static final field StackSwitch Ldev/journeyscope/navigation/NavigationAction;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/journeyscope/navigation/NavigationAction;
+	public static fun values ()[Ldev/journeyscope/navigation/NavigationAction;
+}
+
+public final class dev/journeyscope/navigation/NavigationTraceConfig {
+	public fun <init> ()V
+	public fun <init> (Lkotlin/jvm/functions/Function1;ILkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;ILkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getJourney ()Lkotlin/jvm/functions/Function0;
+	public final fun getMaxStackDepth ()I
+	public final fun getRouteRedactor ()Lkotlin/jvm/functions/Function1;
+}
+
+public final class dev/journeyscope/navigation/NavigationTracer {
+	public fun <init> ()V
+	public fun <init> (Ldev/journeyscope/navigation/NavigationTraceConfig;)V
+	public synthetic fun <init> (Ldev/journeyscope/navigation/NavigationTraceConfig;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun destinationEntered (Ljava/lang/String;Ljava/util/List;Ldev/journeyscope/core/Journey;)Z
+	public static synthetic fun destinationEntered$default (Ldev/journeyscope/navigation/NavigationTracer;Ljava/lang/String;Ljava/util/List;Ldev/journeyscope/core/Journey;ILjava/lang/Object;)Z
+	public final fun destinationExited (Ljava/lang/String;Ljava/util/List;Ldev/journeyscope/core/Journey;)Z
+	public static synthetic fun destinationExited$default (Ldev/journeyscope/navigation/NavigationTracer;Ljava/lang/String;Ljava/util/List;Ldev/journeyscope/core/Journey;ILjava/lang/Object;)Z
+	public final fun markCompleted (Ljava/lang/String;Ldev/journeyscope/core/Journey;)Z
+	public static synthetic fun markCompleted$default (Ldev/journeyscope/navigation/NavigationTracer;Ljava/lang/String;Ldev/journeyscope/core/Journey;ILjava/lang/Object;)Z
+	public final fun navigate (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ldev/journeyscope/core/Journey;)Z
+	public static synthetic fun navigate$default (Ldev/journeyscope/navigation/NavigationTracer;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ldev/journeyscope/core/Journey;ILjava/lang/Object;)Z
+	public final fun pop (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ldev/journeyscope/core/Journey;)Z
+	public static synthetic fun pop$default (Ldev/journeyscope/navigation/NavigationTracer;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ldev/journeyscope/core/Journey;ILjava/lang/Object;)Z
+	public final fun replace (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ldev/journeyscope/core/Journey;)Z
+	public static synthetic fun replace$default (Ldev/journeyscope/navigation/NavigationTracer;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ldev/journeyscope/core/Journey;ILjava/lang/Object;)Z
+	public final fun snapshot (Ljava/util/List;Ldev/journeyscope/core/Journey;)Z
+	public static synthetic fun snapshot$default (Ldev/journeyscope/navigation/NavigationTracer;Ljava/util/List;Ldev/journeyscope/core/Journey;ILjava/lang/Object;)Z
+	public final fun switchStack (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ldev/journeyscope/core/Journey;)Z
+	public static synthetic fun switchStack$default (Ldev/journeyscope/navigation/NavigationTracer;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ldev/journeyscope/core/Journey;ILjava/lang/Object;)Z
+}
+
+public final class dev/journeyscope/navigation/RouteRedactor {
+	public static final field INSTANCE Ldev/journeyscope/navigation/RouteRedactor;
+	public final fun getDefault ()Lkotlin/jvm/functions/Function1;
+}
+

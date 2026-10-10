@@ -16,7 +16,10 @@ import dev.journeyscope.ui.model.TimingBreakdownUi
 import dev.journeyscope.ui.theme.JourneyTheme
 
 @Composable
-internal fun JourneyTimingSection(timing: TimingBreakdownUi, modifier: Modifier = Modifier) {
+internal fun JourneyTimingSection(
+    timing: TimingBreakdownUi,
+    modifier: Modifier = Modifier,
+) {
     if (timing.rows.isEmpty()) return
     val colors = JourneyTheme.colors
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {

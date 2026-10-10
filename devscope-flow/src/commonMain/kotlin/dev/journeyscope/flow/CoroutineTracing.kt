@@ -48,7 +48,10 @@ public fun <T> CoroutineScope.asyncTraced(
     return deferred
 }
 
-private class Boundary(val span: SpanHandle, val context: CoroutineContext) {
+private class Boundary(
+    val span: SpanHandle,
+    val context: CoroutineContext,
+) {
     fun close(cause: Throwable?) {
         when (cause) {
             null -> span.end(SpanStatus.OK, outcome("completed"))
@@ -60,15 +63,19 @@ private class Boundary(val span: SpanHandle, val context: CoroutineContext) {
     private fun outcome(value: String): DiagnosticMetadata = diagnosticMetadata { put("coroutine.outcome", value) }
 }
 
-private fun CoroutineScope.openBoundary(name: String, explicit: Journey?): Boundary? {
+private fun CoroutineScope.openBoundary(
+    name: String,
+    explicit: Journey?,
+): Boundary? {
     val ambient = coroutineContext[TraceContext]
     val journey = explicit ?: ambient?.journey ?: return null
     if (!journey.isRecording) return null
     val parent = ambient?.takeIf { it.journey === journey }
-    val metadata = diagnosticMetadata {
-        put("detail", "coroutine job created")
-        put("coroutine.propagated", parent != null)
-    }
+    val metadata =
+        diagnosticMetadata {
+            put("detail", "coroutine job created")
+            put("coroutine.propagated", parent != null)
+        }
     val span = parent?.beginChildSpan(name, SpanCategory.CUSTOM, metadata) ?: journey.beginSpan(name, SpanCategory.CUSTOM, metadata)
     if (!span.isRecording) return null
     return Boundary(span, journey.context(span))

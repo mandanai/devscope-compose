@@ -5,9 +5,17 @@ import dev.journeyscope.core.RedactionPolicy
 internal object HeaderSanitizer {
     private const val MAX_VALUE_LENGTH = 128
 
-    private val alwaysDenied = setOf(
-        "authorization", "proxy-authorization", "cookie", "set-cookie", "x-api-key", "x-auth-token", "x-csrf-token", "x-xsrf-token",
-    )
+    private val alwaysDenied =
+        setOf(
+            "authorization",
+            "proxy-authorization",
+            "cookie",
+            "set-cookie",
+            "x-api-key",
+            "x-auth-token",
+            "x-csrf-token",
+            "x-xsrf-token",
+        )
 
     /** Allowlisted headers only; a credential header is dropped even if the host listed it. */
     fun collect(

@@ -12,14 +12,18 @@ public object JourneyScope {
 
     public val isEnabled: Boolean get() = false
 
+    /** Ignores [config]; collection stays off in this artifact. */
+
     public fun configure(config: JourneyScopeConfig): JourneyTracer = inert
 
     public fun disable() {
         // Nothing is ever enabled in this artifact.
     }
 
-    public fun startJourney(name: String, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty): Journey =
-        inert.startJourney(name, metadata)
+    public fun startJourney(
+        name: String,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    ): Journey = inert.startJourney(name, metadata)
 
     public suspend fun <T> withJourney(
         name: String,

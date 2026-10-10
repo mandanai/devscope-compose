@@ -3,6 +3,7 @@ package dev.journeyscope.export.schema
 import dev.journeyscope.core.JourneyScope
 import dev.journeyscope.core.JourneyScopeConfig
 
+/** A diagnostic finding reduced to non-sensitive fields for inclusion in a report. */
 public data class ExportedFinding(
     val ruleId: String,
     val severity: String,
@@ -10,6 +11,7 @@ public data class ExportedFinding(
     val spanId: String? = null,
 )
 
+/** Header data written into an exported report. */
 public data class ReportContext(
     val platform: String = currentPlatformName(),
     val appVersion: String? = null,

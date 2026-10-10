@@ -2,7 +2,10 @@ package dev.journeyscope.navigation
 
 import dev.journeyscope.core.Journey
 
-public enum class NavigationAction(internal val label: String) {
+/** Kinds of navigation event recorded under `nav.action`. */
+public enum class NavigationAction(
+    internal val label: String,
+) {
     Navigate("Navigate"),
     Pop("Pop"),
     Replace("Replace"),
@@ -12,6 +15,7 @@ public enum class NavigationAction(internal val label: String) {
     BackStackSnapshot("Back stack snapshot"),
 }
 
+/** Stacks deeper than [maxStackDepth] keep only their last entries. */
 public class NavigationTraceConfig(
     /** Maps a route to the text that may be recorded; must never leak argument values. */
     public val routeRedactor: (String) -> String = RouteRedactor.Default,
@@ -24,6 +28,7 @@ public class NavigationTraceConfig(
     }
 }
 
+/** Route-text redaction helpers for [NavigationTraceConfig.routeRedactor]. */
 public object RouteRedactor {
     private val hex = Regex("[0-9a-fA-F-]{16,}")
 
@@ -33,7 +38,8 @@ public object RouteRedactor {
         path.split('/').joinToString("/") { segment -> if (looksLikeValue(segment)) "{arg}" else segment }
     }
 
-    private fun looksLikeValue(segment: String): Boolean = segment.isNotEmpty() &&
-        !(segment.startsWith("{") && segment.endsWith("}")) &&
-        (segment.all { it.isDigit() } || hex.matches(segment) || segment.any { it == '@' || it == '=' } || segment.length > 32)
+    private fun looksLikeValue(segment: String): Boolean =
+        segment.isNotEmpty() &&
+            !(segment.startsWith("{") && segment.endsWith("}")) &&
+            (segment.all { it.isDigit() } || hex.matches(segment) || segment.any { it == '@' || it == '=' } || segment.length > 32)
 }

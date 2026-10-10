@@ -28,7 +28,9 @@ internal fun JourneyCategoryFilterRow(
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         LazyRow(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             item(key = "all") {
-                FilterChip(selected = selected.isEmpty(), onClick = onClear, label = { Text("All", style = MaterialTheme.typography.labelLarge) })
+                FilterChip(selected = selected.isEmpty(), onClick = onClear, label = {
+                    Text("All", style = MaterialTheme.typography.labelLarge)
+                })
             }
             items(available, key = { it.name }) { category ->
                 FilterChip(

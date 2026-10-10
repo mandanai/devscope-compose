@@ -96,11 +96,22 @@ internal fun JourneyListItem(
 ) {
     val colors = JourneyTheme.colors
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .clickable(onClickLabel = if (checked != null) "Toggle selection" else "Open journey details", role = Role.Button, onClick = onClick)
-            .clearAndSetSemantics { contentDescription = item.spokenDescription },
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
+                .clickable(
+                    onClickLabel =
+                        if (checked !=
+                            null
+                        ) {
+                            "Toggle selection"
+                        } else {
+                            "Open journey details"
+                        },
+                    role = Role.Button,
+                    onClick = onClick,
+                ).clearAndSetSemantics { contentDescription = item.spokenDescription },
         shape = RoundedCornerShape(20.dp),
         color = colors.surface,
         border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) colors.running else colors.border),
@@ -114,10 +125,19 @@ internal fun JourneyListItem(
                         fontWeight = FontWeight.SemiBold,
                         color = colors.textPrimary,
                     )
-                    Text((if (item.imported) "Imported · " else "") + item.subtitle, style = MaterialTheme.typography.bodySmall, color = colors.textSecondary)
+                    Text(
+                        (if (item.imported) "Imported · " else "") + item.subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = colors.textSecondary,
+                    )
                 }
                 Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(item.breakdown.totalLabel, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = colors.textPrimary)
+                    Text(
+                        item.breakdown.totalLabel,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.textPrimary,
+                    )
                     JourneyStatusBadge(item.status)
                 }
             }
@@ -127,7 +147,10 @@ internal fun JourneyListItem(
 }
 
 @Composable
-private fun ExportActionRow(export: ExportUiState, visibleIds: List<String>) {
+private fun ExportActionRow(
+    export: ExportUiState,
+    visibleIds: List<String>,
+) {
     Row(Modifier.fillMaxWidth().padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         if (export.selecting) {
             TextButton(onClick = { export.review(export.selection) }, enabled = export.selection.isNotEmpty()) {

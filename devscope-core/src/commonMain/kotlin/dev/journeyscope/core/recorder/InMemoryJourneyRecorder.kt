@@ -12,15 +12,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 /** Bounded ring of traces; each trace owns its own state, so this only tracks membership. */
-public class InMemoryJourneyRecorder(private val maxTraces: Int = DEFAULT_MAX_TRACES) : JourneyRecorder {
+public class InMemoryJourneyRecorder(
+    private val maxTraces: Int = DEFAULT_MAX_TRACES,
+) : JourneyRecorder {
     // Plain class on purpose: StateFlow CAS compares with equals, identity is what we want.
-    private class Ring(val traces: List<RecordedTrace>)
+    private class Ring(
+        val traces: List<RecordedTrace>,
+    )
 
     private val ring = MutableStateFlow(Ring(emptyList()))
-    private val mutableEvents = MutableSharedFlow<RecorderEvent>(
-        extraBufferCapacity = EVENT_BUFFER,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST,
-    )
+    private val mutableEvents =
+        MutableSharedFlow<RecorderEvent>(
+            extraBufferCapacity = EVENT_BUFFER,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
 
     init {
         require(maxTraces > 0) { "maxTraces must be positive" }
@@ -29,8 +34,7 @@ public class InMemoryJourneyRecorder(private val maxTraces: Int = DEFAULT_MAX_TR
     override val events: SharedFlow<RecorderEvent> get() = mutableEvents
 
     /** Emits the full snapshot now and after every change; conflation-safe for UI collectors. */
-    public fun observeTraces(): Flow<List<JourneyTrace>> =
-        mutableEvents.onStart { emit(RecorderEvent.Cleared) }.map { snapshot() }
+    public fun observeTraces(): Flow<List<JourneyTrace>> = mutableEvents.onStart { emit(RecorderEvent.Cleared) }.map { snapshot() }
 
     override fun attach(trace: RecordedTrace) {
         val evicted = ArrayList<RecordedTrace>()
@@ -61,7 +65,10 @@ public class InMemoryJourneyRecorder(private val maxTraces: Int = DEFAULT_MAX_TR
 
     override fun snapshot(): List<JourneyTrace> = ring.value.traces.map { it.snapshot() }
 
-    override fun find(id: TraceId): JourneyTrace? = ring.value.traces.firstOrNull { it.id == id }?.snapshot()
+    override fun find(id: TraceId): JourneyTrace? =
+        ring.value.traces
+            .firstOrNull { it.id == id }
+            ?.snapshot()
 
     override fun liveTraces(): List<RecordedTrace> = ring.value.traces.filter { !it.isFinished }
 
@@ -71,8 +78,7 @@ public class InMemoryJourneyRecorder(private val maxTraces: Int = DEFAULT_MAX_TR
         mutableEvents.tryEmit(RecorderEvent.Cleared)
     }
 
-    private fun oldestEvictableIndex(traces: List<RecordedTrace>): Int =
-        traces.indexOfFirst { it.isFinished }.takeIf { it >= 0 } ?: 0
+    private fun oldestEvictableIndex(traces: List<RecordedTrace>): Int = traces.indexOfFirst { it.isFinished }.takeIf { it >= 0 } ?: 0
 
     public companion object {
         public const val DEFAULT_MAX_TRACES: Int = 50

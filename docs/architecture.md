@@ -2,24 +2,27 @@
 
 ## Dependency direction
 ```
-samples/*  ->  devscope-ui-compose  ->  devscope-core
-samples/*  ->  adapters (future)    ->  devscope-core
+devscope-core  <-  devscope-diagnostics  <-+
+devscope-core  <-  devscope-export       <-+- devscope-ui-compose
+devscope-core  <-  devscope-flow / -navigation / -network-ktor / -network-okhttp / -database-sqldelight
+devscope-core-noop   (no project dependency; compiles four shared core source files)
+samples/composeApp  ->  all of the above;  samples/androidApp -> composeApp
 ```
 - `devscope-core` depends on nothing but Kotlin stdlib and kotlinx-coroutines. No Compose, Android or UIKit.
-- Adapters (Ktor, OkHttp, Flow, Navigation, SQLDelight) depend only on core, never on each other or on the UI.
-- Gradle rejects project cycles; check core purity with `./gradlew :devscope-core:dependencies`.
-
+- Adapters depend only on core, never on each other or on the UI. `devscope-ui-compose` depends on core, diagnostics and export.
+- The graph is acyclic (Gradle rejects project cycles) and no `commonMain` imports `android.*`.
+- Third-party types appear in an adapter's public API only where they are the point (`ktor-client-core`, `okhttp`, `sqldelight-runtime`, lifecycle on Android).
 ## Source sets
 `commonMain`/`commonTest` by default; `androidMain`/`iosMain` only where a platform API forces it. Targets: `android`, `iosArm64`, `iosSimulatorArm64`.
 
 ## Build
 - Convention plugins in `build-logic/convention` (`journeyscope.kmp.library`, `journeyscope.compose`, `journeyscope.publishing`, `journeyscope.sample.*`).
 - Versions only in `gradle/libs.versions.toml`.
-- SDK modules use `explicitApi()`, treat warnings as errors, and compile at Kotlin language/API 2.1 (`kotlinLanguage` in the catalog).
+- SDK modules use `explicitApi()`, Kotlin ABI validation baselines (`api/`), treat warnings as errors, and compile at Kotlin language/API 2.1 (`kotlinLanguage` in the catalog).
 - AGP 9 forbids combining the KMP plugin with `com.android.application`, so the Android sample is split: `samples/composeApp` (KMP library) and `samples/androidApp` (application).
 
 ## Principles
-Offline-first, no mandatory backend, no DI framework required, disabled by default (`JourneyScope.isEnabled`, turned on via `JourneyScope.configure`), secure-by-default data collection (to be enforced as features land).
+Offline-first, no mandatory backend, no DI framework required, disabled by default (`JourneyScope.isEnabled`, turned on via `JourneyScope.configure`), secure-by-default data collection (key/header/URL redaction at capture, a second redaction pass at export).
 
 ## Runtime tracing engine (`devscope-core`)
 See [api.md](api.md) for usage. Layers: `JourneyScope` (facade) -> `JourneyTracer` (engine) -> `Journey`/`SpanHandle` (live handles) -> `JourneyRecorder` (bounded storage + `SharedFlow` events). Immutable snapshots: `JourneyTrace`, `JourneySpan`, `JourneyEvent`.

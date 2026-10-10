@@ -1,8 +1,12 @@
 package dev.journeyscope.diagnostics
 
+/** Rounding helpers so displayed percentages stay consistent. */
 public object Percentages {
     /** Whole-number percentages of [total] that sum to exactly 100 (largest-remainder method). */
-    public fun distribute(parts: List<Long>, total: Long): List<Int> {
+    public fun distribute(
+        parts: List<Long>,
+        total: Long,
+    ): List<Int> {
         if (total <= 0L || parts.isEmpty()) return parts.map { 0 }
         val floors = parts.map { (it * 100) / total }
         val remainders = parts.mapIndexed { index, part -> index to ((part * 100) % total) }
@@ -19,7 +23,10 @@ public object Percentages {
     }
 
     /** One-decimal percentage, half-up, e.g. 940 of 1265 -> "74.3%". */
-    public fun format(part: Long, total: Long): String {
+    public fun format(
+        part: Long,
+        total: Long,
+    ): String {
         if (total <= 0L) return "0.0%"
         val tenths = (part * 1000 + total / 2) / total
         return "${tenths / 10}.${tenths % 10}%"

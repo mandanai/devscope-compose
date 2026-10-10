@@ -2,7 +2,10 @@ package dev.journeyscope.core.timing
 
 import kotlin.time.TimeSource
 
+/** Injectable time source: monotonic for durations, wall clock for display. */
+
 public interface JourneyClock {
+    /** Origin is arbitrary; only differences are meaningful. */
     public fun monotonicNanos(): Long
 
     public fun wallClockMillis(): Long

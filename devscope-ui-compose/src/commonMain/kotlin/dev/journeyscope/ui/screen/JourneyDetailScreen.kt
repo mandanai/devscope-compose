@@ -27,8 +27,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import dev.journeyscope.ui.components.JourneyCategoryFilterRow
 import dev.journeyscope.ui.components.ExpectedSequenceSection
+import dev.journeyscope.ui.components.JourneyCategoryFilterRow
 import dev.journeyscope.ui.components.JourneyDiagnosticSection
 import dev.journeyscope.ui.components.JourneyDurationSummary
 import dev.journeyscope.ui.components.JourneyHeader
@@ -56,9 +56,10 @@ internal fun JourneyDetailScreen(
     val colors = JourneyTheme.colors
     val listState = rememberLazyListState()
     val filters = state.filters
-    val visibleRows = remember(detail.rows, filters) {
-        if (filters.isEmpty()) detail.rows else detail.rows.filter { it.category in filters }
-    }
+    val visibleRows =
+        remember(detail.rows, filters) {
+            if (filters.isEmpty()) detail.rows else detail.rows.filter { it.category in filters }
+        }
     val availableCategories = remember(detail.rows) { detail.rows.map { it.category }.distinct() }
     val expandableIds = remember(visibleRows) { visibleRows.map { it.id } }
 
@@ -141,7 +142,11 @@ internal fun JourneyDetailScreen(
     }
 }
 
-private fun revealSlowest(rows: List<TimelineRowUi>, category: JourneyCategory, state: InspectorState) {
+private fun revealSlowest(
+    rows: List<TimelineRowUi>,
+    category: JourneyCategory,
+    state: InspectorState,
+) {
     rows.filter { it.category == category }.maxByOrNull { it.selfNanos }?.let { state.reveal(it.id) }
 }
 
@@ -149,10 +154,11 @@ private fun revealSlowest(rows: List<TimelineRowUi>, category: JourneyCategory, 
 private fun BackBar(onBack: () -> Unit) {
     val colors = JourneyTheme.colors
     Row(
-        modifier = Modifier
-            .clickable(onClickLabel = "Back to journeys", role = Role.Button, onClick = onBack)
-            .padding(horizontal = 8.dp, vertical = 12.dp)
-            .semantics { contentDescription = "Back to journeys" },
+        modifier =
+            Modifier
+                .clickable(onClickLabel = "Back to journeys", role = Role.Button, onClick = onBack)
+                .padding(horizontal = 8.dp, vertical = 12.dp)
+                .semantics { contentDescription = "Back to journeys" },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {

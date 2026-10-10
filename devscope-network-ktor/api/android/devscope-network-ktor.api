@@ -1,0 +1,12 @@
+public final class dev/journeyscope/network/ktor/JourneyScopeNetworkConfig {
+	public fun <init> ()V
+	public final fun getTrace ()Ldev/journeyscope/core/network/NetworkTraceConfig;
+	public final fun getTracer ()Lkotlin/jvm/functions/Function0;
+	public final fun setTrace (Ldev/journeyscope/core/network/NetworkTraceConfig;)V
+	public final fun setTracer (Lkotlin/jvm/functions/Function0;)V
+}
+
+public final class dev/journeyscope/network/ktor/JourneyScopeNetworkKt {
+	public static final fun getJourneyScopeNetwork ()Lio/ktor/client/plugins/api/ClientPlugin;
+}
+

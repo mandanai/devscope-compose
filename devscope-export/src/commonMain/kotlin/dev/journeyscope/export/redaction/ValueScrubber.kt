@@ -1,6 +1,9 @@
 package dev.journeyscope.export.redaction
 
-internal class ScrubResult(val text: String, val changed: Boolean)
+internal class ScrubResult(
+    val text: String,
+    val changed: Boolean,
+)
 
 /** Last line of defence for free text: names, labels and allowlisted values can still carry secrets. */
 internal object ValueScrubber {
@@ -11,9 +14,10 @@ internal object ValueScrubber {
     private val email = Regex("""[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}""")
     private val longSecret = Regex("""\b[A-Fa-f0-9]{32,}\b|\b[A-Za-z0-9+/_-]{40,}={0,2}""")
     private val phone = Regex("""(?<![\w.])\+?\d[\d\s().-]{8,}\d(?![\w.])""")
-    private val querySecret = Regex(
-        """(?i)([?&;](?:access_token|refresh_token|id_token|token|api[_-]?key|key|secret|password|passwd|otp|code|sig|signature|x-amz-[a-z-]+|expires|auth|session|sid)=)[^&#\s]*""",
-    )
+    private val querySecret =
+        Regex(
+            """(?i)([?&;](?:access_token|refresh_token|id_token|token|api[_-]?key|key|secret|password|passwd|otp|code|sig|signature|x-amz-[a-z-]+|expires|auth|session|sid)=)[^&#\s]*""",
+        )
     private val userInfo = Regex("""(?i)(\b[a-z][a-z0-9+.-]*://)[^/\s:@]+:[^/\s@]+@""")
 
     fun scrub(input: String): ScrubResult {

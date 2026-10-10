@@ -1,5 +1,6 @@
 package dev.journeyscope.export.share
 
+/** A redacted, serialized report ready to share; held in memory. */
 public class ExportedReport(
     public val fileName: String,
     public val json: String,

@@ -9,25 +9,46 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-data class CartApiResponse(val accepted: Boolean, val rejectionReason: String?, val quantity: Int)
+data class CartApiResponse(
+    val accepted: Boolean,
+    val rejectionReason: String?,
+    val quantity: Int,
+)
 
 interface CartRemoteDataSource {
-    suspend fun addItem(productId: String, quantity: Int, scenario: SampleScenario): CartApiResponse
+    suspend fun addItem(
+        productId: String,
+        quantity: Int,
+        scenario: SampleScenario,
+    ): CartApiResponse
 }
 
 /** The NETWORK span comes from the `JourneyScopeNetwork` plugin installed on [client]; nothing here traces by hand. */
-class KtorCartApi(private val client: HttpClient) : CartRemoteDataSource {
-    override suspend fun addItem(productId: String, quantity: Int, scenario: SampleScenario): CartApiResponse {
-        val body = client.post("$BASE_URL/cart/items") {
-            contentType(ContentType.Application.Json)
-            header(SCENARIO_HEADER, scenario.name)
-            setBody("""{"productId":"$productId","quantity":$quantity}""")
-        }.bodyAsText()
+class KtorCartApi(
+    private val client: HttpClient,
+) : CartRemoteDataSource {
+    override suspend fun addItem(
+        productId: String,
+        quantity: Int,
+        scenario: SampleScenario,
+    ): CartApiResponse {
+        val body =
+            client
+                .post("$BASE_URL/cart/items") {
+                    contentType(ContentType.Application.Json)
+                    header(SCENARIO_HEADER, scenario.name)
+                    setBody("""{"productId":"$productId","quantity":$quantity}""")
+                }.bodyAsText()
         val code = jsonString(body, "returnCode")
         return CartApiResponse(
             accepted = code == SUCCESS_CODE,
             rejectionReason = jsonString(body, "reason"),
-            quantity = Regex("\"quantity\":(\\d+)").find(body)?.groupValues?.get(1)?.toInt() ?: 0,
+            quantity =
+                Regex("\"quantity\":(\\d+)")
+                    .find(body)
+                    ?.groupValues
+                    ?.get(1)
+                    ?.toInt() ?: 0,
         )
     }
 
@@ -38,4 +59,7 @@ class KtorCartApi(private val client: HttpClient) : CartRemoteDataSource {
     }
 }
 
-internal fun jsonString(json: String, key: String): String? = Regex("\"$key\":\"([^\"]*)\"").find(json)?.groupValues?.get(1)
+internal fun jsonString(
+    json: String,
+    key: String,
+): String? = Regex("\"$key\":\"([^\"]*)\"").find(json)?.groupValues?.get(1)

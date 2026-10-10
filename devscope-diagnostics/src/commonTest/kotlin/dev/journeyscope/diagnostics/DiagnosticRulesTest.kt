@@ -24,19 +24,21 @@ class DiagnosticRulesTest {
 
     @Test
     fun durationsInEvidenceAreRoundedNotTruncated() {
-        val trace = TraceBuilder().span("api", SpanCategory.NETWORK, 0, 1000).build(totalMs = 2000).let {
-            it.copy(spans = it.spans.map { span -> span.copy(endNanos = 1_999_600_000L) }, endNanos = 2_000_000_000L)
-        }
+        val trace =
+            TraceBuilder().span("api", SpanCategory.NETWORK, 0, 1000).build(totalMs = 2000).let {
+                it.copy(spans = it.spans.map { span -> span.copy(endNanos = 1_999_600_000L) }, endNanos = 2_000_000_000L)
+            }
         val finding = analyzer().analyze(trace).findings.single { it.ruleId == "network.slow" }
         assertTrue("2000 ms" in finding.evidence.first(), finding.evidence.first())
     }
 
     @Test
     fun overlappingJourneyDoesNotClaimSequential() {
-        val trace = TraceBuilder()
-            .span("a", SpanCategory.NETWORK, 0, 900)
-            .span("b", SpanCategory.NETWORK, 100, 900, metadata = network(path = "/other"))
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("a", SpanCategory.NETWORK, 0, 900)
+                .span("b", SpanCategory.NETWORK, 100, 900, metadata = network(path = "/other"))
+                .build()
         val dominant = analyzer().analyze(trace).findings.single { it.ruleId == "timing.dominant" }
         assertFalse("sequential journey" in dominant.evidence.first())
         assertTrue("overlapping" in dominant.evidence.first())
@@ -51,12 +53,15 @@ class DiagnosticRulesTest {
 
     @Test
     fun slowDatabaseThresholdAndLeafSelection() {
-        fun ids(ms: Long) = analyzer().analyze(
-            TraceBuilder()
-                .span("tx", SpanCategory.DATABASE, 0, ms)
-                .span("q", SpanCategory.DATABASE, 0, ms, parent = "tx")
-                .build(),
-        ).findings.filter { it.ruleId == "database.slow" }
+        fun ids(ms: Long) =
+            analyzer()
+                .analyze(
+                    TraceBuilder()
+                        .span("tx", SpanCategory.DATABASE, 0, ms)
+                        .span("q", SpanCategory.DATABASE, 0, ms, parent = "tx")
+                        .build(),
+                ).findings
+                .filter { it.ruleId == "database.slow" }
         assertTrue(ids(99).isEmpty())
         val findings = ids(100)
         assertEquals(1, findings.size)
@@ -65,9 +70,10 @@ class DiagnosticRulesTest {
 
     @Test
     fun slowNetworkSkipsFailedSpansWhichAreReportedAsFailures() {
-        val trace = TraceBuilder()
-            .span("api", SpanCategory.NETWORK, 0, 1500, status = SpanStatus.FAILED, metadata = network(failure = "TIMEOUT"))
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("api", SpanCategory.NETWORK, 0, 1500, status = SpanStatus.FAILED, metadata = network(failure = "TIMEOUT"))
+                .build()
         val ids = analyzer().analyze(trace).ids()
         assertTrue("network.failed" in ids)
         assertFalse("network.slow" in ids)
@@ -75,10 +81,11 @@ class DiagnosticRulesTest {
 
     @Test
     fun failureClassification() {
-        val trace = TraceBuilder()
-            .span("ok-business", SpanCategory.NETWORK, 0, 100, metadata = network(status = 200, business = "FAILURE"))
-            .span("cancelled", SpanCategory.NETWORK, 100, 50, status = SpanStatus.CANCELLED, metadata = network(path = "/c"))
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("ok-business", SpanCategory.NETWORK, 0, 100, metadata = network(status = 200, business = "FAILURE"))
+                .span("cancelled", SpanCategory.NETWORK, 100, 50, status = SpanStatus.CANCELLED, metadata = network(path = "/c"))
+                .build()
         val report = analyzer().analyze(trace)
 
         val business = report.findings.single { it.ruleId == "business.validation_failed" }
@@ -105,11 +112,12 @@ class DiagnosticRulesTest {
 
     @Test
     fun repeatedRequestsAfterFailuresAreCalledPossibleRetries() {
-        val trace = TraceBuilder()
-            .span("r0", SpanCategory.NETWORK, 0, 50, status = SpanStatus.FAILED, metadata = network())
-            .span("r1", SpanCategory.NETWORK, 100, 50, status = SpanStatus.FAILED, metadata = network())
-            .span("r2", SpanCategory.NETWORK, 200, 50, metadata = network())
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("r0", SpanCategory.NETWORK, 0, 50, status = SpanStatus.FAILED, metadata = network())
+                .span("r1", SpanCategory.NETWORK, 100, 50, status = SpanStatus.FAILED, metadata = network())
+                .span("r2", SpanCategory.NETWORK, 200, 50, metadata = network())
+                .build()
         val finding = analyzer().analyze(trace).findings.single { it.ruleId == "network.repeated" }
         assertTrue("retries" in finding.inference.orEmpty())
     }
@@ -127,18 +135,21 @@ class DiagnosticRulesTest {
 
     @Test
     fun gapRuleRespectsMinimumAndRelativeThreshold() {
-        fun ids(gapMs: Long) = analyzer().analyze(
-            TraceBuilder().span("a", SpanCategory.CUSTOM, 0, 100).span("b", SpanCategory.CUSTOM, 100 + gapMs, 100).build(),
-        ).ids()
+        fun ids(gapMs: Long) =
+            analyzer()
+                .analyze(
+                    TraceBuilder().span("a", SpanCategory.CUSTOM, 0, 100).span("b", SpanCategory.CUSTOM, 100 + gapMs, 100).build(),
+                ).ids()
         assertFalse("journey.gap" in ids(100))
         assertTrue("journey.gap" in ids(400))
     }
 
     @Test
     fun interruptedJourneyIsFlaggedButRunningIsNot() {
-        val interrupted = TraceBuilder(TraceStatus.INTERRUPTED)
-            .span("a", SpanCategory.NETWORK, 0, 100, status = SpanStatus.INTERRUPTED, endedBySystem = true)
-            .build()
+        val interrupted =
+            TraceBuilder(TraceStatus.INTERRUPTED)
+                .span("a", SpanCategory.NETWORK, 0, 100, status = SpanStatus.INTERRUPTED, endedBySystem = true)
+                .build()
         assertTrue("journey.unfinished" in analyzer().analyze(interrupted).ids())
 
         val running = TraceBuilder(TraceStatus.RUNNING).span("a", SpanCategory.NETWORK, 0, null).build()
@@ -148,12 +159,24 @@ class DiagnosticRulesTest {
     @Test
     fun missingCheckpointIsReportedWithEmissionEvidence() {
         val config = DiagnosticConfig(expectedSequences = listOf(sequenceOf("emit", "checkpoint")))
-        val trace = TraceBuilder().span("emit", SpanCategory.STATE_EMISSION, 0, 5).event("CartUiState emitted", SpanCategory.STATE_EMISSION, 5).build()
+        val trace =
+            TraceBuilder()
+                .span(
+                    "emit",
+                    SpanCategory.STATE_EMISSION,
+                    0,
+                    5,
+                ).event("CartUiState emitted", SpanCategory.STATE_EMISSION, 5)
+                .build()
 
         val finding = analyzer(config).analyze(trace).findings.single { it.ruleId == "journey.checkpoint_missing" }
 
         assertTrue(finding.evidence.any { "checkpoint" in it })
-        assertTrue(finding.evidence.any { "UI state emission was observed, but the configured completion checkpoint was not recorded" in it })
+        assertTrue(
+            finding.evidence.any {
+                "UI state emission was observed, but the configured completion checkpoint was not recorded" in it
+            },
+        )
     }
 
     @Test
@@ -167,11 +190,12 @@ class DiagnosticRulesTest {
 
     @Test
     fun databaseSignificantWhenNotDominant() {
-        val trace = TraceBuilder()
-            .span("api", SpanCategory.NETWORK, 0, 400)
-            .span("db", SpanCategory.DATABASE, 400, 300)
-            .span("ui", SpanCategory.UI_RENDER, 700, 200)
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("api", SpanCategory.NETWORK, 0, 400)
+                .span("db", SpanCategory.DATABASE, 400, 300)
+                .span("ui", SpanCategory.UI_RENDER, 700, 200)
+                .build()
         val ids = analyzer().analyze(trace).ids()
         assertTrue("timing.database_significant" in ids)
         assertFalse("timing.dominant" in ids)
@@ -179,7 +203,11 @@ class DiagnosticRulesTest {
 
     @Test
     fun disabledRulesAndSeverityOverridesAreHonoured() {
-        val config = DiagnosticConfig(disabledRules = setOf("timing.dominant"), severityOverrides = mapOf("network.slow" to DiagnosticSeverity.Error))
+        val config =
+            DiagnosticConfig(
+                disabledRules = setOf("timing.dominant"),
+                severityOverrides = mapOf("network.slow" to DiagnosticSeverity.Error),
+            )
         val trace = TraceBuilder().span("api", SpanCategory.NETWORK, 0, 900, metadata = network()).build()
         val report = analyzer(config).analyze(trace)
         assertFalse("timing.dominant" in report.ids())
@@ -188,16 +216,21 @@ class DiagnosticRulesTest {
 
     @Test
     fun customRulesRunAndThrowingRulesAreIsolated() {
-        val custom = object : DiagnosticRule {
-            override val id = "custom.always"
-            override fun evaluate(context: DiagnosticContext) = listOf(
-                DiagnosticFinding("custom.always", DiagnosticSeverity.Info, DiagnosticCategory("Custom"), "Custom", listOf("seen")),
-            )
-        }
-        val broken = object : DiagnosticRule {
-            override val id = "custom.broken"
-            override fun evaluate(context: DiagnosticContext): List<DiagnosticFinding> = error("boom")
-        }
+        val custom =
+            object : DiagnosticRule {
+                override val id = "custom.always"
+
+                override fun evaluate(context: DiagnosticContext) =
+                    listOf(
+                        DiagnosticFinding("custom.always", DiagnosticSeverity.Info, DiagnosticCategory("Custom"), "Custom", listOf("seen")),
+                    )
+            }
+        val broken =
+            object : DiagnosticRule {
+                override val id = "custom.broken"
+
+                override fun evaluate(context: DiagnosticContext): List<DiagnosticFinding> = error("boom")
+            }
         val report = DiagnosticAnalyzer(rules = DiagnosticRules.default() + custom + broken).analyze(addToCartDemo())
         assertTrue("custom.always" in report.ids())
         assertEquals(listOf("custom.broken"), report.ruleFailures.map { it.ruleId })
@@ -205,21 +238,23 @@ class DiagnosticRulesTest {
 
     @Test
     fun healthyFastJourneyProducesNoFindings() {
-        val trace = TraceBuilder()
-            .span("vm", SpanCategory.VIEW_MODEL, 0, 20)
-            .span("api", SpanCategory.NETWORK, 20, 120, metadata = network(status = 200))
-            .span("db", SpanCategory.DATABASE, 140, 15)
-            .span("ui", SpanCategory.UI_RENDER, 155, 25)
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("vm", SpanCategory.VIEW_MODEL, 0, 20)
+                .span("api", SpanCategory.NETWORK, 20, 120, metadata = network(status = 200))
+                .span("db", SpanCategory.DATABASE, 140, 15)
+                .span("ui", SpanCategory.UI_RENDER, 155, 25)
+                .build()
         val report = analyzer(DiagnosticConfig(slowJourney = 2000.milliseconds)).analyze(trace)
         assertTrue(report.findings.none { it.severity != DiagnosticSeverity.Info }, report.ids().toString())
     }
 
     @Test
     fun findingsAreOrderedBySeverity() {
-        val trace = TraceBuilder()
-            .span("api", SpanCategory.NETWORK, 0, 900, status = SpanStatus.FAILED, metadata = network(failure = "TIMEOUT"))
-            .build()
+        val trace =
+            TraceBuilder()
+                .span("api", SpanCategory.NETWORK, 0, 900, status = SpanStatus.FAILED, metadata = network(failure = "TIMEOUT"))
+                .build()
         val severities = analyzer().analyze(trace).findings.map { it.severity }
         assertEquals(severities.sortedDescending(), severities)
     }
