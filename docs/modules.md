@@ -2,7 +2,7 @@
 
 ## Implemented
 - `devscope-core` — `dev.journeyscope.core`; `JourneyScope.isEnabled`, `JourneyScope.VERSION`.
-- `devscope-ui-compose` — `dev.journeyscope.ui`; `JourneyScopeInspector` placeholder.
+- `devscope-ui-compose` — `dev.journeyscope.ui`; `JourneyScopeInspector` journey list/detail UI (see [ui.md](ui.md)).
 
 ## Planned (not yet created)
 `devscope-network-ktor`, `devscope-network-okhttp`, `devscope-flow`, `devscope-navigation`, `devscope-database-sqldelight`, `devscope-diagnostics`, `devscope-export`.

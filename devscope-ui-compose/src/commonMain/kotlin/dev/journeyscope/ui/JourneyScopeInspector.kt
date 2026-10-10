@@ -1,29 +1,48 @@
 package dev.journeyscope.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import dev.journeyscope.core.JourneyScope
+import dev.journeyscope.ui.mapping.DefaultInsightProvider
+import dev.journeyscope.ui.mapping.InspectorThresholds
+import dev.journeyscope.ui.mapping.JourneyInsightProvider
+import dev.journeyscope.ui.mapping.MetadataDisplayPolicy
+import dev.journeyscope.ui.mapping.TraceMapper
+import dev.journeyscope.ui.screen.JourneyInspectorScreen
+import dev.journeyscope.ui.state.InspectorPresenter
+import dev.journeyscope.ui.state.JourneyTraceSource
+import dev.journeyscope.ui.state.asTraceSource
+import dev.journeyscope.ui.theme.JourneyColors
+import dev.journeyscope.ui.theme.JourneyScopeTheme
+import dev.journeyscope.ui.theme.defaultJourneyColors
 
 @Composable
-public fun JourneyScopeInspector(modifier: Modifier = Modifier) {
-    Surface(modifier = modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        Column(
-            modifier = Modifier.padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text("JourneyScope", style = MaterialTheme.typography.headlineMedium)
-            Text("Inspector placeholder", style = MaterialTheme.typography.bodyLarge)
-            Text("v${JourneyScope.VERSION}", style = MaterialTheme.typography.labelMedium)
-        }
+public fun JourneyScopeInspector(
+    modifier: Modifier = Modifier,
+    source: JourneyTraceSource = rememberRecorderSource(),
+    thresholds: InspectorThresholds = rememberRecorderThresholds(),
+    insightProvider: JourneyInsightProvider = DefaultInsightProvider(),
+    metadataPolicy: MetadataDisplayPolicy = MetadataDisplayPolicy.Default,
+    colors: JourneyColors = defaultJourneyColors(),
+    onClose: (() -> Unit)? = null,
+) {
+    val presenter = remember(source, thresholds, insightProvider, metadataPolicy) {
+        InspectorPresenter(source, TraceMapper(thresholds, metadataPolicy, insightProvider))
     }
+    JourneyScopeTheme(colors = colors) {
+        JourneyInspectorScreen(presenter = presenter, onClose = onClose, modifier = modifier)
+    }
+}
+
+@Composable
+private fun rememberRecorderSource(): JourneyTraceSource {
+    val recorder = JourneyScope.tracer.recorder
+    return remember(recorder) { recorder.asTraceSource() }
+}
+
+@Composable
+private fun rememberRecorderThresholds(): InspectorThresholds {
+    val config = JourneyScope.tracer.config
+    return remember(config) { InspectorThresholds.from(config) }
 }
