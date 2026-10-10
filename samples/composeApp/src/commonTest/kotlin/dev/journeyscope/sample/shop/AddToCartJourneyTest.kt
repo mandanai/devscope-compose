@@ -1,5 +1,6 @@
 package dev.journeyscope.sample.shop
 
+import dev.journeyscope.core.model.MetadataValue
 import dev.journeyscope.core.model.SpanCategory
 import dev.journeyscope.core.model.SpanStatus
 import dev.journeyscope.core.model.TraceStatus
@@ -59,7 +60,7 @@ class AddToCartJourneyTest {
         assertNull(viewModel.parentId)
         assertEquals(viewModel.id, useCase.parentId)
         assertEquals(useCase.id, repository.parentId)
-        listOf("POST /cart/items", "validateCartResponse", "cart.upsert").forEach { name ->
+        listOf(CART_API_SPAN, "validateCartResponse", "cart.upsert").forEach { name ->
             assertEquals(repository.id, trace.span(name).parentId, name)
         }
         assertNull(trace.span("Cart count render").parentId)
@@ -86,7 +87,7 @@ class AddToCartJourneyTest {
         advanceUntilIdle()
 
         val trace = shop.onlyTrace()
-        assertEquals(shop.latency.normal, trace.span("POST /cart/items").duration)
+        assertEquals(shop.latency.normal, trace.span(CART_API_SPAN).duration)
         assertEquals(shop.latency.database, trace.span("cart.upsert").duration)
         assertEquals(shop.latency.normal + shop.latency.database, trace.summary?.duration)
         assertEquals(false, trace.summary?.isSlow)
@@ -101,7 +102,7 @@ class AddToCartJourneyTest {
 
         val trace = shop.onlyTrace()
         assertEquals(TraceStatus.COMPLETED, trace.status)
-        assertEquals(shop.latency.slow, trace.span("POST /cart/items").duration)
+        assertEquals(shop.latency.slow, trace.span(CART_API_SPAN).duration)
         assertEquals(true, trace.summary?.isSlow)
     }
 
@@ -114,7 +115,7 @@ class AddToCartJourneyTest {
 
         val trace = shop.onlyTrace()
         assertEquals(TraceStatus.FAILED, trace.status)
-        assertEquals(SpanStatus.OK, trace.span("POST /cart/items").status)
+        assertEquals(SpanStatus.OK, trace.span(CART_API_SPAN).status)
         val validation = trace.span("validateCartResponse")
         assertEquals(SpanStatus.FAILED, validation.status)
         assertTrue(validation.failure?.type?.endsWith("CartRejectedException") == true)
@@ -128,6 +129,20 @@ class AddToCartJourneyTest {
     }
 
     @Test
+    fun businessFailureIsVisibleOnTheNetworkSpanAlongsideHttp200() = runTest {
+        val shop = VirtualShop(this).also { it.autoRender(this) }
+
+        shop.viewModel.addToCart(SampleScenario.BusinessFailure)
+        advanceUntilIdle()
+
+        val network = shop.onlyTrace().span(CART_API_SPAN)
+        assertEquals(MetadataValue.Integer(200), network.metadata["http.status"])
+        assertEquals(MetadataValue.Text("FAILURE"), network.metadata["business.status"])
+        assertEquals(MetadataValue.Text("2001"), network.metadata["returnCode"])
+        assertTrue(network.metadata.entries.keys.none { it.contains("header") })
+    }
+
+    @Test
     fun networkExceptionEndsFailedAtTheNetworkSpan() = runTest {
         val shop = VirtualShop(this).also { it.autoRender(this) }
 
@@ -136,7 +151,7 @@ class AddToCartJourneyTest {
 
         val trace = shop.onlyTrace()
         assertEquals(TraceStatus.FAILED, trace.status)
-        val network = trace.span("POST /cart/items")
+        val network = trace.span(CART_API_SPAN)
         assertEquals(SpanStatus.FAILED, network.status)
         assertTrue(network.failure?.type?.endsWith("SimulatedNetworkException") == true)
         assertNull(network.failure?.message)
@@ -154,8 +169,8 @@ class AddToCartJourneyTest {
         assertTrue(job.isCancelled)
         val trace = shop.onlyTrace()
         assertEquals(TraceStatus.CANCELLED, trace.status)
-        assertEquals(SpanStatus.CANCELLED, trace.span("POST /cart/items").status)
-        assertEquals(shop.latency.cancelAfter, trace.span("POST /cart/items").duration)
+        assertEquals(SpanStatus.CANCELLED, trace.span(CART_API_SPAN).status)
+        assertEquals(shop.latency.cancelAfter, trace.span(CART_API_SPAN).duration)
         assertTrue(trace.spans.none { it.status == SpanStatus.RUNNING })
         assertTrue(trace.spans(SpanCategory.BUSINESS_VALIDATION).isEmpty())
         val state = shop.viewModel.state.value
@@ -252,7 +267,7 @@ class AddToCartJourneyTest {
 
         val running = shop.onlyTrace()
         assertEquals(TraceStatus.RUNNING, running.status)
-        assertTrue(running.span("POST /cart/items").isOpen)
+        assertTrue(running.span(CART_API_SPAN).isOpen)
 
         advanceUntilIdle()
         assertTrue(shop.onlyTrace().status.isTerminal)

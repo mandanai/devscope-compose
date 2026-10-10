@@ -19,6 +19,10 @@ gradlePlugin {
             id = "journeyscope.kmp.library"
             implementationClass = "KmpLibraryConventionPlugin"
         }
+        register("androidKmpLibrary") {
+            id = "journeyscope.kmp.library.android-only"
+            implementationClass = "AndroidKmpLibraryConventionPlugin"
+        }
         register("compose") {
             id = "journeyscope.compose"
             implementationClass = "ComposeConventionPlugin"

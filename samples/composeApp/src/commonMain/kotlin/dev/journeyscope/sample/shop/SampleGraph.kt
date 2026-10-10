@@ -4,7 +4,8 @@ import dev.journeyscope.core.JourneyScope
 import dev.journeyscope.core.JourneyScopeConfig
 import dev.journeyscope.sample.shop.data.CartLocalDataSource
 import dev.journeyscope.sample.shop.data.CartRepository
-import dev.journeyscope.sample.shop.data.SimulatedCartApi
+import dev.journeyscope.sample.shop.data.KtorCartApi
+import dev.journeyscope.sample.shop.data.sampleHttpClient
 import dev.journeyscope.sample.shop.domain.AddToCartUseCase
 import dev.journeyscope.sample.shop.ui.Product
 import dev.journeyscope.sample.shop.ui.ProductViewModel
@@ -18,7 +19,7 @@ object SampleGraph {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     val productViewModel: ProductViewModel by lazy {
-        val repository = CartRepository(SimulatedCartApi(), CartLocalDataSource(), Dispatchers.Default.limitedParallelism(IO_PARALLELISM, "cart-io"))
+        val repository = CartRepository(KtorCartApi(sampleHttpClient()), CartLocalDataSource(), Dispatchers.Default.limitedParallelism(IO_PARALLELISM, "cart-io"))
         ProductViewModel(
             product = Product(id = "sku-keyboard-01", name = "Mechanical Keyboard", price = "$129.00"),
             addToCartUseCase = AddToCartUseCase(repository),

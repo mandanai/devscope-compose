@@ -15,7 +15,11 @@ public class MetadataDisplayPolicy(
 
     public companion object {
         public val DEFAULT_VISIBLE_KEYS: Set<String> =
-            setOf(DETAIL_KEY, SOURCE_KEY, "http.method", "http.status", "http.path", "returnCode", "component")
+            setOf(
+                DETAIL_KEY, SOURCE_KEY, "http.method", "http.host", "http.status", "http.path", "http.failure", "http.protocol",
+                "http.streaming", "http.request.bytes", "http.response.bytes", "http.request.header.*", "http.response.header.*",
+                "business.status", "returnCode", "component",
+            )
 
         public val Default: MetadataDisplayPolicy = MetadataDisplayPolicy()
 

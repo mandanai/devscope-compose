@@ -6,7 +6,8 @@ import dev.journeyscope.core.model.TraceStatus
 import dev.journeyscope.core.recorder.InMemoryJourneyRecorder
 import dev.journeyscope.sample.shop.data.CartLocalDataSource
 import dev.journeyscope.sample.shop.data.CartRepository
-import dev.journeyscope.sample.shop.data.SimulatedCartApi
+import dev.journeyscope.sample.shop.data.KtorCartApi
+import dev.journeyscope.sample.shop.data.sampleHttpClient
 import dev.journeyscope.sample.shop.domain.AddToCartUseCase
 import dev.journeyscope.sample.shop.ui.ProductViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +31,7 @@ class RealClockJourneyTest {
         val tracer = JourneyTracer(JourneyScopeConfig(enabled = true), recorder)
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         val repository = CartRepository(
-            SimulatedCartApi(latency),
+            KtorCartApi(sampleHttpClient(latency, { tracer })),
             CartLocalDataSource(latency),
             Dispatchers.Default.limitedParallelism(1, "test-io"),
         )
@@ -48,7 +49,7 @@ class RealClockJourneyTest {
         val trace = recorder.snapshot().single()
         assertEquals(TraceStatus.COMPLETED, trace.status)
         assertEquals(6, trace.spans.count { it.name != "Cart count render" })
-        assertTrue(trace.span("POST /cart/items").duration >= latency.normal)
+        assertTrue(trace.span(CART_API_SPAN).duration >= latency.normal)
         assertTrue(trace.span("cart.upsert").duration >= latency.database)
         assertTrue(checkNotNull(trace.summary).duration >= latency.normal + latency.database)
     }

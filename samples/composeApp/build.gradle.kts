@@ -14,6 +14,8 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.devscopeCore)
             implementation(projects.devscopeUiCompose)
+            implementation(projects.devscopeNetworkKtor)
+            implementation(libs.ktor.client.mock)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)

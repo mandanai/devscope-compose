@@ -158,14 +158,20 @@ internal class RecordingJourney(
         }
     }
 
-    internal fun endSpan(spanId: SpanId, status: SpanStatus, failure: FailureInfo?) {
+    internal fun endSpan(spanId: SpanId, status: SpanStatus, failure: FailureInfo?, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty) {
+        val extra = if (metadata.isEmpty) metadata else deps.sanitizer.metadata(metadata)
         val now = deps.clock.monotonicNanos()
         val changed = mutate { s ->
             val target = s.trace.spans.firstOrNull { it.id == spanId }
             if (s.detached || target == null || target.endNanos != null) {
                 s to false
             } else {
-                val closed = target.copy(endNanos = now, status = status, failure = failure)
+                val merged = if (extra.isEmpty) {
+                    target.metadata
+                } else {
+                    deps.sanitizer.metadata(DiagnosticMetadata(target.metadata.entries + extra.entries, target.metadata.truncated || extra.truncated))
+                }
+                val closed = target.copy(endNanos = now, status = status, failure = failure, metadata = merged)
                 s.with(s.trace.copy(spans = s.trace.spans.map { if (it.id == spanId) closed else it })) to true
             }
         }
@@ -264,9 +270,10 @@ internal class RecordingSpanHandle(
 ) : SpanHandle() {
     override val isRecording: Boolean get() = true
 
-    override fun end(status: SpanStatus) = journey.endSpan(id, status, null)
+    override fun end(status: SpanStatus, metadata: DiagnosticMetadata) = journey.endSpan(id, status, null, metadata)
 
-    override fun fail(throwable: Throwable) = journey.endSpan(id, SpanStatus.FAILED, journey.failureOf(throwable))
+    override fun fail(throwable: Throwable, metadata: DiagnosticMetadata) =
+        journey.endSpan(id, SpanStatus.FAILED, journey.failureOf(throwable), metadata)
 
     override fun recordEvent(name: String, category: SpanCategory, metadata: DiagnosticMetadata) =
         journey.recordSpanEvent(id, name, category, metadata)

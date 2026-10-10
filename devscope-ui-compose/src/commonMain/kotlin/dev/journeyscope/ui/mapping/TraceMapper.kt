@@ -5,6 +5,7 @@ import dev.journeyscope.core.model.DiagnosticMetadata
 import dev.journeyscope.core.model.JourneySpan
 import dev.journeyscope.core.model.JourneyTrace
 import dev.journeyscope.core.model.MetadataValue
+import dev.journeyscope.core.model.SpanCategory
 import dev.journeyscope.core.model.SpanStatus
 import dev.journeyscope.core.model.TraceStatus
 import dev.journeyscope.ui.model.BreakdownOrder
@@ -41,6 +42,18 @@ public data class InspectorThresholds(
 
 private const val MAX_INDENT_DEPTH = 3
 private const val HIDDEN_VALUE = "Hidden by display policy"
+
+private val NETWORK_FAILURE_LABELS = mapOf(
+    "TIMEOUT" to "Timeout",
+    "CONNECTION" to "Connection failed",
+    "DNS" to "DNS lookup failed",
+    "TLS" to "TLS error",
+    "CANCELLED" to "Cancelled",
+    "HTTP_CLIENT_ERROR" to "HTTP client error",
+    "HTTP_SERVER_ERROR" to "HTTP server error",
+    "PROTOCOL" to "Protocol error",
+    "UNKNOWN" to "Network error",
+)
 
 internal class TraceMapper(
     private val thresholds: InspectorThresholds,
@@ -194,7 +207,7 @@ internal class TraceMapper(
         }
         val bottleneck = self >= thresholds.slowSpan.inWholeNanoseconds
         val detail = detailText(span.metadata) ?: span.category.displayName()
-        val failure = span.failure?.let { failureText(it.type, it.message) }
+        val failure = networkFailureLabel(span) ?: span.failure?.let { failureText(it.type, it.message) }
         val offset = (span.startNanos - trace.startNanos).coerceAtLeast(0L)
         val spoken = buildString {
             append(span.name).append(", ").append(detail).append(", took ").append(spokenDuration(inclusive))
@@ -224,6 +237,13 @@ internal class TraceMapper(
             metadata = metadataRows(span.metadata),
             spokenDescription = spoken,
         )
+    }
+
+    private fun networkFailureLabel(span: JourneySpan): String? {
+        if (span.category != SpanCategory.NETWORK || span.status != SpanStatus.FAILED) return null
+        val kind = (span.metadata["http.failure"] as? MetadataValue.Text)?.value ?: return null
+        val status = (span.metadata["http.status"] as? MetadataValue.Integer)?.value
+        return NETWORK_FAILURE_LABELS[kind]?.let { label -> if (status != null) "$label · HTTP $status" else label }
     }
 
     private fun failureText(type: String, message: String?): String =

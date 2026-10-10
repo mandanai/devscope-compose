@@ -49,3 +49,6 @@ Open the app, pick a scenario under **Debug scenario**, tap **Add to Cart**, the
 
 ## Tests
 `./gradlew :samples:composeApp:testAndroidHostTest` (and `iosSimulatorArm64Test` with Xcode configured). Most tests use the test scheduler's virtual time as the journey clock, so recorded durations equal the configured delays exactly; `RealClockJourneyTest` runs on real dispatchers and the system monotonic clock.
+
+## Network layer
+The sample talks to a Ktor `HttpClient` backed by `MockEngine` (`shop/data/SampleHttpClient.kt`), so it stays offline while exercising the real `JourneyScopeNetwork` plugin. The plugin produces the NETWORK span (`POST api.shop.example/cart/items`); `CartBusinessValidator` maps the response `returnCode` to a business status shown on that span next to the HTTP status. Latency comes from a small `SimulatedLatency` plugin installed after the tracing plugin, because `MockEngine` handlers cannot share a test scheduler.

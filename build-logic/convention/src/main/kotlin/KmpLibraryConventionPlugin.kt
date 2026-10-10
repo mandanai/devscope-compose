@@ -4,7 +4,9 @@ import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
-class KmpLibraryConventionPlugin : Plugin<Project> {
+open class KmpLibraryConventionPlugin : Plugin<Project> {
+    protected open val includeIos: Boolean = true
+
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
         pluginManager.apply("com.android.kotlin.multiplatform.library")
@@ -17,7 +19,11 @@ class KmpLibraryConventionPlugin : Plugin<Project> {
                 apiVersion.set(level)
                 freeCompilerArgs.add("-Xsuppress-version-warnings")
             }
-            configureKotlinMultiplatform(this, androidNamespace())
+            configureKotlinMultiplatform(this, androidNamespace(), includeIos)
         }
     }
+}
+
+class AndroidKmpLibraryConventionPlugin : KmpLibraryConventionPlugin() {
+    override val includeIos: Boolean = false
 }

@@ -10,7 +10,8 @@ import dev.journeyscope.core.timing.JourneyClock
 import dev.journeyscope.sample.shop.data.CartLocalDataSource
 import dev.journeyscope.sample.shop.data.CartRemoteDataSource
 import dev.journeyscope.sample.shop.data.CartRepository
-import dev.journeyscope.sample.shop.data.SimulatedCartApi
+import dev.journeyscope.sample.shop.data.KtorCartApi
+import dev.journeyscope.sample.shop.data.sampleHttpClient
 import dev.journeyscope.sample.shop.domain.AddToCartUseCase
 import dev.journeyscope.sample.shop.ui.Product
 import dev.journeyscope.sample.shop.ui.ProductViewModel
@@ -36,6 +37,8 @@ class TestSchedulerClock(private val scheduler: TestCoroutineScheduler) : Journe
     }
 }
 
+const val CART_API_SPAN = "POST api.shop.example/cart/items"
+
 val TestProduct = Product("sku-test", "Test Product", "$1.00")
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -56,7 +59,7 @@ class VirtualShop(
     val viewModel = ProductViewModel(
         product = TestProduct,
         addToCartUseCase = AddToCartUseCase(
-            CartRepository(remote ?: SimulatedCartApi(latency), CartLocalDataSource(latency), ioDispatcher),
+            CartRepository(remote ?: KtorCartApi(sampleHttpClient(latency, { tracer }, ioDispatcher)), CartLocalDataSource(latency), ioDispatcher),
         ),
         scope = scope,
         latency = latency,

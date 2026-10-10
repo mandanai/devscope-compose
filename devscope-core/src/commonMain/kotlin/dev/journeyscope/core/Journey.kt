@@ -108,10 +108,10 @@ public abstract class SpanHandle internal constructor() {
     public abstract val id: SpanId
     public abstract val isRecording: Boolean
 
-    /** The first call wins; later calls are ignored. */
-    public abstract fun end(status: SpanStatus = SpanStatus.OK)
+    /** The first call wins; later calls are ignored. [metadata] is merged into the span's start metadata. */
+    public abstract fun end(status: SpanStatus = SpanStatus.OK, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty)
 
-    public abstract fun fail(throwable: Throwable)
+    public abstract fun fail(throwable: Throwable, metadata: DiagnosticMetadata = DiagnosticMetadata.Empty)
 
     public abstract fun recordEvent(
         name: String,
@@ -140,9 +140,9 @@ internal object NoopSpanHandle : SpanHandle() {
     override val id: SpanId = SpanId("noop")
     override val isRecording: Boolean = false
 
-    override fun end(status: SpanStatus) = Unit
+    override fun end(status: SpanStatus, metadata: DiagnosticMetadata) = Unit
 
-    override fun fail(throwable: Throwable) = Unit
+    override fun fail(throwable: Throwable, metadata: DiagnosticMetadata) = Unit
 
     override fun recordEvent(name: String, category: SpanCategory, metadata: DiagnosticMetadata) = Unit
 }
@@ -172,3 +172,7 @@ internal object NoopJourney : Journey() {
 
     override fun interrupt(reason: String) = Unit
 }
+
+internal fun noopSpanHandle(): SpanHandle = NoopSpanHandle
+
+internal fun noopJourney(): Journey = NoopJourney
