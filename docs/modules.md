@@ -3,6 +3,7 @@
 ## Implemented
 - `devscope-core` — `dev.journeyscope.core`; `JourneyScope.isEnabled`, `JourneyScope.VERSION`.
 - `devscope-ui-compose` — `dev.journeyscope.ui`; `JourneyScopeInspector` journey list/detail UI (see [ui.md](ui.md)).
+- `samples/composeApp` — layered Add to Cart sample instrumented end to end (see [sample-walkthrough.md](sample-walkthrough.md)).
 
 ## Planned (not yet created)
 `devscope-network-ktor`, `devscope-network-okhttp`, `devscope-flow`, `devscope-navigation`, `devscope-database-sqldelight`, `devscope-diagnostics`, `devscope-export`.

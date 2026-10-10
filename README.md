@@ -23,5 +23,6 @@ iOS: open `samples/iosApp/iosApp.xcodeproj` in Xcode 26+ and run. See [docs/deve
 - [Architecture](docs/architecture.md)
 - [Modules](docs/modules.md)
 - [Development](docs/development.md)
+- [Sample walkthrough: Add to Cart](docs/sample-walkthrough.md)
 
 Tracing engine usage: [docs/api.md](docs/api.md). Design notes: [docs/architecture.md](docs/architecture.md).
