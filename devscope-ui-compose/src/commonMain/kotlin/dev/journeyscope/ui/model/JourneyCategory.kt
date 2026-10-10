@@ -22,6 +22,7 @@ internal enum class Glyph {
     Window,
     Dot,
     Bulb,
+    Route,
     Back,
     Close,
     ChevronDown,
@@ -34,6 +35,9 @@ internal fun SpanCategory.toJourneyCategory(): JourneyCategory = when (this) {
     SpanCategory.REPOSITORY,
     SpanCategory.BUSINESS_VALIDATION,
     SpanCategory.STATE_EMISSION,
+    SpanCategory.STATE,
+    SpanCategory.LIFECYCLE,
+    SpanCategory.NAVIGATION,
     -> JourneyCategory.UiVm
     SpanCategory.NETWORK -> JourneyCategory.Network
     SpanCategory.DATABASE -> JourneyCategory.Storage
@@ -48,7 +52,9 @@ internal fun SpanCategory.toGlyph(): Glyph = when (this) {
     SpanCategory.REPOSITORY, SpanCategory.DATABASE -> Glyph.Cylinder
     SpanCategory.NETWORK -> Glyph.Globe
     SpanCategory.BUSINESS_VALIDATION -> Glyph.Check
-    SpanCategory.STATE_EMISSION -> Glyph.Bolt
+    SpanCategory.STATE_EMISSION, SpanCategory.STATE -> Glyph.Bolt
+    SpanCategory.LIFECYCLE -> Glyph.Layers
+    SpanCategory.NAVIGATION -> Glyph.Route
     SpanCategory.UI_RENDER -> Glyph.Window
     else -> Glyph.Dot
 }

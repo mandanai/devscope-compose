@@ -82,6 +82,11 @@ private fun DrawScope.drawGlyph(glyph: Glyph, color: Color) {
             line(9.5f, 18f, 14.5f, 18f)
             line(10.5f, 21f, 13.5f, 21f)
         }
+        Glyph.Route -> {
+            drawCircle(color, 2.4f * u, at(6f, 18f), style = stroke)
+            drawCircle(color, 2.4f * u, at(18f, 6f), style = stroke)
+            polyline(8.4f, 18f, 14f, 18f, 14f, 6f, 15.6f, 6f)
+        }
         Glyph.Back -> polyline(15f, 5f, 8f, 12f, 15f, 19f)
         Glyph.Close -> {
             line(6f, 6f, 18f, 18f)

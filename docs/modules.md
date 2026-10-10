@@ -3,12 +3,14 @@
 ## Implemented
 - `devscope-core` — `dev.journeyscope.core`; `JourneyScope.isEnabled`, `JourneyScope.VERSION`; shared client-neutral network engine in `dev.journeyscope.core.network`.
 - `devscope-ui-compose` — `dev.journeyscope.ui`; `JourneyScopeInspector` journey list/detail UI (see [ui.md](ui.md)).
+- `devscope-flow` — `dev.journeyscope.flow`; `traceFlow`, `traceState`, `traceShared`, `observeWithJourneyScope`, `launchTraced`/`asyncTraced`; Android lifecycle adapter in `androidMain` only (see [flow.md](flow.md)).
+- `devscope-navigation` — `dev.journeyscope.navigation`; framework-neutral `NavigationTracer` (see [navigation.md](navigation.md)).
 - `devscope-network-ktor` — `dev.journeyscope.network.ktor`; `JourneyScopeNetwork` Ktor client plugin, Android + iOS (see [network.md](network.md)).
 - `devscope-network-okhttp` — `dev.journeyscope.network.okhttp`; `JourneyScopeInterceptor`, Android only (see [network.md](network.md)).
 - `samples/composeApp` — layered Add to Cart sample instrumented end to end (see [sample-walkthrough.md](sample-walkthrough.md)).
 
 ## Planned (not yet created)
-`devscope-flow`, `devscope-navigation`, `devscope-database-sqldelight`, `devscope-diagnostics`, `devscope-export`.
+`devscope-database-sqldelight`, `devscope-diagnostics`, `devscope-export`.
 
 ## Adding a module
 1. Create the directory with `build.gradle.kts` applying `journeyscope.kmp.library` (and `journeyscope.compose` / `journeyscope.publishing` as needed).

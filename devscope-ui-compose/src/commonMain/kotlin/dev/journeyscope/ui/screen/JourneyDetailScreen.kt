@@ -27,6 +27,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.journeyscope.ui.components.JourneyCategoryFilterRow
+import dev.journeyscope.ui.components.ExpectedSequenceSection
 import dev.journeyscope.ui.components.JourneyDiagnosticSection
 import dev.journeyscope.ui.components.JourneyDurationSummary
 import dev.journeyscope.ui.components.JourneyHeader
@@ -118,6 +119,11 @@ internal fun JourneyDetailScreen(
                     }
                 } else {
                     journeyTimeline(visibleRows, state.expandedRows, state::toggleExpanded)
+                }
+                if (detail.sequences.isNotEmpty()) {
+                    item(key = "sequences", contentType = "sequences") {
+                        ExpectedSequenceSection(detail.sequences, modifier = Modifier.padding(top = 16.dp))
+                    }
                 }
                 item(key = "insight", contentType = "insight") {
                     JourneyDiagnosticSection(detail.insights, onShowTarget = state::reveal, modifier = Modifier.padding(top = 16.dp))

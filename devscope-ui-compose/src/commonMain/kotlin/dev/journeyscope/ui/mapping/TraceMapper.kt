@@ -1,7 +1,9 @@
 package dev.journeyscope.ui.mapping
 
 import dev.journeyscope.core.JourneyScopeConfig
+import dev.journeyscope.core.expectation.ExpectedSequence
 import dev.journeyscope.core.model.DiagnosticMetadata
+import dev.journeyscope.core.model.JourneyEvent
 import dev.journeyscope.core.model.JourneySpan
 import dev.journeyscope.core.model.JourneyTrace
 import dev.journeyscope.core.model.MetadataValue
@@ -17,6 +19,8 @@ import dev.journeyscope.ui.model.JourneyDetailUi
 import dev.journeyscope.ui.model.JourneyListItemUi
 import dev.journeyscope.ui.model.MetadataRowUi
 import dev.journeyscope.ui.model.RowState
+import dev.journeyscope.ui.model.SequenceCheckUi
+import dev.journeyscope.ui.model.SequenceStepUi
 import dev.journeyscope.ui.model.StatusKind
 import dev.journeyscope.ui.model.StatusUi
 import dev.journeyscope.ui.model.TimelineRowUi
@@ -59,6 +63,7 @@ internal class TraceMapper(
     private val thresholds: InspectorThresholds,
     private val policy: MetadataDisplayPolicy,
     private val insightProvider: JourneyInsightProvider,
+    private val expectedSequences: List<ExpectedSequence> = emptyList(),
 ) {
     fun listItem(trace: JourneyTrace, nowNanos: Long): JourneyListItemUi {
         val timing = trace.timing(nowNanos)
@@ -89,6 +94,10 @@ internal class TraceMapper(
             insights = insights(breakdown, rows),
             failureLabel = trace.failure?.let { failureText(it.type, it.message) },
             droppedItems = trace.droppedItems,
+            sequences = expectedSequences.map { sequence ->
+                val check = sequence.evaluate(trace)
+                SequenceCheckUi(check.name, check.steps.map { SequenceStepUi(it.label, it.observed) })
+            },
         )
     }
 
@@ -189,7 +198,7 @@ internal class TraceMapper(
                     depth = 0,
                     selfLabel = null,
                     failureLabel = null,
-                    metadata = metadataRows(event.metadata),
+                    metadata = metadataRows(event.metadata) + checkpointRows(trace, event),
                     spokenDescription = "${event.name}, event, ${spokenDuration(offset)} after start",
                 ),
             )
@@ -237,6 +246,16 @@ internal class TraceMapper(
             metadata = metadataRows(span.metadata),
             spokenDescription = spoken,
         )
+    }
+
+    private fun checkpointRows(trace: JourneyTrace, event: JourneyEvent): List<MetadataRowUi> {
+        if (event.category != SpanCategory.STATE || !policy.isVisible(MetadataDisplayPolicy.UI_CHECKPOINT_KEY)) return emptyList()
+        val observed = (event.metadata["state.event"] as? MetadataValue.Text)?.value == "observed"
+        if (!observed) return emptyList()
+        val checkpoint = trace.spans
+            .filter { it.category == SpanCategory.UI_RENDER && it.startNanos >= event.atNanos }
+            .minByOrNull { it.startNanos } ?: return emptyList()
+        return listOf(MetadataRowUi(MetadataDisplayPolicy.UI_CHECKPOINT_KEY, checkpoint.name, hidden = false))
     }
 
     private fun networkFailureLabel(span: JourneySpan): String? {

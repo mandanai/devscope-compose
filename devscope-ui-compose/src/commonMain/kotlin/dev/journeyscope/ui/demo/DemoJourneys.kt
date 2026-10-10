@@ -30,7 +30,7 @@ public object DemoJourneys {
     public val source: JourneyTraceSource by lazy { staticTraceSource(all, NOW_NANOS) }
 
     internal val all: List<JourneyTrace> by lazy {
-        listOf(addToCart(), openProduct(), checkoutFailed(), syncOrdersRunning(), syncProfileRunning(), coldStartEmpty(), importCatalogLarge())
+        listOf(addToCart(), addToCartThenCart(), openProduct(), checkoutFailed(), syncOrdersRunning(), syncProfileRunning(), coldStartEmpty(), importCatalogLarge())
     }
 
     internal fun addToCart(): JourneyTrace {
@@ -45,6 +45,41 @@ public object DemoJourneys {
             Stage("UI Render Checkpoint", SpanCategory.UI_RENDER, 110, "Cart count updated"),
         )
         return sequentialTrace("CART-1024", "Add to Cart", 0, stages, TraceStatus.COMPLETED, demoSource = true)
+    }
+
+    internal fun addToCartThenCart(): JourneyTrace {
+        val base = addToCart()
+        val at = { millis: Long -> BASE_NANOS + millis * NANOS_PER_MILLI }
+        val events = listOf(
+            event(
+                "nav-e1", "cart-ui-state state observed", SpanCategory.STATE, at(1_150), 100,
+                diagnosticMetadata {
+                    put("state.stream", "cart-ui-state")
+                    put("state.event", "observed")
+                    put("state.previous", "Adding")
+                    put("state.current", "Added · 1")
+                    put("collector.id", "c1")
+                    put("detail", "Adding → Added · 1")
+                },
+            ),
+            event(
+                "nav-e2", "Navigate: product/{arg} → cart", SpanCategory.NAVIGATION, at(1_260), 101,
+                diagnosticMetadata {
+                    put("nav.action", "Navigate")
+                    put("nav.from", "product/{arg}")
+                    put("nav.to", "cart")
+                    put("nav.stack.before", "product/{arg}")
+                    put("nav.stack.after", "product/{arg} > cart")
+                    put("detail", "product/{arg} → cart · stack 1 → 2")
+                },
+            ),
+        )
+        return base.copy(
+            id = TraceId("CART-1025"),
+            name = "Add to Cart → Cart",
+            events = events,
+            summary = base.summary?.copy(name = "Add to Cart → Cart", eventCount = events.size),
+        )
     }
 
     internal fun slowJourney(): JourneyTrace = addToCart()
@@ -189,9 +224,16 @@ public object DemoJourneys {
         endedBySystem = false, metadata = diagnosticMetadata { put(MetadataDisplayPolicy.DETAIL_KEY, detail); put("thread", "main") },
     )
 
-    private fun event(id: String, name: String, category: SpanCategory, atNanos: Long, sequence: Long): JourneyEvent = JourneyEvent(
+    private fun event(
+        id: String,
+        name: String,
+        category: SpanCategory,
+        atNanos: Long,
+        sequence: Long,
+        metadata: DiagnosticMetadata = DiagnosticMetadata.Empty,
+    ): JourneyEvent = JourneyEvent(
         id = EventId(id), name = name, category = category, sequence = sequence, atNanos = atNanos,
-        atWallMillis = BASE_WALL_MILLIS + (atNanos - BASE_NANOS) / NANOS_PER_MILLI, spanId = null, metadata = DiagnosticMetadata.Empty,
+        atWallMillis = BASE_WALL_MILLIS + (atNanos - BASE_NANOS) / NANOS_PER_MILLI, spanId = null, metadata = metadata,
     )
 
     private fun demoMetadata(): DiagnosticMetadata = diagnosticMetadata { put(MetadataDisplayPolicy.SOURCE_KEY, "Demo data") }

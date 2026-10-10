@@ -9,6 +9,8 @@ Runtime debugging and diagnostics SDK for Kotlin Multiplatform apps. Inspect com
 |---|---|
 | `devscope-core` | Platform-independent core (no UI, no Android/iOS APIs) |
 | `devscope-ui-compose` | Compose Multiplatform inspector UI, depends on core |
+| `devscope-flow` | Flow / StateFlow / SharedFlow, coroutine and lifecycle tracing, see [docs/flow.md](docs/flow.md) |
+| `devscope-navigation` | Framework-neutral navigation tracing, see [docs/navigation.md](docs/navigation.md) |
 | `samples/composeApp` | Shared sample UI + iOS framework |
 | `samples/androidApp` | Android host |
 | `samples/iosApp` | iOS host (Xcode) |

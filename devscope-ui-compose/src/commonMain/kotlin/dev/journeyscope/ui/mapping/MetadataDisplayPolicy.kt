@@ -18,7 +18,8 @@ public class MetadataDisplayPolicy(
             setOf(
                 DETAIL_KEY, SOURCE_KEY, "http.method", "http.host", "http.status", "http.path", "http.failure", "http.protocol",
                 "http.streaming", "http.request.bytes", "http.response.bytes", "http.request.header.*", "http.response.header.*",
-                "business.status", "returnCode", "component",
+                "business.status", "returnCode", "component", "state.*", "flow.kind", "collector.id", "lifecycle.state", "nav.*",
+                "coroutine.*", UI_CHECKPOINT_KEY,
             )
 
         public val Default: MetadataDisplayPolicy = MetadataDisplayPolicy()
@@ -27,5 +28,6 @@ public class MetadataDisplayPolicy(
 
         public const val DETAIL_KEY: String = "detail"
         public const val SOURCE_KEY: String = "journey.source"
+        public const val UI_CHECKPOINT_KEY: String = "ui.checkpoint"
     }
 }

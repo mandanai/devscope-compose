@@ -45,6 +45,9 @@ public value class SpanCategory(public val name: String) {
         public val DATABASE: SpanCategory = SpanCategory("DATABASE")
         public val STATE_EMISSION: SpanCategory = SpanCategory("STATE_EMISSION")
         public val UI_RENDER: SpanCategory = SpanCategory("UI_RENDER")
+        public val STATE: SpanCategory = SpanCategory("STATE")
+        public val NAVIGATION: SpanCategory = SpanCategory("NAVIGATION")
+        public val LIFECYCLE: SpanCategory = SpanCategory("LIFECYCLE")
         public val CUSTOM: SpanCategory = SpanCategory("CUSTOM")
     }
 }

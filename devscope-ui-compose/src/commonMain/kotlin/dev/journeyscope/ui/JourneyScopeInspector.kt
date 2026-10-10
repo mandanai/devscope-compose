@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import dev.journeyscope.core.JourneyScope
+import dev.journeyscope.core.expectation.ExpectedSequence
 import dev.journeyscope.ui.mapping.DefaultInsightProvider
 import dev.journeyscope.ui.mapping.InspectorThresholds
 import dev.journeyscope.ui.mapping.JourneyInsightProvider
@@ -25,10 +26,11 @@ public fun JourneyScopeInspector(
     insightProvider: JourneyInsightProvider = DefaultInsightProvider(),
     metadataPolicy: MetadataDisplayPolicy = MetadataDisplayPolicy.Default,
     colors: JourneyColors = defaultJourneyColors(),
+    expectedSequences: List<ExpectedSequence> = emptyList(),
     onClose: (() -> Unit)? = null,
 ) {
-    val presenter = remember(source, thresholds, insightProvider, metadataPolicy) {
-        InspectorPresenter(source, TraceMapper(thresholds, metadataPolicy, insightProvider))
+    val presenter = remember(source, thresholds, insightProvider, metadataPolicy, expectedSequences) {
+        InspectorPresenter(source, TraceMapper(thresholds, metadataPolicy, insightProvider, expectedSequences))
     }
     JourneyScopeTheme(colors = colors) {
         JourneyInspectorScreen(presenter = presenter, onClose = onClose, modifier = modifier)

@@ -62,7 +62,16 @@ internal data class JourneyDetailUi(
     val insights: List<InsightUi>,
     val failureLabel: String?,
     val droppedItems: Int,
+    val sequences: List<SequenceCheckUi> = emptyList(),
 )
+
+@Immutable
+internal data class SequenceStepUi(val label: String, val observed: Boolean)
+
+@Immutable
+internal data class SequenceCheckUi(val name: String, val steps: List<SequenceStepUi>) {
+    val missingCount: Int get() = steps.count { !it.observed }
+}
 
 @Immutable
 internal data class JourneyListItemUi(

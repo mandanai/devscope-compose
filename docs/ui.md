@@ -28,7 +28,7 @@ Navigation is a saved state machine (`List` / `Detail(traceId)`); back uses `Nav
 
 Sweep-line over the trace: every instant is charged to one category — the deepest active span, then the latest-started, then the highest sequence. Concurrent spans therefore never double-count. Time with no active span is "Untracked". Segments always sum to the trace duration; open spans are measured to "now".
 
-Category buckets: UI_INTERACTION, VIEW_MODEL, USE_CASE, REPOSITORY, BUSINESS_VALIDATION, STATE_EMISSION → **UI / VM**; NETWORK → **Network**; DATABASE → **Storage**; UI_RENDER → **Render**; anything else → **Other**.
+Category buckets: UI_INTERACTION, VIEW_MODEL, USE_CASE, REPOSITORY, BUSINESS_VALIDATION, STATE_EMISSION, STATE, LIFECYCLE, NAVIGATION → **UI / VM**; NETWORK → **Network**; DATABASE → **Storage**; UI_RENDER → **Render**; anything else → **Other**.
 
 The demo "Add to Cart" journey models eight sequential, non-overlapping stages: 65 + 940 + 150 + 110 = 1,265 ms (74 % network).
 
@@ -38,7 +38,7 @@ The demo "Add to Cart" journey models eight sequential, non-overlapping stages: 
 
 ## Metadata safety
 
-`MetadataDisplayPolicy.Default` renders only allowlisted keys (`detail`, `journey.source`, `http.*`-style keys you add, `returnCode`, `component`); other keys show as "Hidden by display policy". Failure messages are hidden unless `showFailureMessages = true`. `MetadataDisplayPolicy.ShowAll` is an explicit opt-in for debug tooling.
+`MetadataDisplayPolicy.Default` renders only allowlisted keys (`detail`, `journey.source`, `http.*`-style keys you add, `returnCode`, `component`, `state.*`, `nav.*`, `flow.kind`, `collector.id`, `lifecycle.state`, `coroutine.*`, `ui.checkpoint`); other keys show as "Hidden by display policy". Failure messages are hidden unless `showFailureMessages = true`. `MetadataDisplayPolicy.ShowAll` is an explicit opt-in for debug tooling.
 
 ## Theming
 

@@ -136,6 +136,8 @@ internal class RecordingJourney(
         return RecordingSpanHandle(this, spanId)
     }
 
+    override fun handleFor(id: SpanId): SpanHandle = RecordingSpanHandle(this, id)
+
     override fun context(parent: SpanHandle?): CoroutineContext = TraceContext(this, parent?.takeIf { it.isRecording }?.id)
 
     override fun finish() = terminate(TraceStatus.COMPLETED, null)

@@ -19,9 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import dev.journeyscope.flow.LifecycleSource
+import dev.journeyscope.flow.observeWithJourneyScope
 import dev.journeyscope.sample.shop.SampleScenario
 
 @Composable
@@ -37,9 +39,14 @@ fun ProductDetailScreen(
     viewModel: ProductViewModel,
     onOpenInspector: () -> Unit,
     onOpenDemo: () -> Unit,
+    onOpenCart: () -> Unit,
     modifier: Modifier = Modifier,
+    lifecycleSource: LifecycleSource? = null,
 ) {
-    val state by viewModel.state.collectAsState()
+    var state by remember { mutableStateOf(viewModel.state.value) }
+    LaunchedEffect(viewModel, lifecycleSource) {
+        viewModel.state.observeWithJourneyScope("cart-ui-state", viewModel.traceOptions(lifecycleSource)) { state = it }
+    }
     var scenarioName by rememberSaveable { mutableStateOf(SampleScenario.Normal.name) }
     val scenario = SampleScenario.valueOf(scenarioName)
 
@@ -67,6 +74,10 @@ fun ProductDetailScreen(
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Button(onClick = { viewModel.addToCart(scenario) }) { Text("Add to Cart") }
+                Button(onClick = { viewModel.addToCart(scenario, openCartOnSuccess = true) }) { Text("Add & open cart") }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                OutlinedButton(onClick = onOpenCart) { Text("View cart") }
                 OutlinedButton(onClick = viewModel::cancelAdd, enabled = state.phase == CartPhase.Adding) { Text("Cancel") }
             }
             Text(statusLine(state), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("cart_status"))

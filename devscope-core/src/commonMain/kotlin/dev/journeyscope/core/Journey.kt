@@ -43,6 +43,8 @@ public abstract class Journey internal constructor() {
         parentId: SpanId?,
     ): SpanHandle
 
+    internal abstract fun handleFor(id: SpanId): SpanHandle
+
     /** For callback-style work that cannot use [trace] or [traceSuspend]; the caller must end the span. */
     public fun beginSpan(
         name: String,
@@ -161,6 +163,8 @@ internal object NoopJourney : Journey() {
 
     override fun openSpan(name: String, category: SpanCategory, metadata: DiagnosticMetadata, parentId: SpanId?): SpanHandle =
         NoopSpanHandle
+
+    override fun handleFor(id: SpanId): SpanHandle = NoopSpanHandle
 
     override fun context(parent: SpanHandle?): CoroutineContext = kotlin.coroutines.EmptyCoroutineContext
 
