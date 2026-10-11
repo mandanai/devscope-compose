@@ -2,7 +2,7 @@
 
 All notable changes are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and versions follow [Semantic Versioning](https://semver.org/) once 1.0 is reached.
 
-## [Unreleased] - 0.1.0-SNAPSHOT
+## [0.1.0] - Unreleased
 
 ### Added
 - Core tracing engine with coroutine-context propagation, redaction defaults and bounded in-memory recorder.

@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   publish:
-    if: github.repository == 'journeyscope/journeyscope'
+    if: github.repository == 'mandanai/devscope-compose'
     runs-on: macos-latest
     environment: release
     steps:

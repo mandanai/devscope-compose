@@ -14,19 +14,20 @@ Artifacts land in `~/.m2/repository/dev/chayaphon/journeyscope/`. In a consumer 
 
 ```kotlin
 repositories { mavenLocal(); mavenCentral(); google() }
-dependencies { implementation("dev.chayaphon.journeyscope:devscope-core:0.1.0-SNAPSHOT") }
+dependencies { implementation("dev.chayaphon.journeyscope:devscope-core:0.1.0") }
 ```
 
-## Remote publishing (not enabled)
+## Remote publishing
 Configured through the vanniktech `com.vanniktech.maven.publish` plugin in `PublishingConventionPlugin`. Remote upload and signing activate **only** when these Gradle properties are present:
 
 - `mavenCentralUsername`, `mavenCentralPassword`
 - `signingInMemoryKey`, `signingInMemoryKeyPassword`
 
-Without them the build can only publish to Maven Local. CI runs a local dry run on every change; `.github/workflows/publish.yml` runs only on a `v*` tag or manual dispatch, inside the protected `release` environment, and only in the `journeyscope/journeyscope` repository.
+Without them the build can only publish to Maven Local.
+
+Locally, put the four properties in the git-ignored `local.properties` and run `scripts/publish.sh` (it exports them as `ORG_GRADLE_PROJECT_*` and runs `publishToMavenCentral`; pass other Gradle tasks as arguments). In CI they come from the `release` environment secrets `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD`, `SIGNING_KEY`, `SIGNING_KEY_PASSWORD`. `signingInMemoryKey` is the armored secret key on a single line with `\n` escapes; the public key must be on a keyserver. CI runs a local dry run on every change; `.github/workflows/publish.yml` runs only on a `v*` tag or manual dispatch, inside the protected `release` environment, and only in the `mandanai/devscope-compose` repository.
 
 ## Before the first release (TODO)
-- Confirm the repository URL, developer id/name/email and security contact in `gradle.properties` (current values are placeholders).
 - Register the `dev.chayaphon.journeyscope` namespace on Maven Central and create the signing key.
 - Replace `-SNAPSHOT` with a release version and update `CHANGELOG.md`.
 - Run `./gradlew spotlessCheck detekt checkKotlinAbi` and refresh API baselines (`updateKotlinAbi`) only for intentional API changes.

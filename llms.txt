@@ -1,6 +1,6 @@
 # JourneyScope
 
-> Runtime debugging SDK for Kotlin Multiplatform apps (Android, iOS). Records the whole journey of an operation (UI → ViewModel → UseCase → Repository → Network → Database → UI state), shows it in an in-app Compose inspector, and exports redacted reports. Pre-release (0.1.0-SNAPSHOT); publish locally with `./gradlew publishToMavenLocal`.
+> Runtime debugging SDK for Kotlin Multiplatform apps (Android, iOS). Records the whole journey of an operation (UI → ViewModel → UseCase → Repository → Network → Database → UI state), shows it in an in-app Compose inspector, and exports redacted reports. Pre-release (0.1.0); publish locally with `./gradlew publishToMavenLocal`.
 
 Instructions for AI agents installing and instrumenting JourneyScope in a host app. Read the playbook first.
 

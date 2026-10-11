@@ -4,7 +4,7 @@ import dev.chayaphon.journeyscope.core.model.DiagnosticMetadata
 
 /** Release-build twin of the real `JourneyScope`: same call-site API, no collection. */
 public object JourneyScope {
-    public const val VERSION: String = "0.1.0-SNAPSHOT"
+    public const val VERSION: String = "0.1.0"
 
     private val inert: JourneyTracer = JourneyTracer(JourneyScopeConfig())
 

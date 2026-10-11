@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 
 public object JourneyScope {
-    public const val VERSION: String = "0.1.0-SNAPSHOT"
+    public const val VERSION: String = "0.1.0"
 
     private val state = MutableStateFlow(JourneyTracer())
 

@@ -40,7 +40,7 @@ JourneyScope records what happens between a tap and the resulting UI state: **UI
 
 ## Installation
 
-JourneyScope is pre-release (`0.1.0-SNAPSHOT`) and is not on Maven Central yet. Publish it locally:
+JourneyScope is pre-release (`0.1.0`) and is not on Maven Central yet. Publish it locally:
 
 ```bash
 ./gradlew publishToMavenLocal
@@ -56,13 +56,13 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.chayaphon.journeyscope:devscope-core:0.1.0-SNAPSHOT")
-    debugImplementation("dev.chayaphon.journeyscope:devscope-android:0.1.0-SNAPSHOT") // Android: inspector via notification, no UI code
-    debugImplementation("dev.chayaphon.journeyscope:devscope-ui-compose:0.1.0-SNAPSHOT") // iOS / embedding the Inspector yourself
+    implementation("dev.chayaphon.journeyscope:devscope-core:0.1.0")
+    debugImplementation("dev.chayaphon.journeyscope:devscope-android:0.1.0") // Android: inspector via notification, no UI code
+    debugImplementation("dev.chayaphon.journeyscope:devscope-ui-compose:0.1.0") // iOS / embedding the Inspector yourself
 
     // Optional adapters
-    implementation("dev.chayaphon.journeyscope:devscope-network-ktor:0.1.0-SNAPSHOT")
-    implementation("dev.chayaphon.journeyscope:devscope-flow:0.1.0-SNAPSHOT")
+    implementation("dev.chayaphon.journeyscope:devscope-network-ktor:0.1.0")
+    implementation("dev.chayaphon.journeyscope:devscope-flow:0.1.0")
 }
 ```
 

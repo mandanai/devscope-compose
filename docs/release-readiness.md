@@ -1,6 +1,6 @@
 # Release readiness report: Phase 8
 
-Version `0.1.0-SNAPSHOT`. Nothing has been published to any remote repository.
+Version `0.1.0`. Nothing has been published to any remote repository.
 
 ## Verdict
 **Not ready for a public release.** The SDK builds, tests, lints, publishes locally, is consumed from Maven Local on Android and iOS compilation, and runs on an Android emulator. iOS tests, the Xcode build and an iOS run were not executed in this environment, and repository metadata is still placeholder.
@@ -53,7 +53,7 @@ Acyclic: `core` at the root; `diagnostics`, `export`, `flow`, `navigation`, `net
 4. OkHttp tracing is Android-only. No Intel iOS simulator target.
 5. `samples/iosApp` enables the SDK unconditionally (no `#if DEBUG`).
 6. `maxLineLength` is not enforced; detekt baseline contains pre-existing findings.
-7. Placeholder POM URL, developer id and security contact (`journeyscope/journeyscope`).
+7. Placeholder POM URL, developer id and security contact (`mandanai/devscope-compose`).
 8. `ui-compose` ships the `ui-tooling-preview` artifact as an `implementation` dependency of `commonMain`; not changed this phase.
 9. `JourneyScope.VERSION` is a literal checked by a test, not generated.
 10. Performance numbers are host-JVM only.
