@@ -42,7 +42,9 @@ jobs:
       - name: Host tests and common metadata
         run: ./gradlew testAndroidHostTest compileCommonMainKotlinMetadata --no-daemon
       - name: Android sample
-        run: ./gradlew :samples:androidApp:assembleDebug --no-daemon
+        run: ./gradlew :samples:androidApp:assembleDebug :samples:androidApp:assembleRelease --no-daemon
+      - name: Noop twins stay binary compatible
+        run: scripts/check-noop-abi.sh
 
   apple:
     runs-on: macos-latest

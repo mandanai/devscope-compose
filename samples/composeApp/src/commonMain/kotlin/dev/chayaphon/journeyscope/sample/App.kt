@@ -9,25 +9,23 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import dev.chayaphon.journeyscope.core.Journey
+import dev.chayaphon.journeyscope.core.JourneyScope
+import dev.chayaphon.journeyscope.core.JourneyScopeConfig
 import dev.chayaphon.journeyscope.flow.LifecycleSource
 import dev.chayaphon.journeyscope.sample.navigation.Routes
 import dev.chayaphon.journeyscope.sample.navigation.SampleNavigator
-import dev.chayaphon.journeyscope.sample.shop.AddToCartCompletion
-import dev.chayaphon.journeyscope.sample.shop.SampleExport
 import dev.chayaphon.journeyscope.sample.shop.SampleGraph
-import dev.chayaphon.journeyscope.sample.shop.enableJourneyScopeForSample
 import dev.chayaphon.journeyscope.sample.shop.ui.CartScreen
 import dev.chayaphon.journeyscope.sample.shop.ui.ProductDetailScreen
-import dev.chayaphon.journeyscope.ui.JourneyScopeInspector
-import dev.chayaphon.journeyscope.ui.demo.DemoJourneys
-import dev.chayaphon.journeyscope.ui.mapping.InspectorThresholds
-import dev.chayaphon.journeyscope.ui.theme.defaultJourneyColors
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun App(lifecycleSource: LifecycleSource? = null) {
+fun App(
+    isDebuggable: Boolean = true,
+    lifecycleSource: LifecycleSource? = null,
+    inspector: SampleInspector? = null,
+) {
     MaterialTheme {
-        remember { enableJourneyScopeForSample() }
+        remember { if (!JourneyScope.isEnabled) JourneyScope.configure(JourneyScopeConfig.debugOnly(isDebuggable)) }
         val viewModel = SampleGraph.productViewModel
         val navigator =
             rememberSaveable(saver = SampleNavigator.saver(viewModel::observedJourney)) {
@@ -61,28 +59,18 @@ fun App(lifecycleSource: LifecycleSource? = null) {
             }
 
             Routes.INSPECTOR_LIVE -> {
-                JourneyScopeInspector(
-                    expectedSequences = listOf(AddToCartCompletion),
-                    onClose = { navigator.pop() },
-                    exportController = SampleExport.controller,
-                )
+                inspector?.Live(onClose = { navigator.pop() })
             }
 
             Routes.INSPECTOR_DEMO -> {
-                JourneyScopeInspector(
-                    source = DemoJourneys.source,
-                    expectedSequences = listOf(DemoJourneys.addToCartCompletion),
-                    thresholds = InspectorThresholds(slowJourney = 1.seconds),
-                    colors = defaultJourneyColors(),
-                    onClose = { navigator.pop() },
-                )
+                inspector?.Demo(onClose = { navigator.pop() })
             }
 
             else -> {
                 ProductDetailScreen(
                     viewModel = viewModel,
-                    onOpenInspector = { navigator.push(Routes.INSPECTOR_LIVE) },
-                    onOpenDemo = { navigator.push(Routes.INSPECTOR_DEMO) },
+                    onOpenInspector = inspector?.let { { navigator.push(Routes.INSPECTOR_LIVE) } },
+                    onOpenDemo = inspector?.let { { navigator.push(Routes.INSPECTOR_DEMO) } },
                     onOpenCart = { navigator.push(Routes.CART) },
                     lifecycleSource = lifecycleSource,
                 )

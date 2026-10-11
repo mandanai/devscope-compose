@@ -6,6 +6,15 @@ style:
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreNamedArgument: true
     excludes: ['**/test/**', '**/*Test/**', '**/commonTest/**', '**/androidHostTest/**', '**/iosTest/**', '**/samples/**']
+  UnusedParameter:
+    excludes: ['**/*-noop/**']
+  FunctionOnlyReturningConstant:
+    excludes: ['**/*-noop/**']
+  UnusedPrivateProperty:
+    excludes: ['**/*-noop/**']
+empty-blocks:
+  EmptyFunctionBlock:
+    excludes: ['**/*-noop/**']
 complexity:
   TooManyFunctions:
     excludes: ['**/commonTest/**', '**/androidHostTest/**', '**/iosTest/**', '**/samples/**']

@@ -22,14 +22,11 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.devscopeCore)
-            implementation(projects.devscopeUiCompose)
             implementation(projects.devscopeFlow)
             implementation(projects.devscopeNavigation)
             implementation(libs.navigationevent.compose)
             implementation(projects.devscopeNetworkKtor)
             implementation(projects.devscopeDatabaseSqldelight)
-            implementation(projects.devscopeDiagnostics)
-            implementation(projects.devscopeExport)
             implementation(libs.ktor.client.mock)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
@@ -41,6 +38,12 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native.driver)
+            implementation(projects.devscopeUiCompose)
+            implementation(projects.devscopeExport)
+        }
+        commonTest.dependencies {
+            implementation(projects.devscopeDiagnostics)
+            implementation(projects.devscopeExport)
         }
         getByName("androidHostTest").dependencies {
             implementation(libs.sqldelight.sqlite.driver)

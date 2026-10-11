@@ -2,7 +2,12 @@
 
 All notable changes are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and versions follow [Semantic Versioning](https://semver.org/) once 1.0 is reached.
 
-## [0.1.0] - Unreleased
+## [0.2.0] - 2026-10-12
+
+### Added
+- `-noop` twins for `devscope-flow`, `-navigation`, `-network-ktor` and `-database-sqldelight` (core twin gains `TraceContext`, network config types and the `configure(config, recorder)` overload), so an app swaps real for noop by build type with identical code; `scripts/check-noop-abi.sh` guards binary compatibility. `samples/androidApp` shows the pattern.
+
+## [0.1.0] - 2026-10-11
 
 ### Added
 - Core tracing engine with coroutine-context propagation, redaction defaults and bounded in-memory recorder.

@@ -71,7 +71,9 @@ fun CartScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        viewModel.product.name.take(1).uppercase(),
+                        viewModel.product.name
+                            .take(1)
+                            .uppercase(),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = Color.White,

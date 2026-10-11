@@ -13,5 +13,6 @@ import platform.UIKit.UIViewController
 fun MainViewController(): UIViewController {
     SampleGraph.configure(NativeSqliteDriver(CartDatabase.Schema, "cart.db"))
     SampleExport.install(iosTraceDirectory(), IosShareSink())
-    return ComposeUIViewController { App() }
+    SampleExport.enable(isDebuggable = true)
+    return ComposeUIViewController { App(inspector = IosInspector) }
 }

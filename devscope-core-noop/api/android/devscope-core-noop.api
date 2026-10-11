@@ -1,30 +1,31 @@
 public final class dev/chayaphon/journeyscope/core/Journey {
-	public final fun beginSpan-JXdtvJI (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;)Ldev/chayaphon/journeyscope/core/SpanHandle;
-	public static synthetic fun beginSpan-JXdtvJI$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/core/SpanHandle;
+	public final fun beginSpan-IGfh76U (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;)Ldev/chayaphon/journeyscope/core/SpanHandle;
+	public static synthetic fun beginSpan-IGfh76U$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/core/SpanHandle;
 	public final fun cancel (Ljava/lang/String;)V
 	public static synthetic fun cancel$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;ILjava/lang/Object;)V
 	public final fun context (Ldev/chayaphon/journeyscope/core/SpanHandle;)Lkotlin/coroutines/CoroutineContext;
 	public static synthetic fun context$default (Ldev/chayaphon/journeyscope/core/Journey;Ldev/chayaphon/journeyscope/core/SpanHandle;ILjava/lang/Object;)Lkotlin/coroutines/CoroutineContext;
 	public final fun fail (Ljava/lang/Throwable;)V
 	public final fun finish ()V
-	public final fun getId-Mk_oa4M ()Ljava/lang/String;
+	public final fun getId-LsZ0XV8 ()Ljava/lang/String;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getStatus ()Ldev/chayaphon/journeyscope/core/model/TraceStatus;
 	public final fun interrupt (Ljava/lang/String;)V
 	public final fun isRecording ()Z
-	public final fun recordEvent-JXdtvJI (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;)V
-	public static synthetic fun recordEvent-JXdtvJI$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;ILjava/lang/Object;)V
+	public final fun recordEvent-IGfh76U (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;)V
+	public static synthetic fun recordEvent-IGfh76U$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;ILjava/lang/Object;)V
 	public final fun start ()V
-	public final fun trace-oSN4EzA (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static synthetic fun trace-oSN4EzA$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/lang/Object;
-	public final fun traceSuspend-oSN4EzA (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun traceSuspend-oSN4EzA$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun trace-ebeQyKk (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static synthetic fun trace-ebeQyKk$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Ldev/chayaphon/journeyscope/core/SpanHandle;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun traceSuspend-ebeQyKk (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun traceSuspend-ebeQyKk$default (Ldev/chayaphon/journeyscope/core/Journey;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class dev/chayaphon/journeyscope/core/JourneyScope {
 	public static final field INSTANCE Ldev/chayaphon/journeyscope/core/JourneyScope;
 	public static final field VERSION Ljava/lang/String;
-	public final fun configure (Ldev/chayaphon/journeyscope/core/JourneyScopeConfig;)Ldev/chayaphon/journeyscope/core/JourneyTracer;
+	public final fun configure (Ldev/chayaphon/journeyscope/core/JourneyScopeConfig;Ldev/chayaphon/journeyscope/core/recorder/JourneyRecorder;)Ldev/chayaphon/journeyscope/core/JourneyTracer;
+	public static synthetic fun configure$default (Ldev/chayaphon/journeyscope/core/JourneyScope;Ldev/chayaphon/journeyscope/core/JourneyScopeConfig;Ldev/chayaphon/journeyscope/core/recorder/JourneyRecorder;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/core/JourneyTracer;
 	public final fun disable ()V
 	public final fun getTracer ()Ldev/chayaphon/journeyscope/core/JourneyTracer;
 	public final fun interruptActive (Ljava/lang/String;)V
@@ -113,10 +114,27 @@ public final class dev/chayaphon/journeyscope/core/SpanHandle {
 	public static synthetic fun end$default (Ldev/chayaphon/journeyscope/core/SpanHandle;Ldev/chayaphon/journeyscope/core/model/SpanStatus;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;ILjava/lang/Object;)V
 	public final fun fail (Ljava/lang/Throwable;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;)V
 	public static synthetic fun fail$default (Ldev/chayaphon/journeyscope/core/SpanHandle;Ljava/lang/Throwable;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;ILjava/lang/Object;)V
-	public final fun getId-hVxYRIk ()Ljava/lang/String;
+	public final fun getId-UqOPbzE ()Ljava/lang/String;
 	public final fun isRecording ()Z
-	public final fun recordEvent-hkXm69U (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;)V
-	public static synthetic fun recordEvent-hkXm69U$default (Ldev/chayaphon/journeyscope/core/SpanHandle;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;ILjava/lang/Object;)V
+	public final fun recordEvent-tav8bHQ (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;)V
+	public static synthetic fun recordEvent-tav8bHQ$default (Ldev/chayaphon/journeyscope/core/SpanHandle;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;ILjava/lang/Object;)V
+}
+
+public final class dev/chayaphon/journeyscope/core/TraceContext : kotlin/coroutines/AbstractCoroutineContextElement {
+	public static final field Key Ldev/chayaphon/journeyscope/core/TraceContext$Key;
+	public final fun beginChildSpan-tav8bHQ (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;)Ldev/chayaphon/journeyscope/core/SpanHandle;
+	public static synthetic fun beginChildSpan-tav8bHQ$default (Ldev/chayaphon/journeyscope/core/TraceContext;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/core/SpanHandle;
+	public final fun getJourney ()Ldev/chayaphon/journeyscope/core/Journey;
+	public final fun getSpanId-NubF7bQ ()Ljava/lang/String;
+	public final fun recordEvent-tav8bHQ (Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;)V
+	public static synthetic fun recordEvent-tav8bHQ$default (Ldev/chayaphon/journeyscope/core/TraceContext;Ljava/lang/String;Ljava/lang/String;Ldev/chayaphon/journeyscope/core/model/DiagnosticMetadata;ILjava/lang/Object;)V
+}
+
+public final class dev/chayaphon/journeyscope/core/TraceContext$Key : kotlin/coroutines/CoroutineContext$Key {
+}
+
+public final class dev/chayaphon/journeyscope/core/TraceContextKt {
+	public static final fun currentTraceContext (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class dev/chayaphon/journeyscope/core/model/DiagnosticMetadata {
@@ -230,19 +248,19 @@ public final class dev/chayaphon/journeyscope/core/model/SpanCategory {
 }
 
 public final class dev/chayaphon/journeyscope/core/model/SpanCategory$Companion {
-	public final fun getBUSINESS_VALIDATION-qm4Vvho ()Ljava/lang/String;
-	public final fun getCUSTOM-qm4Vvho ()Ljava/lang/String;
-	public final fun getDATABASE-qm4Vvho ()Ljava/lang/String;
-	public final fun getLIFECYCLE-qm4Vvho ()Ljava/lang/String;
-	public final fun getNAVIGATION-qm4Vvho ()Ljava/lang/String;
-	public final fun getNETWORK-qm4Vvho ()Ljava/lang/String;
-	public final fun getREPOSITORY-qm4Vvho ()Ljava/lang/String;
-	public final fun getSTATE-qm4Vvho ()Ljava/lang/String;
-	public final fun getSTATE_EMISSION-qm4Vvho ()Ljava/lang/String;
-	public final fun getUI_INTERACTION-qm4Vvho ()Ljava/lang/String;
-	public final fun getUI_RENDER-qm4Vvho ()Ljava/lang/String;
-	public final fun getUSE_CASE-qm4Vvho ()Ljava/lang/String;
-	public final fun getVIEW_MODEL-qm4Vvho ()Ljava/lang/String;
+	public final fun getBUSINESS_VALIDATION-fcmYeAk ()Ljava/lang/String;
+	public final fun getCUSTOM-fcmYeAk ()Ljava/lang/String;
+	public final fun getDATABASE-fcmYeAk ()Ljava/lang/String;
+	public final fun getLIFECYCLE-fcmYeAk ()Ljava/lang/String;
+	public final fun getNAVIGATION-fcmYeAk ()Ljava/lang/String;
+	public final fun getNETWORK-fcmYeAk ()Ljava/lang/String;
+	public final fun getREPOSITORY-fcmYeAk ()Ljava/lang/String;
+	public final fun getSTATE-fcmYeAk ()Ljava/lang/String;
+	public final fun getSTATE_EMISSION-fcmYeAk ()Ljava/lang/String;
+	public final fun getUI_INTERACTION-fcmYeAk ()Ljava/lang/String;
+	public final fun getUI_RENDER-fcmYeAk ()Ljava/lang/String;
+	public final fun getUSE_CASE-fcmYeAk ()Ljava/lang/String;
+	public final fun getVIEW_MODEL-fcmYeAk ()Ljava/lang/String;
 }
 
 public final class dev/chayaphon/journeyscope/core/model/SpanId {
@@ -296,5 +314,141 @@ public final class dev/chayaphon/journeyscope/core/model/TraceStatus : java/lang
 	public final fun isTerminal ()Z
 	public static fun valueOf (Ljava/lang/String;)Ldev/chayaphon/journeyscope/core/model/TraceStatus;
 	public static fun values ()[Ldev/chayaphon/journeyscope/core/model/TraceStatus;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/BodyCapture {
+	public static final field Companion Ldev/chayaphon/journeyscope/core/network/BodyCapture$Companion;
+	public static final field DEFAULT_MAX_BYTES I
+	public static final field HARD_LIMIT_BYTES I
+	public fun <init> ()V
+	public fun <init> (ILjava/util/Set;)V
+	public synthetic fun <init> (ILjava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun accepts (Ljava/lang/String;)Z
+	public final fun getContentTypes ()Ljava/util/Set;
+	public final fun getMaxBytes ()I
+}
+
+public final class dev/chayaphon/journeyscope/core/network/BodyCapture$Companion {
+}
+
+public abstract interface class dev/chayaphon/journeyscope/core/network/BusinessResponseValidator {
+	public abstract fun inspect (Ldev/chayaphon/journeyscope/core/network/NetworkRequestInfo;Ldev/chayaphon/journeyscope/core/network/NetworkResponseInfo;)Ldev/chayaphon/journeyscope/core/network/BusinessResult;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/BusinessResult {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-zmiRttE ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-pCVHPLI (Ljava/lang/String;Ljava/lang/String;)Ldev/chayaphon/journeyscope/core/network/BusinessResult;
+	public static synthetic fun copy-pCVHPLI$default (Ldev/chayaphon/journeyscope/core/network/BusinessResult;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/core/network/BusinessResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getStatus-zmiRttE ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/BusinessStatus {
+	public static final field Companion Ldev/chayaphon/journeyscope/core/network/BusinessStatus$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Ldev/chayaphon/journeyscope/core/network/BusinessStatus;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/BusinessStatus$Companion {
+	public final fun getFAILURE-zmiRttE ()Ljava/lang/String;
+	public final fun getSESSION_EXPIRED-zmiRttE ()Ljava/lang/String;
+	public final fun getSUCCESS-zmiRttE ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/NetworkFailure : java/lang/Enum {
+	public static final field CANCELLED Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static final field CONNECTION Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static final field DNS Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static final field HTTP_CLIENT_ERROR Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static final field HTTP_SERVER_ERROR Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static final field PROTOCOL Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static final field TIMEOUT Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static final field TLS Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static final field UNKNOWN Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+	public static fun values ()[Ldev/chayaphon/journeyscope/core/network/NetworkFailure;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/NetworkRequestInfo {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/Long;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getContentLength ()Ljava/lang/Long;
+	public final fun getHeaders ()Ljava/util/Map;
+	public final fun getMethod ()Ljava/lang/String;
+	public final fun getUrl ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/NetworkResponseInfo {
+	public fun <init> (ILjava/util/Map;Ljava/lang/Long;Ljava/lang/String;ZLjava/lang/String;)V
+	public synthetic fun <init> (ILjava/util/Map;Ljava/lang/Long;Ljava/lang/String;ZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBodySnippet ()Ljava/lang/String;
+	public final fun getContentLength ()Ljava/lang/Long;
+	public final fun getHeaders ()Ljava/util/Map;
+	public final fun getProtocol ()Ljava/lang/String;
+	public final fun getStatusCode ()I
+	public final fun getStreaming ()Z
+}
+
+public final class dev/chayaphon/journeyscope/core/network/NetworkTraceConfig {
+	public fun <init> ()V
+	public fun <init> (Ldev/chayaphon/journeyscope/core/network/NoJourneyPolicy;Ljava/util/Set;Ljava/util/Set;ZLdev/chayaphon/journeyscope/core/network/PropagationConfig;Ldev/chayaphon/journeyscope/core/network/BusinessResponseValidator;Ldev/chayaphon/journeyscope/core/network/BodyCapture;)V
+	public synthetic fun <init> (Ldev/chayaphon/journeyscope/core/network/NoJourneyPolicy;Ljava/util/Set;Ljava/util/Set;ZLdev/chayaphon/journeyscope/core/network/PropagationConfig;Ldev/chayaphon/journeyscope/core/network/BusinessResponseValidator;Ldev/chayaphon/journeyscope/core/network/BodyCapture;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBodyCapture ()Ldev/chayaphon/journeyscope/core/network/BodyCapture;
+	public final fun getBusinessValidator ()Ldev/chayaphon/journeyscope/core/network/BusinessResponseValidator;
+	public final fun getCaptureSizes ()Z
+	public final fun getHeaderAllowlist ()Ljava/util/Set;
+	public final fun getNoJourneyPolicy ()Ldev/chayaphon/journeyscope/core/network/NoJourneyPolicy;
+	public final fun getPropagation ()Ldev/chayaphon/journeyscope/core/network/PropagationConfig;
+	public final fun getQueryParamAllowlist ()Ljava/util/Set;
+}
+
+public abstract class dev/chayaphon/journeyscope/core/network/NoJourneyPolicy {
+}
+
+public final class dev/chayaphon/journeyscope/core/network/NoJourneyPolicy$Explicit : dev/chayaphon/journeyscope/core/network/NoJourneyPolicy {
+	public fun <init> (Ldev/chayaphon/journeyscope/core/Journey;)V
+	public final fun getJourney ()Ldev/chayaphon/journeyscope/core/Journey;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/NoJourneyPolicy$Ignore : dev/chayaphon/journeyscope/core/network/NoJourneyPolicy {
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/core/network/NoJourneyPolicy$Ignore;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/NoJourneyPolicy$Standalone : dev/chayaphon/journeyscope/core/network/NoJourneyPolicy {
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/core/network/NoJourneyPolicy$Standalone;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/core/network/PropagationConfig {
+	public fun <init> (Ljava/util/Set;Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/util/Set;Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getRequireHttps ()Z
+	public final fun getSpanIdHeader ()Ljava/lang/String;
+	public final fun getTraceIdHeader ()Ljava/lang/String;
+	public final fun getTrustedHosts ()Ljava/util/Set;
+}
+
+public abstract interface class dev/chayaphon/journeyscope/core/recorder/JourneyRecorder {
 }
 
