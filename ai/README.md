@@ -19,16 +19,43 @@ Machine-oriented instructions that let an AI coding agent install, configure and
 
 ## Use it from your project
 
-Paste into your project's `AGENTS.md` / `CLAUDE.md` / `.cursorrules`:
+Two layers: an always-on pointer in the agent's context file, and the on-demand skill.
+
+### 1. Install the skill
+
+Claude Code, Codex CLI and Gemini CLI share the Agent Skills format (a folder with `SKILL.md`); only the directory differs.
+
+| Agent | Project dir | User dir | Context file |
+|---|---|---|---|
+| Claude Code | `.claude/skills/` | `~/.claude/skills/` | `CLAUDE.md` |
+| Codex CLI | `.agents/skills/` | `~/.agents/skills/` | `AGENTS.md` |
+| Gemini CLI | `.agents/skills/` (alias) or `.gemini/skills/` | `~/.agents/skills/` or `~/.gemini/skills/` | `GEMINI.md` |
+
+```bash
+# from a checkout of this repo
+scripts/install-skill.sh --agent all --scope project --dest /path/to/your/app
+
+# without a checkout
+curl -fsSL https://raw.githubusercontent.com/mandanai/devscope-compose/main/scripts/install-skill.sh | sh -s -- --agent codex
+```
+
+Options: `--agent claude|codex|gemini|all`, `--scope project|user`, `--gemini-native` (use `.gemini/skills`), `--link`, `--force`. Reload skills afterwards (Gemini: `/skills reload`). The skill is self-contained: it carries a generated copy of this folder in `references/`.
+
+### 2. Add the always-on pointer
+
+Skills activate on demand from their description. Add this to the context file your agent reads (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `.cursorrules`):
 
 ```markdown
 ## JourneyScope
-For anything involving JourneyScope (journey tracing, devscope-* modules, the on-device Inspector), follow
+For anything involving JourneyScope (journey tracing, devscope-* modules, the on-device Inspector), use the
+journeyscope skill, or follow
 https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/setup-playbook.md
 and the guardrails in .../ai/guardrails.md before editing. Index: .../llms.txt
 ```
 
-Claude Code users can instead copy [`skills/journeyscope`](../skills/journeyscope/SKILL.md) into `.claude/skills/`.
+Gemini CLI also supports `@file` imports in `GEMINI.md`; if you installed the skill, `@./.agents/skills/journeyscope/references/guardrails.md` keeps the guardrails always loaded.
+
+You can also invoke it explicitly: "use the journeyscope skill to set up JourneyScope and trace the checkout flow".
 
 ## Status
 
@@ -36,4 +63,4 @@ JourneyScope is pre-release (`0.1.0-SNAPSHOT`, not on Maven Central). Agents mus
 
 ## Maintaining
 
-API or behaviour changes must update the matching file here in the same PR. Every Kotlin snippet is lifted from `samples/composeApp` or verified against `devscope-*/api/*.api`.
+API or behaviour changes must update the matching file here in the same PR, then run `scripts/sync-skill-references.sh` to refresh the skill copy. Every Kotlin snippet is lifted from `samples/composeApp` or verified against `devscope-*/api/*.api`.

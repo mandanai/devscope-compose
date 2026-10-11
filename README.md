@@ -105,7 +105,7 @@ Let your coding agent do the installation, configuration and instrumentation. Po
 
 > Set up JourneyScope in this app following https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/setup-playbook.md and trace the checkout flow.
 
-The instructions, decision rules and guardrails live in [`ai/`](ai/README.md), indexed for agents in [`llms.txt`](llms.txt). Claude Code users can copy [`skills/journeyscope`](skills/journeyscope/SKILL.md) into `.claude/skills/`.
+The instructions, decision rules and guardrails live in [`ai/`](ai/README.md), indexed for agents in [`llms.txt`](llms.txt). Install the skill for Claude Code, Codex CLI or Gemini CLI with `scripts/install-skill.sh --agent all` (see [`ai/README.md`](ai/README.md)).
 
 ## Modules
 

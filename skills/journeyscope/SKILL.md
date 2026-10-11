@@ -5,20 +5,23 @@ description: Install, configure and instrument JourneyScope (devscope-* modules)
 
 # JourneyScope setup and instrumentation
 
-Do the setup, configuration and code changes yourself in the user's codebase. The procedure lives in `ai/` of the JourneyScope repo.
+Do the setup, configuration and code changes yourself in the user's codebase. The procedure, rules and API reference are in this skill's `references/` folder.
 
 ## Locate the knowledge base
 
-- Vendored or checked out locally: read files under `ai/` (for example `ai/setup-playbook.md`).
-- Otherwise fetch from `https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/<file>`; the index is `llms.txt` at the repo root.
+Use the first that exists:
+
+1. `references/` next to this file.
+2. `ai/` in a checkout of the JourneyScope repo.
+3. `https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/<file>` (index: `llms.txt` at the repo root).
 
 ## Procedure
 
-1. Read `setup-playbook.md` and follow it step by step.
-2. Use `decision-tree.md` against the host project to pick modules. Load only the `scenarios/*.md` files it selects.
-3. Obey `guardrails.md` before every edit. Use only symbols in `api-cheatsheet.md`.
+1. Read `references/setup-playbook.md` and follow it step by step.
+2. Use `references/decision-tree.md` against the host project to pick modules. Load only the `references/scenarios/*.md` files it selects.
+3. Obey `references/guardrails.md` before every edit. Use only symbols in `references/api-cheatsheet.md`.
 4. Instrument the flow the user named, top-down, matching the host project's style and dependency mechanism.
-5. Run `verification.md`. Do not claim done until builds pass, release isolation holds, and one named journey is proven or the gap is stated.
+5. Run `references/verification.md`. Do not claim done until builds pass, release isolation holds, and one named journey is proven or the gap is stated.
 6. Finish with the report described in the playbook (modules, files, flows traced, not traced, unverified).
 
 ## Hard rules
@@ -28,3 +31,7 @@ Do the setup, configuration and code changes yourself in the user's codebase. Th
 - No bodies, tokens, PII or interpolated data in span names or metadata.
 - Ask before widening allowlists, enabling body capture or persistence, or changing redaction/sampling.
 - JourneyScope is pre-release; if not resolvable, ask before running `./gradlew publishToMavenLocal`.
+
+## If you cannot run builds or shell commands
+
+Still make the edits, then give the user the exact commands from `references/verification.md` to run and say which checks were not run.

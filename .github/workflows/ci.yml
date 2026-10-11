@@ -107,3 +107,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/dependency-review-action@v4
+
+  agent-skill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Skill references are in sync with ai/
+        run: |
+          sh scripts/sync-skill-references.sh
+          git diff --exit-code -- skills
+          test -z "$(git status --porcelain -- skills)"
