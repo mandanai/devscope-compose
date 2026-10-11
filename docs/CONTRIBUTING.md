@@ -17,6 +17,7 @@ JDK 17, Android SDK (compile SDK 37), and for iOS work a Mac with Xcode. Open th
 - Kotlin warnings are errors. Do not use deprecated APIs; use the documented replacement.
 - Keep sensitive data out of spans, metadata and tests. New metadata keys should be safe by default.
 - Add a regression test with every bug fix.
+- **Agent instructions** in [`ai/`](../ai/README.md) must change in the same PR as any API or behaviour they describe (start with `ai/api-cheatsheet.md` and the matching scenario).
 
 ## Module rules
 - Adapters depend on `devscope-core` only. `commonMain` must not import `android.*`.
