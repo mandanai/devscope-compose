@@ -59,7 +59,7 @@ You can also invoke it explicitly: "use the journeyscope skill to set up Journey
 
 ## Status
 
-JourneyScope is pre-release (`0.1.0`, not on Maven Central). Agents must publish it locally first; see the playbook.
+JourneyScope is pre-release (`0.2.0`, not on Maven Central). Agents must publish it locally first; see the playbook.
 
 ## Maintaining
 

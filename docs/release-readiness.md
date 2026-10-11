@@ -1,6 +1,6 @@
 # Release readiness report: Phase 8
 
-Version `0.1.0`. Nothing has been published to any remote repository.
+Version `0.2.0`. Nothing has been published to any remote repository.
 
 ## Verdict
 **Not ready for a public release.** The SDK builds, tests, lints, publishes locally, is consumed from Maven Local on Android and iOS compilation, and runs on an Android emulator. iOS tests, the Xcode build and an iOS run were not executed in this environment, and repository metadata is still placeholder.
