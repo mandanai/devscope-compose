@@ -6,7 +6,7 @@ Follow in order. Each step: **detect → act → check**. Report anything skippe
 ## 0. Preconditions
 
 - Android minSdk 26, compileSdk 37, JDK 17. iOS: Xcode 26+, Apple Silicon (`iosArm64`, `iosSimulatorArm64` only).
-- JourneyScope is **pre-release**. Group `dev.chayaphon.journeyscope`, version `0.1.0`. If it is not resolvable, **ASK** whether to publish locally: from a checkout of this repo run `./gradlew publishToMavenLocal`.
+- JourneyScope is **pre-release**. Group `dev.chayaphon.journeyscope`, version `0.2.0`. If it is not resolvable, **ASK** whether to publish locally: from a checkout of this repo run `./gradlew publishToMavenLocal`.
 
 ## 1. Detect the project shape
 

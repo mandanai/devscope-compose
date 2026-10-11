@@ -14,7 +14,7 @@ Artifacts land in `~/.m2/repository/dev/chayaphon/journeyscope/`. In a consumer 
 
 ```kotlin
 repositories { mavenLocal(); mavenCentral(); google() }
-dependencies { implementation("dev.chayaphon.journeyscope:devscope-core:0.1.0") }
+dependencies { implementation("dev.chayaphon.journeyscope:devscope-core:0.2.0") }
 ```
 
 ## Remote publishing
@@ -29,7 +29,7 @@ Locally, put the four properties in the git-ignored `local.properties` and run `
 
 ## Before the first release (TODO)
 - Register the `dev.chayaphon.journeyscope` namespace on Maven Central and create the signing key.
-- Replace `-SNAPSHOT` with a release version and update `CHANGELOG.md`.
+- Set `VERSION_NAME` and `JourneyScope.VERSION` to the release version and update `CHANGELOG.md`.
 - Run `./gradlew spotlessCheck detekt checkKotlinAbi` and refresh API baselines (`updateKotlinAbi`) only for intentional API changes.
 
 ## Public API compatibility
