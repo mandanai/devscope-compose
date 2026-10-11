@@ -12,6 +12,7 @@ for key in mavenCentralUsername mavenCentralPassword signingInMemoryKey signingI
     echo "local.properties: $key is not set" >&2
     exit 1
   fi
+  [[ "$key" == signingInMemoryKey ]] && value="$(printf '%b' "$value")"
   export "ORG_GRADLE_PROJECT_$key=$value"
 done
 

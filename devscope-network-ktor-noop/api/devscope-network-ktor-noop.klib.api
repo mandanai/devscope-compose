@@ -1,0 +1,21 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <dev.chayaphon.journeyscope:devscope-network-ktor-noop>
+final class dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig { // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig|null[0]
+    constructor <init>() // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig.<init>|<init>(){}[0]
+
+    final var trace // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig.trace|{}trace[0]
+        final fun <get-trace>(): dev.chayaphon.journeyscope.core.network/NetworkTraceConfig // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig.trace.<get-trace>|<get-trace>(){}[0]
+        final fun <set-trace>(dev.chayaphon.journeyscope.core.network/NetworkTraceConfig) // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig.trace.<set-trace>|<set-trace>(dev.chayaphon.journeyscope.core.network.NetworkTraceConfig){}[0]
+    final var tracer // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig.tracer|{}tracer[0]
+        final fun <get-tracer>(): kotlin/Function0<dev.chayaphon.journeyscope.core/JourneyTracer> // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig.tracer.<get-tracer>|<get-tracer>(){}[0]
+        final fun <set-tracer>(kotlin/Function0<dev.chayaphon.journeyscope.core/JourneyTracer>) // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig.tracer.<set-tracer>|<set-tracer>(kotlin.Function0<dev.chayaphon.journeyscope.core.JourneyTracer>){}[0]
+}
+
+final val dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetwork // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetwork|{}JourneyScopeNetwork[0]
+    final fun <get-JourneyScopeNetwork>(): io.ktor.client.plugins.api/ClientPlugin<dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetworkConfig> // dev.chayaphon.journeyscope.network.ktor/JourneyScopeNetwork.<get-JourneyScopeNetwork>|<get-JourneyScopeNetwork>(){}[0]

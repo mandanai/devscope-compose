@@ -36,6 +36,10 @@ gradlePlugin {
             id = "journeyscope.publishing"
             implementationClass = "PublishingConventionPlugin"
         }
+        register("noop") {
+            id = "journeyscope.noop"
+            implementationClass = "NoopConventionPlugin"
+        }
         register("sampleLibrary") {
             id = "journeyscope.sample.library"
             implementationClass = "SampleLibraryConventionPlugin"

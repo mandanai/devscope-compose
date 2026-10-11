@@ -56,13 +56,16 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.chayaphon.journeyscope:devscope-core:0.1.0")
+    debugImplementation("dev.chayaphon.journeyscope:devscope-core:0.1.0")
+    releaseImplementation("dev.chayaphon.journeyscope:devscope-core-noop:0.1.0") // Chucker style; see docs/release.md
     debugImplementation("dev.chayaphon.journeyscope:devscope-android:0.1.0") // Android: inspector via notification, no UI code
     debugImplementation("dev.chayaphon.journeyscope:devscope-ui-compose:0.1.0") // iOS / embedding the Inspector yourself
 
-    // Optional adapters
-    implementation("dev.chayaphon.journeyscope:devscope-network-ktor:0.1.0")
-    implementation("dev.chayaphon.journeyscope:devscope-flow:0.1.0")
+    // Optional adapters, each with a -noop twin for release
+    debugImplementation("dev.chayaphon.journeyscope:devscope-network-ktor:0.1.0")
+    releaseImplementation("dev.chayaphon.journeyscope:devscope-network-ktor-noop:0.1.0")
+    debugImplementation("dev.chayaphon.journeyscope:devscope-flow:0.1.0")
+    releaseImplementation("dev.chayaphon.journeyscope:devscope-flow-noop:0.1.0")
 }
 ```
 
@@ -113,6 +116,7 @@ The instructions, decision rules and guardrails live in [`ai/`](ai/README.md), i
 |---|---|:-:|:-:|
 | `devscope-core` | Tracing engine | ✅ | ✅ |
 | `devscope-core-noop` | Release twin of the core facade | ✅ | ✅ |
+| `devscope-flow-noop`, `devscope-navigation-noop`, `devscope-network-ktor-noop`, `devscope-database-sqldelight-noop` | Release twins of the adapters | ✅ | ✅ |
 | `devscope-ui-compose` | Compose Multiplatform Inspector | ✅ | ✅ |
 | `devscope-network-ktor` | Ktor client plugin | ✅ | ✅ |
 | `devscope-network-okhttp` | OkHttp interceptor | ✅ | — |

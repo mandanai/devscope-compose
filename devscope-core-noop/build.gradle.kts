@@ -1,6 +1,7 @@
 plugins {
     id("journeyscope.kmp.library")
     id("journeyscope.publishing")
+    id("journeyscope.noop")
 }
 
 val sharedCoreSources =
@@ -9,6 +10,8 @@ val sharedCoreSources =
         "model/DiagnosticMetadata.kt",
         "model/Status.kt",
         "model/Ids.kt",
+        "network/NetworkModels.kt",
+        "network/NetworkTraceConfig.kt",
     )
 
 val syncSharedCore =
@@ -33,13 +36,5 @@ kotlin {
 tasks.configureEach {
     if (name.startsWith("compile") || name.endsWith("sourcesJar", ignoreCase = true) || name.startsWith("ksp") || name == "assemble") {
         dependsOn(syncSharedCore)
-    }
-}
-
-// Same capability as devscope-core: Gradle fails dependency resolution if both land on one classpath.
-afterEvaluate {
-    configurations.matching { it.isCanBeConsumed && !it.isCanBeResolved }.configureEach {
-        outgoing.capability("${project.group}:devscope-core:${project.version}")
-        outgoing.capability("${project.group}:${project.name}:${project.version}")
     }
 }

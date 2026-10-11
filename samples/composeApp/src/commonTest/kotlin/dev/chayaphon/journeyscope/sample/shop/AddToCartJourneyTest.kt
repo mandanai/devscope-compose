@@ -1,5 +1,7 @@
 package dev.chayaphon.journeyscope.sample.shop
 
+import dev.chayaphon.journeyscope.core.expectation.ExpectedSequence
+import dev.chayaphon.journeyscope.core.expectation.ExpectedStep
 import dev.chayaphon.journeyscope.core.model.MetadataValue
 import dev.chayaphon.journeyscope.core.model.SpanCategory
 import dev.chayaphon.journeyscope.core.model.SpanStatus
@@ -24,6 +26,18 @@ import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.milliseconds
+
+private val addToCartExpectation =
+    ExpectedSequence(
+        name = "Add to Cart completion",
+        steps =
+            listOf(
+                ExpectedStep.category("Network request", SpanCategory.NETWORK),
+                ExpectedStep.category("Database write", SpanCategory.DATABASE, "cart.upsert"),
+                ExpectedStep.category("UI render checkpoint", SpanCategory.UI_RENDER),
+            ),
+        appliesTo = { it.name == "Add to Cart" },
+    )
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddToCartJourneyTest {
@@ -117,7 +131,7 @@ class AddToCartJourneyTest {
             shop.viewModel.addToCart()
             advanceUntilIdle()
 
-            val report = DiagnosticAnalyzer(DiagnosticConfig(expectedSequences = listOf(AddToCartCompletion))).analyze(shop.onlyTrace())
+            val report = DiagnosticAnalyzer(DiagnosticConfig(expectedSequences = listOf(addToCartExpectation))).analyze(shop.onlyTrace())
             assertTrue(report.findings.none { it.severity != DiagnosticSeverity.Info }, report.findings.map { it.ruleId }.toString())
         }
 

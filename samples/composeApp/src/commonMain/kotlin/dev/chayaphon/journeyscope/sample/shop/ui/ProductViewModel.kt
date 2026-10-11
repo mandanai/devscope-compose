@@ -185,7 +185,6 @@ class ProductViewModel(
     }
 
     private suspend fun awaitCartShown(journey: Journey) {
-        if (!journey.isRecording) return
         val before = cartShown.value
         mutableOpenCartRequests.tryEmit(journey)
         withTimeoutOrNull(renderTimeout) { cartShown.first { it > before } }
