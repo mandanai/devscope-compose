@@ -1,0 +1,11 @@
+public final class dev/chayaphon/journeyscope/android/JourneyScopeAndroid {
+	public static final field $stable I
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/android/JourneyScopeAndroid;
+	public final fun getExportController ()Ldev/chayaphon/journeyscope/export/JourneyExportController;
+	public final fun getNotificationsEnabled ()Z
+	public final fun intent (Landroid/content/Context;)Landroid/content/Intent;
+	public final fun launch (Landroid/content/Context;)V
+	public final fun setExportController (Ldev/chayaphon/journeyscope/export/JourneyExportController;)V
+	public final fun setNotificationsEnabled (Z)V
+}
+

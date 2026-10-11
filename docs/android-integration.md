@@ -8,7 +8,7 @@ Minimum SDK 26, compile SDK 37, JDK 17. Artifacts are Kotlin Multiplatform; Grad
 // app/build.gradle.kts
 dependencies {
     implementation("dev.chayaphon.journeyscope:devscope-core:<version>")
-    debugImplementation("dev.chayaphon.journeyscope:devscope-ui-compose:<version>")
+    debugImplementation("dev.chayaphon.journeyscope:devscope-android:<version>")
 }
 ```
 
@@ -20,6 +20,12 @@ class App : Application() {
     }
 }
 ```
+
+That is the whole setup. `devscope-android` brings the inspector, an `androidx.startup` initializer and a `FileProvider`. While collection is enabled it shows an ongoing notification (journey, failure and running counts) that opens the inspector; sharing needs no host `FileProvider`. On Android 13+ the first resumed activity asks for the notification permission.
+
+- Hide the notification: `JourneyScopeAndroid.notificationsEnabled = false`; open the inspector yourself with `JourneyScopeAndroid.launch(context)`.
+- Use your own persistence or share sink: set `JourneyScopeAndroid.exportController` before the inspector opens.
+- Remove the auto-install entirely: `<meta-data android:name="dev.chayaphon.journeyscope.android.JourneyScopeInitializer" tools:node="remove" />` under the `InitializationProvider`.
 
 ## Multi-module application
 
@@ -50,7 +56,9 @@ val client = HttpClient(engine) {
 
 The Ktor plugin runs in common code, so the same call works on Android and iOS.
 
-## Jetpack Compose
+## Embedding the inspector yourself
+
+Optional; only needed if you want the inspector inside your own navigation (use `devscope-ui-compose` directly):
 
 ```kotlin
 setContent {

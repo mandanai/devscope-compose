@@ -57,7 +57,8 @@ repositories {
 
 dependencies {
     implementation("dev.chayaphon.journeyscope:devscope-core:0.1.0-SNAPSHOT")
-    debugImplementation("dev.chayaphon.journeyscope:devscope-ui-compose:0.1.0-SNAPSHOT")
+    debugImplementation("dev.chayaphon.journeyscope:devscope-android:0.1.0-SNAPSHOT") // Android: inspector via notification, no UI code
+    debugImplementation("dev.chayaphon.journeyscope:devscope-ui-compose:0.1.0-SNAPSHOT") // iOS / embedding the Inspector yourself
 
     // Optional adapters
     implementation("dev.chayaphon.journeyscope:devscope-network-ktor:0.1.0-SNAPSHOT")
@@ -90,7 +91,7 @@ val client = HttpClient { install(JourneyScopeNetwork) }       // Ktor
 val okHttp = OkHttpClient.Builder().addInterceptor(JourneyScopeInterceptor()).build()
 ```
 
-Open the inspector:
+Open the inspector: on Android with `devscope-android` tap the JourneyScope notification, nothing else to write. To embed it yourself:
 
 ```kotlin
 JourneyScopeInspector(onClose = { showInspector = false })

@@ -7,6 +7,7 @@ All notable changes are recorded here. The format follows [Keep a Changelog](htt
 ### Added
 - Core tracing engine with coroutine-context propagation, redaction defaults and bounded in-memory recorder.
 - Compose Multiplatform Inspector (`devscope-ui-compose`).
+- `devscope-android`: zero-code Android setup; an ongoing notification opens the inspector, no host button, `FileProvider` or export wiring. Adds `JourneyScope.tracerFlow` to core.
 - Adapters: Ktor and OkHttp network tracing, Flow/StateFlow, navigation, SQLDelight.
 - Evidence-based diagnostics (`devscope-diagnostics`).
 - Secure export, import and persistence (`devscope-export`), and a no-op core twin (`devscope-core-noop`).

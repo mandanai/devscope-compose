@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="journeyscope_inspector_title">JourneyScope</string>
+    <string name="journeyscope_channel_name">JourneyScope</string>
+    <string name="journeyscope_notification_idle">No journeys recorded yet</string>
+</resources>

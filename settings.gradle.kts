@@ -34,6 +34,7 @@ dependencyResolutionManagement {
 rootProject.name = "journeyscope"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+include(":devscope-android")
 include(":devscope-core")
 include(":devscope-core-noop")
 include(":devscope-database-sqldelight")

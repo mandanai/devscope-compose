@@ -15,7 +15,6 @@ JDK 17, Android SDK (compile SDK 37), and for iOS work a Mac with Xcode. Open th
 - **Public API changes** must update the ABI baseline (`./gradlew updateKotlinAbi`) in the same commit and be documented with KDoc.
 - **detekt** uses `config/detekt/baseline.xml` for pre-existing findings. Do not add to the baseline to silence new code; fix it.
 - Kotlin warnings are errors. Do not use deprecated APIs; use the documented replacement.
-- Comments follow `.claude/rules/code-comments.md`: explain the non-obvious *why* in one line, otherwise rename or extract.
 - Keep sensitive data out of spans, metadata and tests. New metadata keys should be safe by default.
 - Add a regression test with every bug fix.
 

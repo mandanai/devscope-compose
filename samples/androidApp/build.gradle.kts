@@ -13,5 +13,6 @@ android {
 dependencies {
     implementation(projects.samples.composeApp)
     implementation(projects.devscopeFlow)
+    implementation(projects.devscopeAndroid)
     implementation(libs.androidx.activity.compose)
 }

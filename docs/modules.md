@@ -3,6 +3,7 @@
 ## Implemented
 - `devscope-core` — `dev.chayaphon.journeyscope.core`; `JourneyScope.isEnabled`, `JourneyScope.VERSION`; shared client-neutral network engine in `dev.chayaphon.journeyscope.core.network`.
 - `devscope-ui-compose` — `dev.chayaphon.journeyscope.ui`; `JourneyScopeInspector` journey list/detail UI (see [ui.md](ui.md)).
+- `devscope-android` — `dev.chayaphon.journeyscope.android`; Android only. Adding it is the whole setup: an `androidx.startup` initializer posts an ongoing notification that opens the inspector, with a bundled `FileProvider` for sharing (see [android-integration.md](android-integration.md)).
 - `devscope-flow` — `dev.chayaphon.journeyscope.flow`; `traceFlow`, `traceState`, `traceShared`, `observeWithJourneyScope`, `launchTraced`/`asyncTraced`; Android lifecycle adapter in `androidMain` only (see [flow.md](flow.md)).
 - `devscope-navigation` — `dev.chayaphon.journeyscope.navigation`; framework-neutral `NavigationTracer` (see [navigation.md](navigation.md)).
 - `devscope-network-ktor` — `dev.chayaphon.journeyscope.network.ktor`; `JourneyScopeNetwork` Ktor client plugin, Android + iOS (see [network.md](network.md)).

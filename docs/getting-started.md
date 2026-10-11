@@ -45,6 +45,10 @@ See [instrumentation](instrumentation.md).
 
 ## 5. Open the Inspector
 
+**Android:** add `debugImplementation(devscope-android)`. A notification opens the Inspector; no button, no export wiring (see [Android integration](android-integration.md)).
+
+**iOS or custom placement:** embed the composable yourself:
+
 ```kotlin
 JourneyScopeInspector(onClose = { showInspector = false })
 ```

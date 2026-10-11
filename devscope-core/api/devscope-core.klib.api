@@ -1016,6 +1016,8 @@ final object dev.chayaphon.journeyscope.core/JourneyScope { // dev.chayaphon.jou
         final fun <get-isEnabled>(): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScope.isEnabled.<get-isEnabled>|<get-isEnabled>(){}[0]
     final val tracer // dev.chayaphon.journeyscope.core/JourneyScope.tracer|{}tracer[0]
         final fun <get-tracer>(): dev.chayaphon.journeyscope.core/JourneyTracer // dev.chayaphon.journeyscope.core/JourneyScope.tracer.<get-tracer>|<get-tracer>(){}[0]
+    final val tracerFlow // dev.chayaphon.journeyscope.core/JourneyScope.tracerFlow|{}tracerFlow[0]
+        final fun <get-tracerFlow>(): kotlinx.coroutines.flow/StateFlow<dev.chayaphon.journeyscope.core/JourneyTracer> // dev.chayaphon.journeyscope.core/JourneyScope.tracerFlow.<get-tracerFlow>|<get-tracerFlow>(){}[0]
 
     final fun configure(dev.chayaphon.journeyscope.core/JourneyScopeConfig, dev.chayaphon.journeyscope.core.recorder/JourneyRecorder? = ...): dev.chayaphon.journeyscope.core/JourneyTracer // dev.chayaphon.journeyscope.core/JourneyScope.configure|configure(dev.chayaphon.journeyscope.core.JourneyScopeConfig;dev.chayaphon.journeyscope.core.recorder.JourneyRecorder?){}[0]
     final fun disable() // dev.chayaphon.journeyscope.core/JourneyScope.disable|disable(){}[0]

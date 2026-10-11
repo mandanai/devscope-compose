@@ -3,7 +3,9 @@ package dev.chayaphon.journeyscope.core
 import dev.chayaphon.journeyscope.core.model.DiagnosticMetadata
 import dev.chayaphon.journeyscope.core.recorder.InMemoryJourneyRecorder
 import dev.chayaphon.journeyscope.core.recorder.JourneyRecorder
-import kotlin.concurrent.Volatile
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * Process-wide entry point that owns the active [JourneyTracer]; collection is off until [configure] enables it.
@@ -13,10 +15,14 @@ import kotlin.concurrent.Volatile
 public object JourneyScope {
     public const val VERSION: String = "0.1.0-SNAPSHOT"
 
-    @Volatile
-    private var current: JourneyTracer = JourneyTracer()
+    private val state = MutableStateFlow(JourneyTracer())
+
+    private val current: JourneyTracer get() = state.value
 
     public val tracer: JourneyTracer get() = current
+
+    /** Emits each tracer installed by [configure] or [disable], so tooling can follow reconfiguration. */
+    public val tracerFlow: StateFlow<JourneyTracer> get() = state.asStateFlow()
 
     public val isEnabled: Boolean get() = current.config.enabled
 
@@ -26,7 +32,7 @@ public object JourneyScope {
         recorder: JourneyRecorder? = null,
     ): JourneyTracer {
         current.interruptActive(RECONFIGURED)
-        return JourneyTracer(config, recorder ?: InMemoryJourneyRecorder(config.maxTraces)).also { current = it }
+        return JourneyTracer(config, recorder ?: InMemoryJourneyRecorder(config.maxTraces)).also { state.value = it }
     }
 
     /** Turns collection off but keeps the recorder and the traces already captured. */
