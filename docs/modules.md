@@ -11,7 +11,7 @@
 - `devscope-database-sqldelight` — `dev.chayaphon.journeyscope.database.sqldelight`; `DatabaseTracing` explicit query/insert/update/delete/transaction spans for SQLDelight (see [database.md](database.md)).
 - `devscope-diagnostics` — `dev.chayaphon.journeyscope.diagnostics`; `DiagnosticAnalyzer`, rule contracts, built-in rules and `TimingAnalysis` (see [diagnostics.md](diagnostics.md)).
 - `devscope-export` — `dev.chayaphon.journeyscope.export`; opt-in persistence (`JourneyPersistence`, `TraceStore`), centralized `RedactionPipeline`, versioned JSON report, strict `TraceImporter`, `JourneyExportController`, share sinks (see [export.md](export.md)).
-- `devscope-core-noop` — release-build twin of the `devscope-core` host API; same Gradle capability so both can never share a classpath (see [release.md](release.md)).
+- `devscope-core-noop`, `devscope-flow-noop`, `devscope-navigation-noop`, `devscope-network-ktor-noop`, `devscope-database-sqldelight-noop` — release-build twins of the matching module; same Gradle capability so both can never share a classpath (see [release.md](release.md)).
 - `samples/composeApp` — layered Add to Cart sample instrumented end to end (see [sample-walkthrough.md](sample-walkthrough.md)).
 
 

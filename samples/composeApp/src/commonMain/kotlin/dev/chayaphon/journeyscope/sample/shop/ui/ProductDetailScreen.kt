@@ -51,8 +51,8 @@ import dev.chayaphon.journeyscope.sample.shop.SampleScenario
 @Composable
 fun ProductDetailScreen(
     viewModel: ProductViewModel,
-    onOpenInspector: () -> Unit,
-    onOpenDemo: () -> Unit,
+    onOpenInspector: (() -> Unit)?,
+    onOpenDemo: (() -> Unit)?,
     onOpenCart: () -> Unit,
     modifier: Modifier = Modifier,
     lifecycleSource: LifecycleSource? = null,
@@ -99,8 +99,8 @@ fun ProductDetailScreen(
 @Composable
 private fun TopBar(
     cartCount: Int,
-    onOpenDemo: () -> Unit,
-    onOpenInspector: () -> Unit,
+    onOpenDemo: (() -> Unit)?,
+    onOpenInspector: (() -> Unit)?,
 ) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
         Box(
@@ -114,8 +114,8 @@ private fun TopBar(
             )
         }
         Row {
-            TextButton(onClick = onOpenDemo) { Text("Demo data", color = Violet) }
-            TextButton(onClick = onOpenInspector) { Text("Inspector", color = Violet) }
+            onOpenDemo?.let { TextButton(onClick = it) { Text("Demo data", color = Violet) } }
+            onOpenInspector?.let { TextButton(onClick = it) { Text("Inspector", color = Violet) } }
         }
     }
 }
@@ -153,7 +153,12 @@ private fun ProductHero(product: Product) {
 private fun StatusCard(state: CartUiState) {
     val accent = phaseColor(state.phase)
     Row(
-        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(accent.copy(alpha = 0.12f)).padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(accent.copy(alpha = 0.12f))
+                .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {

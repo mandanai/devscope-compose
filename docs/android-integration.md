@@ -84,7 +84,7 @@ Create the inspector, `JourneyPersistence` and `JourneyExportController` from `s
 Two supported strategies:
 
 1. **Keep core, stay disabled (recommended with adapters).** `JourneyScopeConfig.debugOnly(isDebuggable = false)` leaves the SDK off. The disabled path is a flag check per call.
-2. **Swap in `devscope-core-noop`** for apps that only use the core facade: `debugImplementation(core)`, `releaseImplementation(core-noop)`. Adapters depend on the real core, so they cannot coexist with the no-op artifact (Gradle fails with a capability conflict, by design). See [release](release.md).
+2. **Swap in the `-noop` twins** (`core`, `flow`, `navigation`, `network-ktor`, `database-sqldelight`): `debugImplementation(real)`, `releaseImplementation(noop)`. The app code stays identical; see `samples/androidApp` and [release](release.md).
 
 ## ProGuard / R8
 

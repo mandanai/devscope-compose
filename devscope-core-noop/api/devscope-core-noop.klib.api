@@ -39,6 +39,30 @@ final enum class dev.chayaphon.journeyscope.core.model/TraceStatus : kotlin/Enum
     final fun values(): kotlin/Array<dev.chayaphon.journeyscope.core.model/TraceStatus> // dev.chayaphon.journeyscope.core.model/TraceStatus.values|values#static(){}[0]
 }
 
+final enum class dev.chayaphon.journeyscope.core.network/NetworkFailure : kotlin/Enum<dev.chayaphon.journeyscope.core.network/NetworkFailure> { // dev.chayaphon.journeyscope.core.network/NetworkFailure|null[0]
+    enum entry CANCELLED // dev.chayaphon.journeyscope.core.network/NetworkFailure.CANCELLED|null[0]
+    enum entry CONNECTION // dev.chayaphon.journeyscope.core.network/NetworkFailure.CONNECTION|null[0]
+    enum entry DNS // dev.chayaphon.journeyscope.core.network/NetworkFailure.DNS|null[0]
+    enum entry HTTP_CLIENT_ERROR // dev.chayaphon.journeyscope.core.network/NetworkFailure.HTTP_CLIENT_ERROR|null[0]
+    enum entry HTTP_SERVER_ERROR // dev.chayaphon.journeyscope.core.network/NetworkFailure.HTTP_SERVER_ERROR|null[0]
+    enum entry PROTOCOL // dev.chayaphon.journeyscope.core.network/NetworkFailure.PROTOCOL|null[0]
+    enum entry TIMEOUT // dev.chayaphon.journeyscope.core.network/NetworkFailure.TIMEOUT|null[0]
+    enum entry TLS // dev.chayaphon.journeyscope.core.network/NetworkFailure.TLS|null[0]
+    enum entry UNKNOWN // dev.chayaphon.journeyscope.core.network/NetworkFailure.UNKNOWN|null[0]
+
+    final val entries // dev.chayaphon.journeyscope.core.network/NetworkFailure.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.chayaphon.journeyscope.core.network/NetworkFailure> // dev.chayaphon.journeyscope.core.network/NetworkFailure.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): dev.chayaphon.journeyscope.core.network/NetworkFailure // dev.chayaphon.journeyscope.core.network/NetworkFailure.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.chayaphon.journeyscope.core.network/NetworkFailure> // dev.chayaphon.journeyscope.core.network/NetworkFailure.values|values#static(){}[0]
+}
+
+abstract fun interface dev.chayaphon.journeyscope.core.network/BusinessResponseValidator { // dev.chayaphon.journeyscope.core.network/BusinessResponseValidator|null[0]
+    abstract fun inspect(dev.chayaphon.journeyscope.core.network/NetworkRequestInfo, dev.chayaphon.journeyscope.core.network/NetworkResponseInfo): dev.chayaphon.journeyscope.core.network/BusinessResult? // dev.chayaphon.journeyscope.core.network/BusinessResponseValidator.inspect|inspect(dev.chayaphon.journeyscope.core.network.NetworkRequestInfo;dev.chayaphon.journeyscope.core.network.NetworkResponseInfo){}[0]
+}
+
+abstract interface dev.chayaphon.journeyscope.core.recorder/JourneyRecorder // dev.chayaphon.journeyscope.core.recorder/JourneyRecorder|null[0]
+
 final class dev.chayaphon.journeyscope.core.model/DiagnosticMetadata { // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata|null[0]
     constructor <init>(kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.core.model/MetadataValue> = ..., kotlin/Boolean = ...) // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.<init>|<init>(kotlin.collections.Map<kotlin.String,dev.chayaphon.journeyscope.core.model.MetadataValue>;kotlin.Boolean){}[0]
 
@@ -69,6 +93,102 @@ final class dev.chayaphon.journeyscope.core.model/DiagnosticMetadata { // dev.ch
         final val Empty // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Companion.Empty|{}Empty[0]
             final fun <get-Empty>(): dev.chayaphon.journeyscope.core.model/DiagnosticMetadata // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Companion.Empty.<get-Empty>|<get-Empty>(){}[0]
     }
+}
+
+final class dev.chayaphon.journeyscope.core.network/BodyCapture { // dev.chayaphon.journeyscope.core.network/BodyCapture|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin.collections/Set<kotlin/String> = ...) // dev.chayaphon.journeyscope.core.network/BodyCapture.<init>|<init>(kotlin.Int;kotlin.collections.Set<kotlin.String>){}[0]
+
+    final val contentTypes // dev.chayaphon.journeyscope.core.network/BodyCapture.contentTypes|{}contentTypes[0]
+        final fun <get-contentTypes>(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.core.network/BodyCapture.contentTypes.<get-contentTypes>|<get-contentTypes>(){}[0]
+    final val maxBytes // dev.chayaphon.journeyscope.core.network/BodyCapture.maxBytes|{}maxBytes[0]
+        final fun <get-maxBytes>(): kotlin/Int // dev.chayaphon.journeyscope.core.network/BodyCapture.maxBytes.<get-maxBytes>|<get-maxBytes>(){}[0]
+
+    final fun accepts(kotlin/String?): kotlin/Boolean // dev.chayaphon.journeyscope.core.network/BodyCapture.accepts|accepts(kotlin.String?){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.core.network/BodyCapture.Companion|null[0]
+        final const val DEFAULT_MAX_BYTES // dev.chayaphon.journeyscope.core.network/BodyCapture.Companion.DEFAULT_MAX_BYTES|{}DEFAULT_MAX_BYTES[0]
+            final fun <get-DEFAULT_MAX_BYTES>(): kotlin/Int // dev.chayaphon.journeyscope.core.network/BodyCapture.Companion.DEFAULT_MAX_BYTES.<get-DEFAULT_MAX_BYTES>|<get-DEFAULT_MAX_BYTES>(){}[0]
+        final const val HARD_LIMIT_BYTES // dev.chayaphon.journeyscope.core.network/BodyCapture.Companion.HARD_LIMIT_BYTES|{}HARD_LIMIT_BYTES[0]
+            final fun <get-HARD_LIMIT_BYTES>(): kotlin/Int // dev.chayaphon.journeyscope.core.network/BodyCapture.Companion.HARD_LIMIT_BYTES.<get-HARD_LIMIT_BYTES>|<get-HARD_LIMIT_BYTES>(){}[0]
+    }
+}
+
+final class dev.chayaphon.journeyscope.core.network/BusinessResult { // dev.chayaphon.journeyscope.core.network/BusinessResult|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.core.network/BusinessStatus, kotlin/String? = ...) // dev.chayaphon.journeyscope.core.network/BusinessResult.<init>|<init>(dev.chayaphon.journeyscope.core.network.BusinessStatus;kotlin.String?){}[0]
+
+    final val code // dev.chayaphon.journeyscope.core.network/BusinessResult.code|{}code[0]
+        final fun <get-code>(): kotlin/String? // dev.chayaphon.journeyscope.core.network/BusinessResult.code.<get-code>|<get-code>(){}[0]
+    final val status // dev.chayaphon.journeyscope.core.network/BusinessResult.status|{}status[0]
+        final fun <get-status>(): dev.chayaphon.journeyscope.core.network/BusinessStatus // dev.chayaphon.journeyscope.core.network/BusinessResult.status.<get-status>|<get-status>(){}[0]
+
+    final fun component1(): dev.chayaphon.journeyscope.core.network/BusinessStatus // dev.chayaphon.journeyscope.core.network/BusinessResult.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // dev.chayaphon.journeyscope.core.network/BusinessResult.component2|component2(){}[0]
+    final fun copy(dev.chayaphon.journeyscope.core.network/BusinessStatus = ..., kotlin/String? = ...): dev.chayaphon.journeyscope.core.network/BusinessResult // dev.chayaphon.journeyscope.core.network/BusinessResult.copy|copy(dev.chayaphon.journeyscope.core.network.BusinessStatus;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.network/BusinessResult.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.network/BusinessResult.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.network/BusinessResult.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.core.network/NetworkRequestInfo { // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>> = ..., kotlin/Long? = ...) // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.<init>|<init>(kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.collections.List<kotlin.String>>;kotlin.Long?){}[0]
+
+    final val contentLength // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.contentLength|{}contentLength[0]
+        final fun <get-contentLength>(): kotlin/Long? // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.contentLength.<get-contentLength>|<get-contentLength>(){}[0]
+    final val headers // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.headers|{}headers[0]
+        final fun <get-headers>(): kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>> // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.headers.<get-headers>|<get-headers>(){}[0]
+    final val method // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.method|{}method[0]
+        final fun <get-method>(): kotlin/String // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.method.<get-method>|<get-method>(){}[0]
+    final val url // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.url|{}url[0]
+        final fun <get-url>(): kotlin/String // dev.chayaphon.journeyscope.core.network/NetworkRequestInfo.url.<get-url>|<get-url>(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.core.network/NetworkResponseInfo { // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo|null[0]
+    constructor <init>(kotlin/Int, kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>> = ..., kotlin/Long? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/String? = ...) // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.<init>|<init>(kotlin.Int;kotlin.collections.Map<kotlin.String,kotlin.collections.List<kotlin.String>>;kotlin.Long?;kotlin.String?;kotlin.Boolean;kotlin.String?){}[0]
+
+    final val bodySnippet // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.bodySnippet|{}bodySnippet[0]
+        final fun <get-bodySnippet>(): kotlin/String? // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.bodySnippet.<get-bodySnippet>|<get-bodySnippet>(){}[0]
+    final val contentLength // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.contentLength|{}contentLength[0]
+        final fun <get-contentLength>(): kotlin/Long? // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.contentLength.<get-contentLength>|<get-contentLength>(){}[0]
+    final val headers // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.headers|{}headers[0]
+        final fun <get-headers>(): kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>> // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.headers.<get-headers>|<get-headers>(){}[0]
+    final val protocol // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.protocol|{}protocol[0]
+        final fun <get-protocol>(): kotlin/String? // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.protocol.<get-protocol>|<get-protocol>(){}[0]
+    final val statusCode // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.statusCode|{}statusCode[0]
+        final fun <get-statusCode>(): kotlin/Int // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.statusCode.<get-statusCode>|<get-statusCode>(){}[0]
+    final val streaming // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.streaming|{}streaming[0]
+        final fun <get-streaming>(): kotlin/Boolean // dev.chayaphon.journeyscope.core.network/NetworkResponseInfo.streaming.<get-streaming>|<get-streaming>(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.core.network/NetworkTraceConfig { // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.core.network/NoJourneyPolicy = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin/Boolean = ..., dev.chayaphon.journeyscope.core.network/PropagationConfig? = ..., dev.chayaphon.journeyscope.core.network/BusinessResponseValidator? = ..., dev.chayaphon.journeyscope.core.network/BodyCapture? = ...) // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.<init>|<init>(dev.chayaphon.journeyscope.core.network.NoJourneyPolicy;kotlin.collections.Set<kotlin.String>;kotlin.collections.Set<kotlin.String>;kotlin.Boolean;dev.chayaphon.journeyscope.core.network.PropagationConfig?;dev.chayaphon.journeyscope.core.network.BusinessResponseValidator?;dev.chayaphon.journeyscope.core.network.BodyCapture?){}[0]
+
+    final val bodyCapture // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.bodyCapture|{}bodyCapture[0]
+        final fun <get-bodyCapture>(): dev.chayaphon.journeyscope.core.network/BodyCapture? // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.bodyCapture.<get-bodyCapture>|<get-bodyCapture>(){}[0]
+    final val businessValidator // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.businessValidator|{}businessValidator[0]
+        final fun <get-businessValidator>(): dev.chayaphon.journeyscope.core.network/BusinessResponseValidator? // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.businessValidator.<get-businessValidator>|<get-businessValidator>(){}[0]
+    final val captureSizes // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.captureSizes|{}captureSizes[0]
+        final fun <get-captureSizes>(): kotlin/Boolean // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.captureSizes.<get-captureSizes>|<get-captureSizes>(){}[0]
+    final val headerAllowlist // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.headerAllowlist|{}headerAllowlist[0]
+        final fun <get-headerAllowlist>(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.headerAllowlist.<get-headerAllowlist>|<get-headerAllowlist>(){}[0]
+    final val noJourneyPolicy // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.noJourneyPolicy|{}noJourneyPolicy[0]
+        final fun <get-noJourneyPolicy>(): dev.chayaphon.journeyscope.core.network/NoJourneyPolicy // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.noJourneyPolicy.<get-noJourneyPolicy>|<get-noJourneyPolicy>(){}[0]
+    final val propagation // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.propagation|{}propagation[0]
+        final fun <get-propagation>(): dev.chayaphon.journeyscope.core.network/PropagationConfig? // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.propagation.<get-propagation>|<get-propagation>(){}[0]
+    final val queryParamAllowlist // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.queryParamAllowlist|{}queryParamAllowlist[0]
+        final fun <get-queryParamAllowlist>(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.core.network/NetworkTraceConfig.queryParamAllowlist.<get-queryParamAllowlist>|<get-queryParamAllowlist>(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.core.network/PropagationConfig { // dev.chayaphon.journeyscope.core.network/PropagationConfig|null[0]
+    constructor <init>(kotlin.collections/Set<kotlin/String>, kotlin/String = ..., kotlin/String = ..., kotlin/Boolean = ...) // dev.chayaphon.journeyscope.core.network/PropagationConfig.<init>|<init>(kotlin.collections.Set<kotlin.String>;kotlin.String;kotlin.String;kotlin.Boolean){}[0]
+
+    final val requireHttps // dev.chayaphon.journeyscope.core.network/PropagationConfig.requireHttps|{}requireHttps[0]
+        final fun <get-requireHttps>(): kotlin/Boolean // dev.chayaphon.journeyscope.core.network/PropagationConfig.requireHttps.<get-requireHttps>|<get-requireHttps>(){}[0]
+    final val spanIdHeader // dev.chayaphon.journeyscope.core.network/PropagationConfig.spanIdHeader|{}spanIdHeader[0]
+        final fun <get-spanIdHeader>(): kotlin/String // dev.chayaphon.journeyscope.core.network/PropagationConfig.spanIdHeader.<get-spanIdHeader>|<get-spanIdHeader>(){}[0]
+    final val traceIdHeader // dev.chayaphon.journeyscope.core.network/PropagationConfig.traceIdHeader|{}traceIdHeader[0]
+        final fun <get-traceIdHeader>(): kotlin/String // dev.chayaphon.journeyscope.core.network/PropagationConfig.traceIdHeader.<get-traceIdHeader>|<get-traceIdHeader>(){}[0]
+    final val trustedHosts // dev.chayaphon.journeyscope.core.network/PropagationConfig.trustedHosts|{}trustedHosts[0]
+        final fun <get-trustedHosts>(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.core.network/PropagationConfig.trustedHosts.<get-trustedHosts>|<get-trustedHosts>(){}[0]
 }
 
 final class dev.chayaphon.journeyscope.core/Journey { // dev.chayaphon.journeyscope.core/Journey|null[0]
@@ -186,6 +306,18 @@ final class dev.chayaphon.journeyscope.core/SpanHandle { // dev.chayaphon.journe
     final fun recordEvent(kotlin/String, dev.chayaphon.journeyscope.core.model/SpanCategory = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...) // dev.chayaphon.journeyscope.core/SpanHandle.recordEvent|recordEvent(kotlin.String;dev.chayaphon.journeyscope.core.model.SpanCategory;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
 }
 
+final class dev.chayaphon.journeyscope.core/TraceContext : kotlin.coroutines/AbstractCoroutineContextElement { // dev.chayaphon.journeyscope.core/TraceContext|null[0]
+    final val journey // dev.chayaphon.journeyscope.core/TraceContext.journey|{}journey[0]
+        final fun <get-journey>(): dev.chayaphon.journeyscope.core/Journey // dev.chayaphon.journeyscope.core/TraceContext.journey.<get-journey>|<get-journey>(){}[0]
+    final val spanId // dev.chayaphon.journeyscope.core/TraceContext.spanId|{}spanId[0]
+        final fun <get-spanId>(): dev.chayaphon.journeyscope.core.model/SpanId? // dev.chayaphon.journeyscope.core/TraceContext.spanId.<get-spanId>|<get-spanId>(){}[0]
+
+    final fun beginChildSpan(kotlin/String, dev.chayaphon.journeyscope.core.model/SpanCategory = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...): dev.chayaphon.journeyscope.core/SpanHandle // dev.chayaphon.journeyscope.core/TraceContext.beginChildSpan|beginChildSpan(kotlin.String;dev.chayaphon.journeyscope.core.model.SpanCategory;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
+    final fun recordEvent(kotlin/String, dev.chayaphon.journeyscope.core.model/SpanCategory = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...) // dev.chayaphon.journeyscope.core/TraceContext.recordEvent|recordEvent(kotlin.String;dev.chayaphon.journeyscope.core.model.SpanCategory;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
+
+    final object Key : kotlin.coroutines/CoroutineContext.Key<dev.chayaphon.journeyscope.core/TraceContext> // dev.chayaphon.journeyscope.core/TraceContext.Key|null[0]
+}
+
 final value class dev.chayaphon.journeyscope.core.model/EventId { // dev.chayaphon.journeyscope.core.model/EventId|null[0]
     constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.core.model/EventId.<init>|<init>(kotlin.String){}[0]
 
@@ -259,6 +391,26 @@ final value class dev.chayaphon.journeyscope.core.model/TraceId { // dev.chayaph
     final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/TraceId.toString|toString(){}[0]
 }
 
+final value class dev.chayaphon.journeyscope.core.network/BusinessStatus { // dev.chayaphon.journeyscope.core.network/BusinessStatus|null[0]
+    constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.core.network/BusinessStatus.<init>|<init>(kotlin.String){}[0]
+
+    final val name // dev.chayaphon.journeyscope.core.network/BusinessStatus.name|{}name[0]
+        final fun <get-name>(): kotlin/String // dev.chayaphon.journeyscope.core.network/BusinessStatus.name.<get-name>|<get-name>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.network/BusinessStatus.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.network/BusinessStatus.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.network/BusinessStatus.toString|toString(){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.core.network/BusinessStatus.Companion|null[0]
+        final val FAILURE // dev.chayaphon.journeyscope.core.network/BusinessStatus.Companion.FAILURE|{}FAILURE[0]
+            final fun <get-FAILURE>(): dev.chayaphon.journeyscope.core.network/BusinessStatus // dev.chayaphon.journeyscope.core.network/BusinessStatus.Companion.FAILURE.<get-FAILURE>|<get-FAILURE>(){}[0]
+        final val SESSION_EXPIRED // dev.chayaphon.journeyscope.core.network/BusinessStatus.Companion.SESSION_EXPIRED|{}SESSION_EXPIRED[0]
+            final fun <get-SESSION_EXPIRED>(): dev.chayaphon.journeyscope.core.network/BusinessStatus // dev.chayaphon.journeyscope.core.network/BusinessStatus.Companion.SESSION_EXPIRED.<get-SESSION_EXPIRED>|<get-SESSION_EXPIRED>(){}[0]
+        final val SUCCESS // dev.chayaphon.journeyscope.core.network/BusinessStatus.Companion.SUCCESS|{}SUCCESS[0]
+            final fun <get-SUCCESS>(): dev.chayaphon.journeyscope.core.network/BusinessStatus // dev.chayaphon.journeyscope.core.network/BusinessStatus.Companion.SUCCESS.<get-SUCCESS>|<get-SUCCESS>(){}[0]
+    }
+}
+
 sealed class dev.chayaphon.journeyscope.core.model/MetadataValue { // dev.chayaphon.journeyscope.core.model/MetadataValue|null[0]
     final class Decimal : dev.chayaphon.journeyscope.core.model/MetadataValue { // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal|null[0]
         constructor <init>(kotlin/Double) // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.<init>|<init>(kotlin.Double){}[0]
@@ -313,6 +465,27 @@ sealed class dev.chayaphon.journeyscope.core.model/MetadataValue { // dev.chayap
     }
 }
 
+sealed class dev.chayaphon.journeyscope.core.network/NoJourneyPolicy { // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy|null[0]
+    final class Explicit : dev.chayaphon.journeyscope.core.network/NoJourneyPolicy { // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Explicit|null[0]
+        constructor <init>(dev.chayaphon.journeyscope.core/Journey) // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Explicit.<init>|<init>(dev.chayaphon.journeyscope.core.Journey){}[0]
+
+        final val journey // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Explicit.journey|{}journey[0]
+            final fun <get-journey>(): dev.chayaphon.journeyscope.core/Journey // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Explicit.journey.<get-journey>|<get-journey>(){}[0]
+    }
+
+    final object Ignore : dev.chayaphon.journeyscope.core.network/NoJourneyPolicy { // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Ignore|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Ignore.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Ignore.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Ignore.toString|toString(){}[0]
+    }
+
+    final object Standalone : dev.chayaphon.journeyscope.core.network/NoJourneyPolicy { // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Standalone|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Standalone.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Standalone.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.network/NoJourneyPolicy.Standalone.toString|toString(){}[0]
+    }
+}
+
 final object dev.chayaphon.journeyscope.core/JourneyScope { // dev.chayaphon.journeyscope.core/JourneyScope|null[0]
     final const val VERSION // dev.chayaphon.journeyscope.core/JourneyScope.VERSION|{}VERSION[0]
         final fun <get-VERSION>(): kotlin/String // dev.chayaphon.journeyscope.core/JourneyScope.VERSION.<get-VERSION>|<get-VERSION>(){}[0]
@@ -322,7 +495,7 @@ final object dev.chayaphon.journeyscope.core/JourneyScope { // dev.chayaphon.jou
     final val tracer // dev.chayaphon.journeyscope.core/JourneyScope.tracer|{}tracer[0]
         final fun <get-tracer>(): dev.chayaphon.journeyscope.core/JourneyTracer // dev.chayaphon.journeyscope.core/JourneyScope.tracer.<get-tracer>|<get-tracer>(){}[0]
 
-    final fun configure(dev.chayaphon.journeyscope.core/JourneyScopeConfig): dev.chayaphon.journeyscope.core/JourneyTracer // dev.chayaphon.journeyscope.core/JourneyScope.configure|configure(dev.chayaphon.journeyscope.core.JourneyScopeConfig){}[0]
+    final fun configure(dev.chayaphon.journeyscope.core/JourneyScopeConfig, dev.chayaphon.journeyscope.core.recorder/JourneyRecorder? = ...): dev.chayaphon.journeyscope.core/JourneyTracer // dev.chayaphon.journeyscope.core/JourneyScope.configure|configure(dev.chayaphon.journeyscope.core.JourneyScopeConfig;dev.chayaphon.journeyscope.core.recorder.JourneyRecorder?){}[0]
     final fun disable() // dev.chayaphon.journeyscope.core/JourneyScope.disable|disable(){}[0]
     final fun interruptActive(kotlin/String) // dev.chayaphon.journeyscope.core/JourneyScope.interruptActive|interruptActive(kotlin.String){}[0]
     final fun startJourney(kotlin/String, dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...): dev.chayaphon.journeyscope.core/Journey // dev.chayaphon.journeyscope.core/JourneyScope.startJourney|startJourney(kotlin.String;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
@@ -330,3 +503,4 @@ final object dev.chayaphon.journeyscope.core/JourneyScope { // dev.chayaphon.jou
 }
 
 final fun dev.chayaphon.journeyscope.core.model/diagnosticMetadata(kotlin/Function1<dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Builder, kotlin/Unit>): dev.chayaphon.journeyscope.core.model/DiagnosticMetadata // dev.chayaphon.journeyscope.core.model/diagnosticMetadata|diagnosticMetadata(kotlin.Function1<dev.chayaphon.journeyscope.core.model.DiagnosticMetadata.Builder,kotlin.Unit>){}[0]
+final suspend fun dev.chayaphon.journeyscope.core/currentTraceContext(): dev.chayaphon.journeyscope.core/TraceContext? // dev.chayaphon.journeyscope.core/currentTraceContext|currentTraceContext(){}[0]

@@ -1,5 +1,6 @@
 package dev.chayaphon.journeyscope.sample.android
 
+import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         installSampleDatabase(this)
-        setContent { App(lifecycleSource = asLifecycleSource()) }
+        val debuggable = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+        setContent { App(isDebuggable = debuggable, lifecycleSource = asLifecycleSource()) }
     }
 }

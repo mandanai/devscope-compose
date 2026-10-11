@@ -11,14 +11,16 @@ JourneyScope ships disabled. The goal is that release builds neither collect dat
 2. `devscope-android`, `devscope-ui-compose`, `devscope-export` → `debugImplementation` (Android) or a debug-only framework variant (iOS). Only `devscope-core` and adapters stay in release.
 3. With the real core and `enabled = false` the disabled path is a flag check per call. That is the recommended strategy when adapters are used.
 
-## Core-only apps: swap in the noop
+## Same code, noop in release
+
+Swap each module the app code touches for its `-noop` twin (`core`, `flow`, `navigation`, `network-ktor`, `database-sqldelight`):
 
 ```kotlin
 debugImplementation("dev.chayaphon.journeyscope:devscope-core:<version>")
 releaseImplementation("dev.chayaphon.journeyscope:devscope-core-noop:<version>")
 ```
 
-Only valid when **no adapter** is used from main sources. Adapters depend on the real core; Gradle fails with a capability conflict if both are present. The noop `configure(config)` takes no recorder, so recorder/persistence wiring must live in debug code.
+Working example: `samples/androidApp`. The twins keep app behaviour (flows still collect, transactions still run) and only drop tracing. They publish the real module's Gradle capability, so Gradle fails if both are on one classpath. Keep `devscope-ui-compose`, `devscope-export` and `devscope-diagnostics` out of shared code: they have no twin. The core twin's `configure(config, recorder)` ignores both arguments, so recorder/persistence wiring must live in debug code.
 
 ## iOS
 

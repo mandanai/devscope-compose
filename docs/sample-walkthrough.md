@@ -26,7 +26,7 @@ The product and cart screens collect `CartUiState` through `observeWithJourneySc
 | Kind | What | Where |
 | --- | --- | --- |
 | Recorded at runtime | Every trace produced by the Add to Cart button; all durations come from the monotonic clock | Inspector |
-| Simulated operations | The API call is a `MockEngine` with a `delay()` (`LatencyProfile`), tagged `simulated=true`; the database is a real SQLDelight database (`CartDatabase`, installed by `SampleGraph.configure(driver)` from the Android/iOS entry points) and its durations are measured | `shop/data` |
+| Simulated operations | The API call is a `MockEngine` with a `delay()` (`LatencyProfile`), tagged `simulated=true`; the database is a real SQLDelight database (`CartDatabase`, installed by `SampleApp.install(...)` from the Android/iOS entry points) and its durations are measured | `shop/data` |
 | Deterministic fixtures | `DemoJourneys` static traces, opened with **Demo data** | `devscope-ui-compose` |
 
 ## Render checkpoint
@@ -39,7 +39,7 @@ The UI runs `LaunchedEffect(renderToken) { withFrameNanos { }; onCartCountRender
 `CartRejectedException` and `SimulatedNetworkException` are caught only to show a failure state, then the journey is failed. Any other throwable fails the journey and is rethrown. Cancellation is recorded as `CANCELLED` and rethrown. Failures record the exception class only; messages and stack traces stay off by default.
 
 ## Reproducing each scenario
-Open the app, pick a scenario under **Debug scenario**, tap **Add to Cart**, then open **Inspector** (a running trace shows a ticking duration).
+Open the app, pick a scenario under **Debug scenario**, tap **Add to Cart**, then open the Inspector (Android debug: tap the JourneyScope notification; iOS: the **Inspector** button). A running trace shows a ticking duration. The release build runs the same screens with the `-noop` twins, so nothing is recorded.
 
 | Scenario | Expected trace |
 | --- | --- |

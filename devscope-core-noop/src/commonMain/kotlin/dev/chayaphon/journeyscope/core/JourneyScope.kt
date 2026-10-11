@@ -1,6 +1,7 @@
 package dev.chayaphon.journeyscope.core
 
 import dev.chayaphon.journeyscope.core.model.DiagnosticMetadata
+import dev.chayaphon.journeyscope.core.recorder.JourneyRecorder
 
 /** Release-build twin of the real `JourneyScope`: same call-site API, no collection. */
 public object JourneyScope {
@@ -12,9 +13,11 @@ public object JourneyScope {
 
     public val isEnabled: Boolean get() = false
 
-    /** Ignores [config]; collection stays off in this artifact. */
-
-    public fun configure(config: JourneyScopeConfig): JourneyTracer = inert
+    /** Ignores both arguments; collection stays off in this artifact. */
+    public fun configure(
+        config: JourneyScopeConfig,
+        recorder: JourneyRecorder? = null,
+    ): JourneyTracer = inert
 
     public fun disable() {
         // Nothing is ever enabled in this artifact.
