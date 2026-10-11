@@ -99,6 +99,14 @@ JourneyScopeInspector(onClose = { showInspector = false })
 
 The full walkthrough is in [Getting started](docs/getting-started.md).
 
+## Set up with an AI agent
+
+Let your coding agent do the installation, configuration and instrumentation. Point it at the playbook and name the flow you want traced:
+
+> Set up JourneyScope in this app following https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/setup-playbook.md and trace the checkout flow.
+
+The instructions, decision rules and guardrails live in [`ai/`](ai/README.md), indexed for agents in [`llms.txt`](llms.txt). Claude Code users can copy [`skills/journeyscope`](skills/journeyscope/SKILL.md) into `.claude/skills/`.
+
 ## Modules
 
 | Module | Purpose | Android | iOS |
