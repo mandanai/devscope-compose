@@ -1,6 +1,6 @@
 # Database tracing (SQLDelight)
 
-`devscope-database-sqldelight` — `dev.journeyscope.database.sqldelight`. Android + iOS (Kotlin Multiplatform); depends on `devscope-core` and the SQLDelight runtime only.
+`devscope-database-sqldelight` — `dev.chayaphon.journeyscope.database.sqldelight`. Android + iOS (Kotlin Multiplatform); depends on `devscope-core` and the SQLDelight runtime only.
 
 ## What is captured
 Only operations you wrap with `DatabaseTracing` are recorded. There is **no** automatic capture of every SQL statement: SQLDelight's `SqlDriver` is deliberately not intercepted, because its calls are not suspending and cannot see the coroutine-context parent, so the resulting spans could not be placed under the right operation.

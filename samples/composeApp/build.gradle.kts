@@ -6,7 +6,7 @@ plugins {
 sqldelight {
     databases {
         create("CartDatabase") {
-            packageName.set("dev.journeyscope.sample.shop.db")
+            packageName.set("dev.chayaphon.journeyscope.sample.shop.db")
         }
     }
 }

@@ -7,8 +7,8 @@ Minimum SDK 26, compile SDK 37, JDK 17. Artifacts are Kotlin Multiplatform; Grad
 ```kotlin
 // app/build.gradle.kts
 dependencies {
-    implementation("dev.journeyscope:devscope-core:<version>")
-    debugImplementation("dev.journeyscope:devscope-ui-compose:<version>")
+    implementation("dev.chayaphon.journeyscope:devscope-core:<version>")
+    debugImplementation("dev.chayaphon.journeyscope:devscope-ui-compose:<version>")
 }
 ```
 
@@ -64,9 +64,9 @@ Pass `asLifecycleSource()` (from `devscope-flow`) to your root composable when y
 ## Debug-only installation
 
 ```kotlin
-debugImplementation("dev.journeyscope:devscope-ui-compose:<version>")
-debugImplementation("dev.journeyscope:devscope-export:<version>")
-implementation("dev.journeyscope:devscope-core:<version>")
+debugImplementation("dev.chayaphon.journeyscope:devscope-ui-compose:<version>")
+debugImplementation("dev.chayaphon.journeyscope:devscope-export:<version>")
+implementation("dev.chayaphon.journeyscope:devscope-core:<version>")
 ```
 
 Create the inspector, `JourneyPersistence` and `JourneyExportController` from `src/debug/` and provide an empty counterpart in `src/release/`.

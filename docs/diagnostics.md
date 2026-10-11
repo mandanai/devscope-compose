@@ -1,6 +1,6 @@
 # Diagnostics
 
-`devscope-diagnostics` — `dev.journeyscope.diagnostics`. Pure Kotlin on `devscope-core`; no Compose. The Inspector consumes it through `DiagnosticAnalyzer`.
+`devscope-diagnostics` — `dev.chayaphon.journeyscope.diagnostics`. Pure Kotlin on `devscope-core`; no Compose. The Inspector consumes it through `DiagnosticAnalyzer`.
 
 ```kotlin
 val report = DiagnosticAnalyzer(DiagnosticConfig(expectedSequences = listOf(addToCartCompletion))).analyze(trace)

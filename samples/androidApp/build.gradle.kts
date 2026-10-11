@@ -3,10 +3,10 @@ plugins {
 }
 
 android {
-    namespace = "dev.journeyscope.sample.android"
+    namespace = "dev.chayaphon.journeyscope.sample.android"
 
     defaultConfig {
-        applicationId = "dev.journeyscope.sample"
+        applicationId = "dev.chayaphon.journeyscope.sample"
     }
 }
 

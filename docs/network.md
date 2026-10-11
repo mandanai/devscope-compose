@@ -1,6 +1,6 @@
 # Network instrumentation
 
-Both adapters feed one client-neutral engine in `devscope-core` (`dev.journeyscope.core.network.NetworkTracing`), so a Ktor call and an OkHttp call produce the same NETWORK span. Install only the adapter you use; neither depends on the other, and nothing in `commonMain` or the UI module depends on OkHttp.
+Both adapters feed one client-neutral engine in `devscope-core` (`dev.chayaphon.journeyscope.core.network.NetworkTracing`), so a Ktor call and an OkHttp call produce the same NETWORK span. Install only the adapter you use; neither depends on the other, and nothing in `commonMain` or the UI module depends on OkHttp.
 
 ## Ktor (Android + iOS)
 ```kotlin

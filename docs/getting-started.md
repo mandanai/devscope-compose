@@ -7,11 +7,11 @@ The mandatory integration is two calls: configure once, then open a journey arou
 ```kotlin
 // build.gradle.kts of the module that owns the app wiring
 dependencies {
-    implementation("dev.journeyscope:devscope-core:<version>")
+    implementation("dev.chayaphon.journeyscope:devscope-core:<version>")
 }
 ```
 
-Published coordinates use group `dev.journeyscope`; see [publishing](publishing.md) for local use before a release exists.
+Published coordinates use group `dev.chayaphon.journeyscope`; see [publishing](publishing.md) for local use before a release exists.
 
 ## 2. Initialize (debug only)
 

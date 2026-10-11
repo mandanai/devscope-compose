@@ -5,48 +5,48 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <dev.journeyscope:devscope-navigation>
-final enum class dev.journeyscope.navigation/NavigationAction : kotlin/Enum<dev.journeyscope.navigation/NavigationAction> { // dev.journeyscope.navigation/NavigationAction|null[0]
-    enum entry BackStackSnapshot // dev.journeyscope.navigation/NavigationAction.BackStackSnapshot|null[0]
-    enum entry DestinationEntered // dev.journeyscope.navigation/NavigationAction.DestinationEntered|null[0]
-    enum entry DestinationExited // dev.journeyscope.navigation/NavigationAction.DestinationExited|null[0]
-    enum entry Navigate // dev.journeyscope.navigation/NavigationAction.Navigate|null[0]
-    enum entry Pop // dev.journeyscope.navigation/NavigationAction.Pop|null[0]
-    enum entry Replace // dev.journeyscope.navigation/NavigationAction.Replace|null[0]
-    enum entry StackSwitch // dev.journeyscope.navigation/NavigationAction.StackSwitch|null[0]
+// Library unique name: <dev.chayaphon.journeyscope:devscope-navigation>
+final enum class dev.chayaphon.journeyscope.navigation/NavigationAction : kotlin/Enum<dev.chayaphon.journeyscope.navigation/NavigationAction> { // dev.chayaphon.journeyscope.navigation/NavigationAction|null[0]
+    enum entry BackStackSnapshot // dev.chayaphon.journeyscope.navigation/NavigationAction.BackStackSnapshot|null[0]
+    enum entry DestinationEntered // dev.chayaphon.journeyscope.navigation/NavigationAction.DestinationEntered|null[0]
+    enum entry DestinationExited // dev.chayaphon.journeyscope.navigation/NavigationAction.DestinationExited|null[0]
+    enum entry Navigate // dev.chayaphon.journeyscope.navigation/NavigationAction.Navigate|null[0]
+    enum entry Pop // dev.chayaphon.journeyscope.navigation/NavigationAction.Pop|null[0]
+    enum entry Replace // dev.chayaphon.journeyscope.navigation/NavigationAction.Replace|null[0]
+    enum entry StackSwitch // dev.chayaphon.journeyscope.navigation/NavigationAction.StackSwitch|null[0]
 
-    final val entries // dev.journeyscope.navigation/NavigationAction.entries|#static{}entries[0]
-        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.journeyscope.navigation/NavigationAction> // dev.journeyscope.navigation/NavigationAction.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val entries // dev.chayaphon.journeyscope.navigation/NavigationAction.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.chayaphon.journeyscope.navigation/NavigationAction> // dev.chayaphon.journeyscope.navigation/NavigationAction.entries.<get-entries>|<get-entries>#static(){}[0]
 
-    final fun valueOf(kotlin/String): dev.journeyscope.navigation/NavigationAction // dev.journeyscope.navigation/NavigationAction.valueOf|valueOf#static(kotlin.String){}[0]
-    final fun values(): kotlin/Array<dev.journeyscope.navigation/NavigationAction> // dev.journeyscope.navigation/NavigationAction.values|values#static(){}[0]
+    final fun valueOf(kotlin/String): dev.chayaphon.journeyscope.navigation/NavigationAction // dev.chayaphon.journeyscope.navigation/NavigationAction.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.chayaphon.journeyscope.navigation/NavigationAction> // dev.chayaphon.journeyscope.navigation/NavigationAction.values|values#static(){}[0]
 }
 
-final class dev.journeyscope.navigation/NavigationTraceConfig { // dev.journeyscope.navigation/NavigationTraceConfig|null[0]
-    constructor <init>(kotlin/Function1<kotlin/String, kotlin/String> = ..., kotlin/Int = ..., kotlin/Function0<dev.journeyscope.core/Journey?>? = ...) // dev.journeyscope.navigation/NavigationTraceConfig.<init>|<init>(kotlin.Function1<kotlin.String,kotlin.String>;kotlin.Int;kotlin.Function0<dev.journeyscope.core.Journey?>?){}[0]
+final class dev.chayaphon.journeyscope.navigation/NavigationTraceConfig { // dev.chayaphon.journeyscope.navigation/NavigationTraceConfig|null[0]
+    constructor <init>(kotlin/Function1<kotlin/String, kotlin/String> = ..., kotlin/Int = ..., kotlin/Function0<dev.chayaphon.journeyscope.core/Journey?>? = ...) // dev.chayaphon.journeyscope.navigation/NavigationTraceConfig.<init>|<init>(kotlin.Function1<kotlin.String,kotlin.String>;kotlin.Int;kotlin.Function0<dev.chayaphon.journeyscope.core.Journey?>?){}[0]
 
-    final val journey // dev.journeyscope.navigation/NavigationTraceConfig.journey|{}journey[0]
-        final fun <get-journey>(): kotlin/Function0<dev.journeyscope.core/Journey?>? // dev.journeyscope.navigation/NavigationTraceConfig.journey.<get-journey>|<get-journey>(){}[0]
-    final val maxStackDepth // dev.journeyscope.navigation/NavigationTraceConfig.maxStackDepth|{}maxStackDepth[0]
-        final fun <get-maxStackDepth>(): kotlin/Int // dev.journeyscope.navigation/NavigationTraceConfig.maxStackDepth.<get-maxStackDepth>|<get-maxStackDepth>(){}[0]
-    final val routeRedactor // dev.journeyscope.navigation/NavigationTraceConfig.routeRedactor|{}routeRedactor[0]
-        final fun <get-routeRedactor>(): kotlin/Function1<kotlin/String, kotlin/String> // dev.journeyscope.navigation/NavigationTraceConfig.routeRedactor.<get-routeRedactor>|<get-routeRedactor>(){}[0]
+    final val journey // dev.chayaphon.journeyscope.navigation/NavigationTraceConfig.journey|{}journey[0]
+        final fun <get-journey>(): kotlin/Function0<dev.chayaphon.journeyscope.core/Journey?>? // dev.chayaphon.journeyscope.navigation/NavigationTraceConfig.journey.<get-journey>|<get-journey>(){}[0]
+    final val maxStackDepth // dev.chayaphon.journeyscope.navigation/NavigationTraceConfig.maxStackDepth|{}maxStackDepth[0]
+        final fun <get-maxStackDepth>(): kotlin/Int // dev.chayaphon.journeyscope.navigation/NavigationTraceConfig.maxStackDepth.<get-maxStackDepth>|<get-maxStackDepth>(){}[0]
+    final val routeRedactor // dev.chayaphon.journeyscope.navigation/NavigationTraceConfig.routeRedactor|{}routeRedactor[0]
+        final fun <get-routeRedactor>(): kotlin/Function1<kotlin/String, kotlin/String> // dev.chayaphon.journeyscope.navigation/NavigationTraceConfig.routeRedactor.<get-routeRedactor>|<get-routeRedactor>(){}[0]
 }
 
-final class dev.journeyscope.navigation/NavigationTracer { // dev.journeyscope.navigation/NavigationTracer|null[0]
-    constructor <init>(dev.journeyscope.navigation/NavigationTraceConfig = ...) // dev.journeyscope.navigation/NavigationTracer.<init>|<init>(dev.journeyscope.navigation.NavigationTraceConfig){}[0]
+final class dev.chayaphon.journeyscope.navigation/NavigationTracer { // dev.chayaphon.journeyscope.navigation/NavigationTracer|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.navigation/NavigationTraceConfig = ...) // dev.chayaphon.journeyscope.navigation/NavigationTracer.<init>|<init>(dev.chayaphon.journeyscope.navigation.NavigationTraceConfig){}[0]
 
-    final fun destinationEntered(kotlin/String, kotlin.collections/List<kotlin/String>, dev.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.journeyscope.navigation/NavigationTracer.destinationEntered|destinationEntered(kotlin.String;kotlin.collections.List<kotlin.String>;dev.journeyscope.core.Journey?){}[0]
-    final fun destinationExited(kotlin/String, kotlin.collections/List<kotlin/String>, dev.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.journeyscope.navigation/NavigationTracer.destinationExited|destinationExited(kotlin.String;kotlin.collections.List<kotlin.String>;dev.journeyscope.core.Journey?){}[0]
-    final fun markCompleted(kotlin/String, dev.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.journeyscope.navigation/NavigationTracer.markCompleted|markCompleted(kotlin.String;dev.journeyscope.core.Journey?){}[0]
-    final fun navigate(kotlin/String?, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin.collections/List<kotlin/String>, dev.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.journeyscope.navigation/NavigationTracer.navigate|navigate(kotlin.String?;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.collections.List<kotlin.String>;dev.journeyscope.core.Journey?){}[0]
-    final fun pop(kotlin/String?, kotlin/String?, kotlin.collections/List<kotlin/String>, kotlin.collections/List<kotlin/String>, dev.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.journeyscope.navigation/NavigationTracer.pop|pop(kotlin.String?;kotlin.String?;kotlin.collections.List<kotlin.String>;kotlin.collections.List<kotlin.String>;dev.journeyscope.core.Journey?){}[0]
-    final fun replace(kotlin/String?, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin.collections/List<kotlin/String>, dev.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.journeyscope.navigation/NavigationTracer.replace|replace(kotlin.String?;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.collections.List<kotlin.String>;dev.journeyscope.core.Journey?){}[0]
-    final fun snapshot(kotlin.collections/List<kotlin/String>, dev.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.journeyscope.navigation/NavigationTracer.snapshot|snapshot(kotlin.collections.List<kotlin.String>;dev.journeyscope.core.Journey?){}[0]
-    final fun switchStack(kotlin/String, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin.collections/List<kotlin/String>, dev.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.journeyscope.navigation/NavigationTracer.switchStack|switchStack(kotlin.String;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.collections.List<kotlin.String>;dev.journeyscope.core.Journey?){}[0]
+    final fun destinationEntered(kotlin/String, kotlin.collections/List<kotlin/String>, dev.chayaphon.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.chayaphon.journeyscope.navigation/NavigationTracer.destinationEntered|destinationEntered(kotlin.String;kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.core.Journey?){}[0]
+    final fun destinationExited(kotlin/String, kotlin.collections/List<kotlin/String>, dev.chayaphon.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.chayaphon.journeyscope.navigation/NavigationTracer.destinationExited|destinationExited(kotlin.String;kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.core.Journey?){}[0]
+    final fun markCompleted(kotlin/String, dev.chayaphon.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.chayaphon.journeyscope.navigation/NavigationTracer.markCompleted|markCompleted(kotlin.String;dev.chayaphon.journeyscope.core.Journey?){}[0]
+    final fun navigate(kotlin/String?, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin.collections/List<kotlin/String>, dev.chayaphon.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.chayaphon.journeyscope.navigation/NavigationTracer.navigate|navigate(kotlin.String?;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.core.Journey?){}[0]
+    final fun pop(kotlin/String?, kotlin/String?, kotlin.collections/List<kotlin/String>, kotlin.collections/List<kotlin/String>, dev.chayaphon.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.chayaphon.journeyscope.navigation/NavigationTracer.pop|pop(kotlin.String?;kotlin.String?;kotlin.collections.List<kotlin.String>;kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.core.Journey?){}[0]
+    final fun replace(kotlin/String?, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin.collections/List<kotlin/String>, dev.chayaphon.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.chayaphon.journeyscope.navigation/NavigationTracer.replace|replace(kotlin.String?;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.core.Journey?){}[0]
+    final fun snapshot(kotlin.collections/List<kotlin/String>, dev.chayaphon.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.chayaphon.journeyscope.navigation/NavigationTracer.snapshot|snapshot(kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.core.Journey?){}[0]
+    final fun switchStack(kotlin/String, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin.collections/List<kotlin/String>, dev.chayaphon.journeyscope.core/Journey? = ...): kotlin/Boolean // dev.chayaphon.journeyscope.navigation/NavigationTracer.switchStack|switchStack(kotlin.String;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.core.Journey?){}[0]
 }
 
-final object dev.journeyscope.navigation/RouteRedactor { // dev.journeyscope.navigation/RouteRedactor|null[0]
-    final val Default // dev.journeyscope.navigation/RouteRedactor.Default|{}Default[0]
-        final fun <get-Default>(): kotlin/Function1<kotlin/String, kotlin/String> // dev.journeyscope.navigation/RouteRedactor.Default.<get-Default>|<get-Default>(){}[0]
+final object dev.chayaphon.journeyscope.navigation/RouteRedactor { // dev.chayaphon.journeyscope.navigation/RouteRedactor|null[0]
+    final val Default // dev.chayaphon.journeyscope.navigation/RouteRedactor.Default|{}Default[0]
+        final fun <get-Default>(): kotlin/Function1<kotlin/String, kotlin/String> // dev.chayaphon.journeyscope.navigation/RouteRedactor.Default.<get-Default>|<get-Default>(){}[0]
 }

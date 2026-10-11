@@ -81,7 +81,7 @@ jobs:
         run: |
           set -e
           for m in core flow navigation network-ktor network-okhttp database-sqldelight diagnostics export ui-compose; do
-            dir="$HOME/.m2/repository/dev/journeyscope/devscope-$m"
+            dir="$HOME/.m2/repository/dev/chayaphon/journeyscope/devscope-$m"
             test -d "$dir" || { echo "missing $dir"; exit 1; }
             ls "$dir"/*/*.pom "$dir"/*/*.module >/dev/null
           done

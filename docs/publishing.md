@@ -1,6 +1,6 @@
 # Publishing
 
-Modules published (group `dev.journeyscope`, shared version from `VERSION_NAME` in `gradle.properties`):
+Modules published (group `dev.chayaphon.journeyscope`, shared version from `VERSION_NAME` in `gradle.properties`):
 `devscope-core`, `devscope-core-noop`, `devscope-ui-compose`, `devscope-network-ktor`, `devscope-network-okhttp` (Android only), `devscope-flow`, `devscope-navigation`, `devscope-database-sqldelight`, `devscope-diagnostics`, `devscope-export`.
 
 Each KMP module publishes a root module plus `-android`, `-iosarm64` and `-iossimulatorarm64` variants with Gradle module metadata, a sources jar and a javadoc jar.
@@ -10,11 +10,11 @@ Each KMP module publishes a root module plus `-android`, `-iosarm64` and `-iossi
 ```bash
 ./gradlew publishToMavenLocal
 ```
-Artifacts land in `~/.m2/repository/dev/journeyscope/`. In a consumer project:
+Artifacts land in `~/.m2/repository/dev/chayaphon/journeyscope/`. In a consumer project:
 
 ```kotlin
 repositories { mavenLocal(); mavenCentral(); google() }
-dependencies { implementation("dev.journeyscope:devscope-core:0.1.0-SNAPSHOT") }
+dependencies { implementation("dev.chayaphon.journeyscope:devscope-core:0.1.0-SNAPSHOT") }
 ```
 
 ## Remote publishing (not enabled)
@@ -27,7 +27,7 @@ Without them the build can only publish to Maven Local. CI runs a local dry run 
 
 ## Before the first release (TODO)
 - Confirm the repository URL, developer id/name/email and security contact in `gradle.properties` (current values are placeholders).
-- Register the `dev.journeyscope` namespace on Maven Central and create the signing key.
+- Register the `dev.chayaphon.journeyscope` namespace on Maven Central and create the signing key.
 - Replace `-SNAPSHOT` with a release version and update `CHANGELOG.md`.
 - Run `./gradlew spotlessCheck detekt checkKotlinAbi` and refresh API baselines (`updateKotlinAbi`) only for intentional API changes.
 

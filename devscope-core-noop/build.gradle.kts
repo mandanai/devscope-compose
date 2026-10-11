@@ -13,10 +13,10 @@ val sharedCoreSources =
 
 val syncSharedCore =
     tasks.register<Sync>("syncSharedCoreSources") {
-        from(project(":devscope-core").layout.projectDirectory.dir("src/commonMain/kotlin/dev/journeyscope/core")) {
+        from(project(":devscope-core").layout.projectDirectory.dir("src/commonMain/kotlin/dev/chayaphon/journeyscope/core")) {
             include(sharedCoreSources)
         }
-        into(layout.buildDirectory.dir("generated/sharedCore/dev/journeyscope/core"))
+        into(layout.buildDirectory.dir("generated/sharedCore/dev/chayaphon/journeyscope/core"))
     }
 
 kotlin {

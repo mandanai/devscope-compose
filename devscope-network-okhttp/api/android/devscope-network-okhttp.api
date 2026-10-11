@@ -1,13 +1,13 @@
-public final class dev/journeyscope/network/okhttp/JourneyScopeInterceptor : okhttp3/Interceptor {
+public final class dev/chayaphon/journeyscope/network/okhttp/JourneyScopeInterceptor : okhttp3/Interceptor {
 	public fun <init> ()V
-	public fun <init> (Ldev/journeyscope/core/network/NetworkTraceConfig;)V
-	public fun <init> (Ldev/journeyscope/core/network/NetworkTracing;)V
-	public synthetic fun <init> (Ldev/journeyscope/core/network/NetworkTracing;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ldev/chayaphon/journeyscope/core/network/NetworkTraceConfig;)V
+	public fun <init> (Ldev/chayaphon/journeyscope/core/network/NetworkTracing;)V
+	public synthetic fun <init> (Ldev/chayaphon/journeyscope/core/network/NetworkTracing;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun intercept (Lokhttp3/Interceptor$Chain;)Lokhttp3/Response;
 }
 
-public final class dev/journeyscope/network/okhttp/JourneyScopeInterceptorKt {
-	public static final fun journeyContext (Lokhttp3/Request$Builder;Ldev/journeyscope/core/TraceContext;)Lokhttp3/Request$Builder;
+public final class dev/chayaphon/journeyscope/network/okhttp/JourneyScopeInterceptorKt {
+	public static final fun journeyContext (Lokhttp3/Request$Builder;Ldev/chayaphon/journeyscope/core/TraceContext;)Lokhttp3/Request$Builder;
 	public static final fun tagWithCurrentJourney (Lokhttp3/Request$Builder;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

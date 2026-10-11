@@ -62,7 +62,7 @@ Acyclic: `core` at the root; `diagnostics`, `export`, `flow`, `navigation`, `net
 
 ## Local publication
 ```bash
-./gradlew publishToMavenLocal      # artifacts in ~/.m2/repository/dev/journeyscope
+./gradlew publishToMavenLocal      # artifacts in ~/.m2/repository/dev/chayaphon/journeyscope
 ```
 Details and the pre-release checklist: [publishing.md](publishing.md).
 

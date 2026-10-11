@@ -8,7 +8,7 @@ internal val Project.libs: VersionCatalog
 
 internal fun VersionCatalog.version(alias: String): String = findVersion(alias).get().requiredVersion
 
-internal fun Project.androidNamespace(prefix: String = "dev.journeyscope"): String =
+internal fun Project.androidNamespace(prefix: String = "dev.chayaphon.journeyscope"): String =
     "$prefix." + path.removePrefix(":")
         .replace("devscope-", "")
         .split(':', '-')

@@ -5,48 +5,48 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <dev.journeyscope:devscope-database-sqldelight>
-final enum class dev.journeyscope.database.sqldelight/DatabaseOperation : kotlin/Enum<dev.journeyscope.database.sqldelight/DatabaseOperation> { // dev.journeyscope.database.sqldelight/DatabaseOperation|null[0]
-    enum entry Delete // dev.journeyscope.database.sqldelight/DatabaseOperation.Delete|null[0]
-    enum entry Insert // dev.journeyscope.database.sqldelight/DatabaseOperation.Insert|null[0]
-    enum entry Query // dev.journeyscope.database.sqldelight/DatabaseOperation.Query|null[0]
-    enum entry Transaction // dev.journeyscope.database.sqldelight/DatabaseOperation.Transaction|null[0]
-    enum entry Update // dev.journeyscope.database.sqldelight/DatabaseOperation.Update|null[0]
+// Library unique name: <dev.chayaphon.journeyscope:devscope-database-sqldelight>
+final enum class dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation : kotlin/Enum<dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation> { // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation|null[0]
+    enum entry Delete // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.Delete|null[0]
+    enum entry Insert // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.Insert|null[0]
+    enum entry Query // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.Query|null[0]
+    enum entry Transaction // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.Transaction|null[0]
+    enum entry Update // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.Update|null[0]
 
-    final val entries // dev.journeyscope.database.sqldelight/DatabaseOperation.entries|#static{}entries[0]
-        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.journeyscope.database.sqldelight/DatabaseOperation> // dev.journeyscope.database.sqldelight/DatabaseOperation.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val entries // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation> // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.entries.<get-entries>|<get-entries>#static(){}[0]
 
-    final fun valueOf(kotlin/String): dev.journeyscope.database.sqldelight/DatabaseOperation // dev.journeyscope.database.sqldelight/DatabaseOperation.valueOf|valueOf#static(kotlin.String){}[0]
-    final fun values(): kotlin/Array<dev.journeyscope.database.sqldelight/DatabaseOperation> // dev.journeyscope.database.sqldelight/DatabaseOperation.values|values#static(){}[0]
+    final fun valueOf(kotlin/String): dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation> // dev.chayaphon.journeyscope.database.sqldelight/DatabaseOperation.values|values#static(){}[0]
 }
 
-final class <#A: kotlin/Any?> dev.journeyscope.database.sqldelight/TracedTransactionScope { // dev.journeyscope.database.sqldelight/TracedTransactionScope|null[0]
-    final val transactionId // dev.journeyscope.database.sqldelight/TracedTransactionScope.transactionId|{}transactionId[0]
-        final fun <get-transactionId>(): kotlin/String // dev.journeyscope.database.sqldelight/TracedTransactionScope.transactionId.<get-transactionId>|<get-transactionId>(){}[0]
+final class <#A: kotlin/Any?> dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope { // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope|null[0]
+    final val transactionId // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope.transactionId|{}transactionId[0]
+        final fun <get-transactionId>(): kotlin/String // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope.transactionId.<get-transactionId>|<get-transactionId>(){}[0]
 
-    final fun <#A1: kotlin/Any?> delete(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.journeyscope.database.sqldelight/TracedTransactionScope.delete|delete(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
-    final fun <#A1: kotlin/Any?> insert(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.journeyscope.database.sqldelight/TracedTransactionScope.insert|insert(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
-    final fun <#A1: kotlin/Any?> query(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.journeyscope.database.sqldelight/TracedTransactionScope.query|query(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
-    final fun <#A1: kotlin/Any?> transaction(kotlin/String, kotlin/Function1<dev.journeyscope.database.sqldelight/TracedTransactionScope<#A1>, #A1>): #A1 // dev.journeyscope.database.sqldelight/TracedTransactionScope.transaction|transaction(kotlin.String;kotlin.Function1<dev.journeyscope.database.sqldelight.TracedTransactionScope<0:0>,0:0>){0§<kotlin.Any?>}[0]
-    final fun <#A1: kotlin/Any?> update(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.journeyscope.database.sqldelight/TracedTransactionScope.update|update(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
-    final fun rollback(#A): kotlin/Nothing // dev.journeyscope.database.sqldelight/TracedTransactionScope.rollback|rollback(1:0){}[0]
+    final fun <#A1: kotlin/Any?> delete(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope.delete|delete(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> insert(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope.insert|insert(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> query(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope.query|query(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> transaction(kotlin/String, kotlin/Function1<dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope<#A1>, #A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope.transaction|transaction(kotlin.String;kotlin.Function1<dev.chayaphon.journeyscope.database.sqldelight.TracedTransactionScope<0:0>,0:0>){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> update(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope.update|update(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+    final fun rollback(#A): kotlin/Nothing // dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope.rollback|rollback(1:0){}[0]
 }
 
-final class dev.journeyscope.database.sqldelight/DatabaseTraceConfig { // dev.journeyscope.database.sqldelight/DatabaseTraceConfig|null[0]
-    constructor <init>(kotlin/Boolean = ..., kotlin/Function0<kotlin/String> = ...) // dev.journeyscope.database.sqldelight/DatabaseTraceConfig.<init>|<init>(kotlin.Boolean;kotlin.Function0<kotlin.String>){}[0]
+final class dev.chayaphon.journeyscope.database.sqldelight/DatabaseTraceConfig { // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTraceConfig|null[0]
+    constructor <init>(kotlin/Boolean = ..., kotlin/Function0<kotlin/String> = ...) // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTraceConfig.<init>|<init>(kotlin.Boolean;kotlin.Function0<kotlin.String>){}[0]
 
-    final val captureRowCounts // dev.journeyscope.database.sqldelight/DatabaseTraceConfig.captureRowCounts|{}captureRowCounts[0]
-        final fun <get-captureRowCounts>(): kotlin/Boolean // dev.journeyscope.database.sqldelight/DatabaseTraceConfig.captureRowCounts.<get-captureRowCounts>|<get-captureRowCounts>(){}[0]
-    final val transactionIdGenerator // dev.journeyscope.database.sqldelight/DatabaseTraceConfig.transactionIdGenerator|{}transactionIdGenerator[0]
-        final fun <get-transactionIdGenerator>(): kotlin/Function0<kotlin/String> // dev.journeyscope.database.sqldelight/DatabaseTraceConfig.transactionIdGenerator.<get-transactionIdGenerator>|<get-transactionIdGenerator>(){}[0]
+    final val captureRowCounts // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTraceConfig.captureRowCounts|{}captureRowCounts[0]
+        final fun <get-captureRowCounts>(): kotlin/Boolean // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTraceConfig.captureRowCounts.<get-captureRowCounts>|<get-captureRowCounts>(){}[0]
+    final val transactionIdGenerator // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTraceConfig.transactionIdGenerator|{}transactionIdGenerator[0]
+        final fun <get-transactionIdGenerator>(): kotlin/Function0<kotlin/String> // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTraceConfig.transactionIdGenerator.<get-transactionIdGenerator>|<get-transactionIdGenerator>(){}[0]
 }
 
-final class dev.journeyscope.database.sqldelight/DatabaseTracing { // dev.journeyscope.database.sqldelight/DatabaseTracing|null[0]
-    constructor <init>(dev.journeyscope.database.sqldelight/DatabaseTraceConfig = ...) // dev.journeyscope.database.sqldelight/DatabaseTracing.<init>|<init>(dev.journeyscope.database.sqldelight.DatabaseTraceConfig){}[0]
+final class dev.chayaphon.journeyscope.database.sqldelight/DatabaseTracing { // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTracing|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.database.sqldelight/DatabaseTraceConfig = ...) // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTracing.<init>|<init>(dev.chayaphon.journeyscope.database.sqldelight.DatabaseTraceConfig){}[0]
 
-    final suspend fun <#A1: kotlin/Any?> delete(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.journeyscope.database.sqldelight/DatabaseTracing.delete|delete(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
-    final suspend fun <#A1: kotlin/Any?> insert(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.journeyscope.database.sqldelight/DatabaseTracing.insert|insert(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
-    final suspend fun <#A1: kotlin/Any?> query(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.journeyscope.database.sqldelight/DatabaseTracing.query|query(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
-    final suspend fun <#A1: kotlin/Any?> transaction(app.cash.sqldelight/Transacter, kotlin/String, kotlin/Boolean = ..., kotlin/Function1<dev.journeyscope.database.sqldelight/TracedTransactionScope<#A1>, #A1>): #A1 // dev.journeyscope.database.sqldelight/DatabaseTracing.transaction|transaction(app.cash.sqldelight.Transacter;kotlin.String;kotlin.Boolean;kotlin.Function1<dev.journeyscope.database.sqldelight.TracedTransactionScope<0:0>,0:0>){0§<kotlin.Any?>}[0]
-    final suspend fun <#A1: kotlin/Any?> update(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.journeyscope.database.sqldelight/DatabaseTracing.update|update(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+    final suspend fun <#A1: kotlin/Any?> delete(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTracing.delete|delete(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+    final suspend fun <#A1: kotlin/Any?> insert(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTracing.insert|insert(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+    final suspend fun <#A1: kotlin/Any?> query(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTracing.query|query(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+    final suspend fun <#A1: kotlin/Any?> transaction(app.cash.sqldelight/Transacter, kotlin/String, kotlin/Boolean = ..., kotlin/Function1<dev.chayaphon.journeyscope.database.sqldelight/TracedTransactionScope<#A1>, #A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTracing.transaction|transaction(app.cash.sqldelight.Transacter;kotlin.String;kotlin.Boolean;kotlin.Function1<dev.chayaphon.journeyscope.database.sqldelight.TracedTransactionScope<0:0>,0:0>){0§<kotlin.Any?>}[0]
+    final suspend fun <#A1: kotlin/Any?> update(kotlin/String, kotlin/Function1<#A1, kotlin/Long>? = ..., kotlin/Function0<#A1>): #A1 // dev.chayaphon.journeyscope.database.sqldelight/DatabaseTracing.update|update(kotlin.String;kotlin.Function1<0:0,kotlin.Long>?;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
 }

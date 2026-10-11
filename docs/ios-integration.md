@@ -9,9 +9,9 @@ JourneyScope is consumed from a Kotlin Multiplatform module and surfaced to the 
 ```kotlin
 kotlin {
     sourceSets.commonMain.dependencies {
-        implementation("dev.journeyscope:devscope-core:<version>")
-        implementation("dev.journeyscope:devscope-ui-compose:<version>")
-        implementation("dev.journeyscope:devscope-export:<version>")
+        implementation("dev.chayaphon.journeyscope:devscope-core:<version>")
+        implementation("dev.chayaphon.journeyscope:devscope-ui-compose:<version>")
+        implementation("dev.chayaphon.journeyscope:devscope-export:<version>")
     }
     listOf(iosArm64(), iosSimulatorArm64()).forEach {
         it.binaries.framework { baseName = "ComposeApp"; isStatic = true }
