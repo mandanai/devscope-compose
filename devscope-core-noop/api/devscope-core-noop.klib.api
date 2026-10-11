@@ -1,0 +1,332 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <dev.chayaphon.journeyscope:devscope-core-noop>
+final enum class dev.chayaphon.journeyscope.core.model/SpanStatus : kotlin/Enum<dev.chayaphon.journeyscope.core.model/SpanStatus> { // dev.chayaphon.journeyscope.core.model/SpanStatus|null[0]
+    enum entry CANCELLED // dev.chayaphon.journeyscope.core.model/SpanStatus.CANCELLED|null[0]
+    enum entry FAILED // dev.chayaphon.journeyscope.core.model/SpanStatus.FAILED|null[0]
+    enum entry INTERRUPTED // dev.chayaphon.journeyscope.core.model/SpanStatus.INTERRUPTED|null[0]
+    enum entry OK // dev.chayaphon.journeyscope.core.model/SpanStatus.OK|null[0]
+    enum entry RUNNING // dev.chayaphon.journeyscope.core.model/SpanStatus.RUNNING|null[0]
+
+    final val entries // dev.chayaphon.journeyscope.core.model/SpanStatus.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.chayaphon.journeyscope.core.model/SpanStatus> // dev.chayaphon.journeyscope.core.model/SpanStatus.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val isFinished // dev.chayaphon.journeyscope.core.model/SpanStatus.isFinished|{}isFinished[0]
+        final fun <get-isFinished>(): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/SpanStatus.isFinished.<get-isFinished>|<get-isFinished>(){}[0]
+
+    final fun valueOf(kotlin/String): dev.chayaphon.journeyscope.core.model/SpanStatus // dev.chayaphon.journeyscope.core.model/SpanStatus.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.chayaphon.journeyscope.core.model/SpanStatus> // dev.chayaphon.journeyscope.core.model/SpanStatus.values|values#static(){}[0]
+}
+
+final enum class dev.chayaphon.journeyscope.core.model/TraceStatus : kotlin/Enum<dev.chayaphon.journeyscope.core.model/TraceStatus> { // dev.chayaphon.journeyscope.core.model/TraceStatus|null[0]
+    enum entry CANCELLED // dev.chayaphon.journeyscope.core.model/TraceStatus.CANCELLED|null[0]
+    enum entry COMPLETED // dev.chayaphon.journeyscope.core.model/TraceStatus.COMPLETED|null[0]
+    enum entry CREATED // dev.chayaphon.journeyscope.core.model/TraceStatus.CREATED|null[0]
+    enum entry FAILED // dev.chayaphon.journeyscope.core.model/TraceStatus.FAILED|null[0]
+    enum entry INTERRUPTED // dev.chayaphon.journeyscope.core.model/TraceStatus.INTERRUPTED|null[0]
+    enum entry RUNNING // dev.chayaphon.journeyscope.core.model/TraceStatus.RUNNING|null[0]
+
+    final val entries // dev.chayaphon.journeyscope.core.model/TraceStatus.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.chayaphon.journeyscope.core.model/TraceStatus> // dev.chayaphon.journeyscope.core.model/TraceStatus.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val isTerminal // dev.chayaphon.journeyscope.core.model/TraceStatus.isTerminal|{}isTerminal[0]
+        final fun <get-isTerminal>(): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/TraceStatus.isTerminal.<get-isTerminal>|<get-isTerminal>(){}[0]
+
+    final fun valueOf(kotlin/String): dev.chayaphon.journeyscope.core.model/TraceStatus // dev.chayaphon.journeyscope.core.model/TraceStatus.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.chayaphon.journeyscope.core.model/TraceStatus> // dev.chayaphon.journeyscope.core.model/TraceStatus.values|values#static(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.core.model/DiagnosticMetadata { // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata|null[0]
+    constructor <init>(kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.core.model/MetadataValue> = ..., kotlin/Boolean = ...) // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.<init>|<init>(kotlin.collections.Map<kotlin.String,dev.chayaphon.journeyscope.core.model.MetadataValue>;kotlin.Boolean){}[0]
+
+    final val entries // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.entries|{}entries[0]
+        final fun <get-entries>(): kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.core.model/MetadataValue> // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.entries.<get-entries>|<get-entries>(){}[0]
+    final val isEmpty // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.isEmpty|{}isEmpty[0]
+        final fun <get-isEmpty>(): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.isEmpty.<get-isEmpty>|<get-isEmpty>(){}[0]
+    final val truncated // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.truncated|{}truncated[0]
+        final fun <get-truncated>(): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.truncated.<get-truncated>|<get-truncated>(){}[0]
+
+    final fun component1(): kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.core.model/MetadataValue> // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.component1|component1(){}[0]
+    final fun component2(): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.component2|component2(){}[0]
+    final fun copy(kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.core.model/MetadataValue> = ..., kotlin/Boolean = ...): dev.chayaphon.journeyscope.core.model/DiagnosticMetadata // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.copy|copy(kotlin.collections.Map<kotlin.String,dev.chayaphon.journeyscope.core.model.MetadataValue>;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.equals|equals(kotlin.Any?){}[0]
+    final fun get(kotlin/String): dev.chayaphon.journeyscope.core.model/MetadataValue? // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.get|get(kotlin.String){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.toString|toString(){}[0]
+
+    final class Builder { // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Builder|null[0]
+        final fun put(kotlin/String, kotlin/Boolean) // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Builder.put|put(kotlin.String;kotlin.Boolean){}[0]
+        final fun put(kotlin/String, kotlin/Double) // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Builder.put|put(kotlin.String;kotlin.Double){}[0]
+        final fun put(kotlin/String, kotlin/Int) // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Builder.put|put(kotlin.String;kotlin.Int){}[0]
+        final fun put(kotlin/String, kotlin/Long) // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Builder.put|put(kotlin.String;kotlin.Long){}[0]
+        final fun put(kotlin/String, kotlin/String) // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Builder.put|put(kotlin.String;kotlin.String){}[0]
+    }
+
+    final object Companion { // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Companion|null[0]
+        final val Empty // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Companion.Empty|{}Empty[0]
+            final fun <get-Empty>(): dev.chayaphon.journeyscope.core.model/DiagnosticMetadata // dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Companion.Empty.<get-Empty>|<get-Empty>(){}[0]
+    }
+}
+
+final class dev.chayaphon.journeyscope.core/Journey { // dev.chayaphon.journeyscope.core/Journey|null[0]
+    final val id // dev.chayaphon.journeyscope.core/Journey.id|{}id[0]
+        final fun <get-id>(): dev.chayaphon.journeyscope.core.model/TraceId // dev.chayaphon.journeyscope.core/Journey.id.<get-id>|<get-id>(){}[0]
+    final val isRecording // dev.chayaphon.journeyscope.core/Journey.isRecording|{}isRecording[0]
+        final fun <get-isRecording>(): kotlin/Boolean // dev.chayaphon.journeyscope.core/Journey.isRecording.<get-isRecording>|<get-isRecording>(){}[0]
+    final val name // dev.chayaphon.journeyscope.core/Journey.name|{}name[0]
+        final fun <get-name>(): kotlin/String // dev.chayaphon.journeyscope.core/Journey.name.<get-name>|<get-name>(){}[0]
+    final val status // dev.chayaphon.journeyscope.core/Journey.status|{}status[0]
+        final fun <get-status>(): dev.chayaphon.journeyscope.core.model/TraceStatus // dev.chayaphon.journeyscope.core/Journey.status.<get-status>|<get-status>(){}[0]
+
+    final fun <#A1: kotlin/Any?> trace(kotlin/String, dev.chayaphon.journeyscope.core.model/SpanCategory = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ..., dev.chayaphon.journeyscope.core/SpanHandle? = ..., kotlin/Function1<dev.chayaphon.journeyscope.core/SpanHandle, #A1>): #A1 // dev.chayaphon.journeyscope.core/Journey.trace|trace(kotlin.String;dev.chayaphon.journeyscope.core.model.SpanCategory;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata;dev.chayaphon.journeyscope.core.SpanHandle?;kotlin.Function1<dev.chayaphon.journeyscope.core.SpanHandle,0:0>){0§<kotlin.Any?>}[0]
+    final fun beginSpan(kotlin/String, dev.chayaphon.journeyscope.core.model/SpanCategory = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ..., dev.chayaphon.journeyscope.core/SpanHandle? = ...): dev.chayaphon.journeyscope.core/SpanHandle // dev.chayaphon.journeyscope.core/Journey.beginSpan|beginSpan(kotlin.String;dev.chayaphon.journeyscope.core.model.SpanCategory;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata;dev.chayaphon.journeyscope.core.SpanHandle?){}[0]
+    final fun cancel(kotlin/String? = ...) // dev.chayaphon.journeyscope.core/Journey.cancel|cancel(kotlin.String?){}[0]
+    final fun context(dev.chayaphon.journeyscope.core/SpanHandle? = ...): kotlin.coroutines/CoroutineContext // dev.chayaphon.journeyscope.core/Journey.context|context(dev.chayaphon.journeyscope.core.SpanHandle?){}[0]
+    final fun fail(kotlin/Throwable) // dev.chayaphon.journeyscope.core/Journey.fail|fail(kotlin.Throwable){}[0]
+    final fun finish() // dev.chayaphon.journeyscope.core/Journey.finish|finish(){}[0]
+    final fun interrupt(kotlin/String) // dev.chayaphon.journeyscope.core/Journey.interrupt|interrupt(kotlin.String){}[0]
+    final fun recordEvent(kotlin/String, dev.chayaphon.journeyscope.core.model/SpanCategory = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ..., dev.chayaphon.journeyscope.core/SpanHandle? = ...) // dev.chayaphon.journeyscope.core/Journey.recordEvent|recordEvent(kotlin.String;dev.chayaphon.journeyscope.core.model.SpanCategory;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata;dev.chayaphon.journeyscope.core.SpanHandle?){}[0]
+    final fun start() // dev.chayaphon.journeyscope.core/Journey.start|start(){}[0]
+    final suspend fun <#A1: kotlin/Any?> traceSuspend(kotlin/String, dev.chayaphon.journeyscope.core.model/SpanCategory = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ..., kotlin.coroutines/SuspendFunction0<#A1>): #A1 // dev.chayaphon.journeyscope.core/Journey.traceSuspend|traceSuspend(kotlin.String;dev.chayaphon.journeyscope.core.model.SpanCategory;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata;kotlin.coroutines.SuspendFunction0<0:0>){0§<kotlin.Any?>}[0]
+}
+
+final class dev.chayaphon.journeyscope.core/JourneyScopeConfig { // dev.chayaphon.journeyscope.core/JourneyScopeConfig|null[0]
+    constructor <init>(kotlin/Boolean = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin.time/Duration = ..., kotlin/Double = ..., kotlin/Int = ..., dev.chayaphon.journeyscope.core/RedactionPolicy = ..., kotlin/Int? = ...) // dev.chayaphon.journeyscope.core/JourneyScopeConfig.<init>|<init>(kotlin.Boolean;kotlin.Int;kotlin.Int;kotlin.Boolean;kotlin.Boolean;kotlin.time.Duration;kotlin.Double;kotlin.Int;dev.chayaphon.journeyscope.core.RedactionPolicy;kotlin.Int?){}[0]
+
+    final val captureStackTraces // dev.chayaphon.journeyscope.core/JourneyScopeConfig.captureStackTraces|{}captureStackTraces[0]
+        final fun <get-captureStackTraces>(): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScopeConfig.captureStackTraces.<get-captureStackTraces>|<get-captureStackTraces>(){}[0]
+    final val enabled // dev.chayaphon.journeyscope.core/JourneyScopeConfig.enabled|{}enabled[0]
+        final fun <get-enabled>(): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScopeConfig.enabled.<get-enabled>|<get-enabled>(){}[0]
+    final val maxEventsPerSecond // dev.chayaphon.journeyscope.core/JourneyScopeConfig.maxEventsPerSecond|{}maxEventsPerSecond[0]
+        final fun <get-maxEventsPerSecond>(): kotlin/Int? // dev.chayaphon.journeyscope.core/JourneyScopeConfig.maxEventsPerSecond.<get-maxEventsPerSecond>|<get-maxEventsPerSecond>(){}[0]
+    final val maxEventsPerTrace // dev.chayaphon.journeyscope.core/JourneyScopeConfig.maxEventsPerTrace|{}maxEventsPerTrace[0]
+        final fun <get-maxEventsPerTrace>(): kotlin/Int // dev.chayaphon.journeyscope.core/JourneyScopeConfig.maxEventsPerTrace.<get-maxEventsPerTrace>|<get-maxEventsPerTrace>(){}[0]
+    final val maxMetadataSize // dev.chayaphon.journeyscope.core/JourneyScopeConfig.maxMetadataSize|{}maxMetadataSize[0]
+        final fun <get-maxMetadataSize>(): kotlin/Int // dev.chayaphon.journeyscope.core/JourneyScopeConfig.maxMetadataSize.<get-maxMetadataSize>|<get-maxMetadataSize>(){}[0]
+    final val maxTraces // dev.chayaphon.journeyscope.core/JourneyScopeConfig.maxTraces|{}maxTraces[0]
+        final fun <get-maxTraces>(): kotlin/Int // dev.chayaphon.journeyscope.core/JourneyScopeConfig.maxTraces.<get-maxTraces>|<get-maxTraces>(){}[0]
+    final val recordFailures // dev.chayaphon.journeyscope.core/JourneyScopeConfig.recordFailures|{}recordFailures[0]
+        final fun <get-recordFailures>(): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScopeConfig.recordFailures.<get-recordFailures>|<get-recordFailures>(){}[0]
+    final val redactionPolicy // dev.chayaphon.journeyscope.core/JourneyScopeConfig.redactionPolicy|{}redactionPolicy[0]
+        final fun <get-redactionPolicy>(): dev.chayaphon.journeyscope.core/RedactionPolicy // dev.chayaphon.journeyscope.core/JourneyScopeConfig.redactionPolicy.<get-redactionPolicy>|<get-redactionPolicy>(){}[0]
+    final val samplingRate // dev.chayaphon.journeyscope.core/JourneyScopeConfig.samplingRate|{}samplingRate[0]
+        final fun <get-samplingRate>(): kotlin/Double // dev.chayaphon.journeyscope.core/JourneyScopeConfig.samplingRate.<get-samplingRate>|<get-samplingRate>(){}[0]
+    final val slowJourneyThreshold // dev.chayaphon.journeyscope.core/JourneyScopeConfig.slowJourneyThreshold|{}slowJourneyThreshold[0]
+        final fun <get-slowJourneyThreshold>(): kotlin.time/Duration // dev.chayaphon.journeyscope.core/JourneyScopeConfig.slowJourneyThreshold.<get-slowJourneyThreshold>|<get-slowJourneyThreshold>(){}[0]
+
+    final fun component1(): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component1|component1(){}[0]
+    final fun component10(): kotlin/Int? // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component10|component10(){}[0]
+    final fun component2(): kotlin/Int // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component3|component3(){}[0]
+    final fun component4(): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component4|component4(){}[0]
+    final fun component5(): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component5|component5(){}[0]
+    final fun component6(): kotlin.time/Duration // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component6|component6(){}[0]
+    final fun component7(): kotlin/Double // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component7|component7(){}[0]
+    final fun component8(): kotlin/Int // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component8|component8(){}[0]
+    final fun component9(): dev.chayaphon.journeyscope.core/RedactionPolicy // dev.chayaphon.journeyscope.core/JourneyScopeConfig.component9|component9(){}[0]
+    final fun copy(kotlin/Boolean = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin.time/Duration = ..., kotlin/Double = ..., kotlin/Int = ..., dev.chayaphon.journeyscope.core/RedactionPolicy = ..., kotlin/Int? = ...): dev.chayaphon.journeyscope.core/JourneyScopeConfig // dev.chayaphon.journeyscope.core/JourneyScopeConfig.copy|copy(kotlin.Boolean;kotlin.Int;kotlin.Int;kotlin.Boolean;kotlin.Boolean;kotlin.time.Duration;kotlin.Double;kotlin.Int;dev.chayaphon.journeyscope.core.RedactionPolicy;kotlin.Int?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScopeConfig.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core/JourneyScopeConfig.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core/JourneyScopeConfig.toString|toString(){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.core/JourneyScopeConfig.Companion|null[0]
+        final fun debugOnly(kotlin/Boolean): dev.chayaphon.journeyscope.core/JourneyScopeConfig // dev.chayaphon.journeyscope.core/JourneyScopeConfig.Companion.debugOnly|debugOnly(kotlin.Boolean){}[0]
+    }
+}
+
+final class dev.chayaphon.journeyscope.core/JourneyTracer { // dev.chayaphon.journeyscope.core/JourneyTracer|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.core/JourneyScopeConfig = ...) // dev.chayaphon.journeyscope.core/JourneyTracer.<init>|<init>(dev.chayaphon.journeyscope.core.JourneyScopeConfig){}[0]
+
+    final val config // dev.chayaphon.journeyscope.core/JourneyTracer.config|{}config[0]
+        final fun <get-config>(): dev.chayaphon.journeyscope.core/JourneyScopeConfig // dev.chayaphon.journeyscope.core/JourneyTracer.config.<get-config>|<get-config>(){}[0]
+
+    final fun createJourney(kotlin/String, dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...): dev.chayaphon.journeyscope.core/Journey // dev.chayaphon.journeyscope.core/JourneyTracer.createJourney|createJourney(kotlin.String;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
+    final fun interruptActive(kotlin/String) // dev.chayaphon.journeyscope.core/JourneyTracer.interruptActive|interruptActive(kotlin.String){}[0]
+    final fun startJourney(kotlin/String, dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...): dev.chayaphon.journeyscope.core/Journey // dev.chayaphon.journeyscope.core/JourneyTracer.startJourney|startJourney(kotlin.String;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
+    final suspend fun <#A1: kotlin/Any?> withJourney(kotlin/String, dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ..., kotlin.coroutines/SuspendFunction1<dev.chayaphon.journeyscope.core/Journey, #A1>): #A1 // dev.chayaphon.journeyscope.core/JourneyTracer.withJourney|withJourney(kotlin.String;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata;kotlin.coroutines.SuspendFunction1<dev.chayaphon.journeyscope.core.Journey,0:0>){0§<kotlin.Any?>}[0]
+}
+
+final class dev.chayaphon.journeyscope.core/RedactionPolicy { // dev.chayaphon.journeyscope.core/RedactionPolicy|null[0]
+    constructor <init>(kotlin.collections/Set<kotlin/String> = ..., kotlin/String = ..., kotlin/Boolean = ...) // dev.chayaphon.journeyscope.core/RedactionPolicy.<init>|<init>(kotlin.collections.Set<kotlin.String>;kotlin.String;kotlin.Boolean){}[0]
+
+    final val includeFailureMessages // dev.chayaphon.journeyscope.core/RedactionPolicy.includeFailureMessages|{}includeFailureMessages[0]
+        final fun <get-includeFailureMessages>(): kotlin/Boolean // dev.chayaphon.journeyscope.core/RedactionPolicy.includeFailureMessages.<get-includeFailureMessages>|<get-includeFailureMessages>(){}[0]
+    final val replacement // dev.chayaphon.journeyscope.core/RedactionPolicy.replacement|{}replacement[0]
+        final fun <get-replacement>(): kotlin/String // dev.chayaphon.journeyscope.core/RedactionPolicy.replacement.<get-replacement>|<get-replacement>(){}[0]
+    final val sensitiveKeyFragments // dev.chayaphon.journeyscope.core/RedactionPolicy.sensitiveKeyFragments|{}sensitiveKeyFragments[0]
+        final fun <get-sensitiveKeyFragments>(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.core/RedactionPolicy.sensitiveKeyFragments.<get-sensitiveKeyFragments>|<get-sensitiveKeyFragments>(){}[0]
+
+    final fun component1(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.core/RedactionPolicy.component1|component1(){}[0]
+    final fun component2(): kotlin/String // dev.chayaphon.journeyscope.core/RedactionPolicy.component2|component2(){}[0]
+    final fun component3(): kotlin/Boolean // dev.chayaphon.journeyscope.core/RedactionPolicy.component3|component3(){}[0]
+    final fun copy(kotlin.collections/Set<kotlin/String> = ..., kotlin/String = ..., kotlin/Boolean = ...): dev.chayaphon.journeyscope.core/RedactionPolicy // dev.chayaphon.journeyscope.core/RedactionPolicy.copy|copy(kotlin.collections.Set<kotlin.String>;kotlin.String;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core/RedactionPolicy.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core/RedactionPolicy.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core/RedactionPolicy.toString|toString(){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.core/RedactionPolicy.Companion|null[0]
+        final val DEFAULT_SENSITIVE_FRAGMENTS // dev.chayaphon.journeyscope.core/RedactionPolicy.Companion.DEFAULT_SENSITIVE_FRAGMENTS|{}DEFAULT_SENSITIVE_FRAGMENTS[0]
+            final fun <get-DEFAULT_SENSITIVE_FRAGMENTS>(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.core/RedactionPolicy.Companion.DEFAULT_SENSITIVE_FRAGMENTS.<get-DEFAULT_SENSITIVE_FRAGMENTS>|<get-DEFAULT_SENSITIVE_FRAGMENTS>(){}[0]
+        final val Default // dev.chayaphon.journeyscope.core/RedactionPolicy.Companion.Default|{}Default[0]
+            final fun <get-Default>(): dev.chayaphon.journeyscope.core/RedactionPolicy // dev.chayaphon.journeyscope.core/RedactionPolicy.Companion.Default.<get-Default>|<get-Default>(){}[0]
+    }
+}
+
+final class dev.chayaphon.journeyscope.core/SpanHandle { // dev.chayaphon.journeyscope.core/SpanHandle|null[0]
+    final val id // dev.chayaphon.journeyscope.core/SpanHandle.id|{}id[0]
+        final fun <get-id>(): dev.chayaphon.journeyscope.core.model/SpanId // dev.chayaphon.journeyscope.core/SpanHandle.id.<get-id>|<get-id>(){}[0]
+    final val isRecording // dev.chayaphon.journeyscope.core/SpanHandle.isRecording|{}isRecording[0]
+        final fun <get-isRecording>(): kotlin/Boolean // dev.chayaphon.journeyscope.core/SpanHandle.isRecording.<get-isRecording>|<get-isRecording>(){}[0]
+
+    final fun end(dev.chayaphon.journeyscope.core.model/SpanStatus = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...) // dev.chayaphon.journeyscope.core/SpanHandle.end|end(dev.chayaphon.journeyscope.core.model.SpanStatus;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
+    final fun fail(kotlin/Throwable, dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...) // dev.chayaphon.journeyscope.core/SpanHandle.fail|fail(kotlin.Throwable;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
+    final fun recordEvent(kotlin/String, dev.chayaphon.journeyscope.core.model/SpanCategory = ..., dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...) // dev.chayaphon.journeyscope.core/SpanHandle.recordEvent|recordEvent(kotlin.String;dev.chayaphon.journeyscope.core.model.SpanCategory;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
+}
+
+final value class dev.chayaphon.journeyscope.core.model/EventId { // dev.chayaphon.journeyscope.core.model/EventId|null[0]
+    constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.core.model/EventId.<init>|<init>(kotlin.String){}[0]
+
+    final val value // dev.chayaphon.journeyscope.core.model/EventId.value|{}value[0]
+        final fun <get-value>(): kotlin/String // dev.chayaphon.journeyscope.core.model/EventId.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/EventId.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/EventId.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/EventId.toString|toString(){}[0]
+}
+
+final value class dev.chayaphon.journeyscope.core.model/SpanCategory { // dev.chayaphon.journeyscope.core.model/SpanCategory|null[0]
+    constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.core.model/SpanCategory.<init>|<init>(kotlin.String){}[0]
+
+    final val name // dev.chayaphon.journeyscope.core.model/SpanCategory.name|{}name[0]
+        final fun <get-name>(): kotlin/String // dev.chayaphon.journeyscope.core.model/SpanCategory.name.<get-name>|<get-name>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/SpanCategory.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/SpanCategory.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/SpanCategory.toString|toString(){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion|null[0]
+        final val BUSINESS_VALIDATION // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.BUSINESS_VALIDATION|{}BUSINESS_VALIDATION[0]
+            final fun <get-BUSINESS_VALIDATION>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.BUSINESS_VALIDATION.<get-BUSINESS_VALIDATION>|<get-BUSINESS_VALIDATION>(){}[0]
+        final val CUSTOM // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.CUSTOM|{}CUSTOM[0]
+            final fun <get-CUSTOM>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.CUSTOM.<get-CUSTOM>|<get-CUSTOM>(){}[0]
+        final val DATABASE // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.DATABASE|{}DATABASE[0]
+            final fun <get-DATABASE>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.DATABASE.<get-DATABASE>|<get-DATABASE>(){}[0]
+        final val LIFECYCLE // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.LIFECYCLE|{}LIFECYCLE[0]
+            final fun <get-LIFECYCLE>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.LIFECYCLE.<get-LIFECYCLE>|<get-LIFECYCLE>(){}[0]
+        final val NAVIGATION // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.NAVIGATION|{}NAVIGATION[0]
+            final fun <get-NAVIGATION>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.NAVIGATION.<get-NAVIGATION>|<get-NAVIGATION>(){}[0]
+        final val NETWORK // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.NETWORK|{}NETWORK[0]
+            final fun <get-NETWORK>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.NETWORK.<get-NETWORK>|<get-NETWORK>(){}[0]
+        final val REPOSITORY // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.REPOSITORY|{}REPOSITORY[0]
+            final fun <get-REPOSITORY>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.REPOSITORY.<get-REPOSITORY>|<get-REPOSITORY>(){}[0]
+        final val STATE // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.STATE|{}STATE[0]
+            final fun <get-STATE>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.STATE.<get-STATE>|<get-STATE>(){}[0]
+        final val STATE_EMISSION // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.STATE_EMISSION|{}STATE_EMISSION[0]
+            final fun <get-STATE_EMISSION>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.STATE_EMISSION.<get-STATE_EMISSION>|<get-STATE_EMISSION>(){}[0]
+        final val UI_INTERACTION // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.UI_INTERACTION|{}UI_INTERACTION[0]
+            final fun <get-UI_INTERACTION>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.UI_INTERACTION.<get-UI_INTERACTION>|<get-UI_INTERACTION>(){}[0]
+        final val UI_RENDER // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.UI_RENDER|{}UI_RENDER[0]
+            final fun <get-UI_RENDER>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.UI_RENDER.<get-UI_RENDER>|<get-UI_RENDER>(){}[0]
+        final val USE_CASE // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.USE_CASE|{}USE_CASE[0]
+            final fun <get-USE_CASE>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.USE_CASE.<get-USE_CASE>|<get-USE_CASE>(){}[0]
+        final val VIEW_MODEL // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.VIEW_MODEL|{}VIEW_MODEL[0]
+            final fun <get-VIEW_MODEL>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.core.model/SpanCategory.Companion.VIEW_MODEL.<get-VIEW_MODEL>|<get-VIEW_MODEL>(){}[0]
+    }
+}
+
+final value class dev.chayaphon.journeyscope.core.model/SpanId { // dev.chayaphon.journeyscope.core.model/SpanId|null[0]
+    constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.core.model/SpanId.<init>|<init>(kotlin.String){}[0]
+
+    final val value // dev.chayaphon.journeyscope.core.model/SpanId.value|{}value[0]
+        final fun <get-value>(): kotlin/String // dev.chayaphon.journeyscope.core.model/SpanId.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/SpanId.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/SpanId.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/SpanId.toString|toString(){}[0]
+}
+
+final value class dev.chayaphon.journeyscope.core.model/TraceId { // dev.chayaphon.journeyscope.core.model/TraceId|null[0]
+    constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.core.model/TraceId.<init>|<init>(kotlin.String){}[0]
+
+    final val value // dev.chayaphon.journeyscope.core.model/TraceId.value|{}value[0]
+        final fun <get-value>(): kotlin/String // dev.chayaphon.journeyscope.core.model/TraceId.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/TraceId.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/TraceId.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/TraceId.toString|toString(){}[0]
+}
+
+sealed class dev.chayaphon.journeyscope.core.model/MetadataValue { // dev.chayaphon.journeyscope.core.model/MetadataValue|null[0]
+    final class Decimal : dev.chayaphon.journeyscope.core.model/MetadataValue { // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal|null[0]
+        constructor <init>(kotlin/Double) // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.<init>|<init>(kotlin.Double){}[0]
+
+        final val value // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.value|{}value[0]
+            final fun <get-value>(): kotlin/Double // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Double // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.component1|component1(){}[0]
+        final fun copy(kotlin/Double = ...): dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.copy|copy(kotlin.Double){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/MetadataValue.Decimal.toString|toString(){}[0]
+    }
+
+    final class Flag : dev.chayaphon.journeyscope.core.model/MetadataValue { // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag|null[0]
+        constructor <init>(kotlin/Boolean) // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag.<init>|<init>(kotlin.Boolean){}[0]
+
+        final val value // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag.value|{}value[0]
+            final fun <get-value>(): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag.component1|component1(){}[0]
+        final fun copy(kotlin/Boolean = ...): dev.chayaphon.journeyscope.core.model/MetadataValue.Flag // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag.copy|copy(kotlin.Boolean){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/MetadataValue.Flag.toString|toString(){}[0]
+    }
+
+    final class Integer : dev.chayaphon.journeyscope.core.model/MetadataValue { // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer|null[0]
+        constructor <init>(kotlin/Long) // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer.<init>|<init>(kotlin.Long){}[0]
+
+        final val value // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer.value|{}value[0]
+            final fun <get-value>(): kotlin/Long // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Long // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer.component1|component1(){}[0]
+        final fun copy(kotlin/Long = ...): dev.chayaphon.journeyscope.core.model/MetadataValue.Integer // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer.copy|copy(kotlin.Long){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/MetadataValue.Integer.toString|toString(){}[0]
+    }
+
+    final class Text : dev.chayaphon.journeyscope.core.model/MetadataValue { // dev.chayaphon.journeyscope.core.model/MetadataValue.Text|null[0]
+        constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.core.model/MetadataValue.Text.<init>|<init>(kotlin.String){}[0]
+
+        final val value // dev.chayaphon.journeyscope.core.model/MetadataValue.Text.value|{}value[0]
+            final fun <get-value>(): kotlin/String // dev.chayaphon.journeyscope.core.model/MetadataValue.Text.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/String // dev.chayaphon.journeyscope.core.model/MetadataValue.Text.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): dev.chayaphon.journeyscope.core.model/MetadataValue.Text // dev.chayaphon.journeyscope.core.model/MetadataValue.Text.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.core.model/MetadataValue.Text.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.core.model/MetadataValue.Text.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.core.model/MetadataValue.Text.toString|toString(){}[0]
+    }
+}
+
+final object dev.chayaphon.journeyscope.core/JourneyScope { // dev.chayaphon.journeyscope.core/JourneyScope|null[0]
+    final const val VERSION // dev.chayaphon.journeyscope.core/JourneyScope.VERSION|{}VERSION[0]
+        final fun <get-VERSION>(): kotlin/String // dev.chayaphon.journeyscope.core/JourneyScope.VERSION.<get-VERSION>|<get-VERSION>(){}[0]
+
+    final val isEnabled // dev.chayaphon.journeyscope.core/JourneyScope.isEnabled|{}isEnabled[0]
+        final fun <get-isEnabled>(): kotlin/Boolean // dev.chayaphon.journeyscope.core/JourneyScope.isEnabled.<get-isEnabled>|<get-isEnabled>(){}[0]
+    final val tracer // dev.chayaphon.journeyscope.core/JourneyScope.tracer|{}tracer[0]
+        final fun <get-tracer>(): dev.chayaphon.journeyscope.core/JourneyTracer // dev.chayaphon.journeyscope.core/JourneyScope.tracer.<get-tracer>|<get-tracer>(){}[0]
+
+    final fun configure(dev.chayaphon.journeyscope.core/JourneyScopeConfig): dev.chayaphon.journeyscope.core/JourneyTracer // dev.chayaphon.journeyscope.core/JourneyScope.configure|configure(dev.chayaphon.journeyscope.core.JourneyScopeConfig){}[0]
+    final fun disable() // dev.chayaphon.journeyscope.core/JourneyScope.disable|disable(){}[0]
+    final fun interruptActive(kotlin/String) // dev.chayaphon.journeyscope.core/JourneyScope.interruptActive|interruptActive(kotlin.String){}[0]
+    final fun startJourney(kotlin/String, dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ...): dev.chayaphon.journeyscope.core/Journey // dev.chayaphon.journeyscope.core/JourneyScope.startJourney|startJourney(kotlin.String;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata){}[0]
+    final suspend fun <#A1: kotlin/Any?> withJourney(kotlin/String, dev.chayaphon.journeyscope.core.model/DiagnosticMetadata = ..., kotlin.coroutines/SuspendFunction1<dev.chayaphon.journeyscope.core/Journey, #A1>): #A1 // dev.chayaphon.journeyscope.core/JourneyScope.withJourney|withJourney(kotlin.String;dev.chayaphon.journeyscope.core.model.DiagnosticMetadata;kotlin.coroutines.SuspendFunction1<dev.chayaphon.journeyscope.core.Journey,0:0>){0§<kotlin.Any?>}[0]
+}
+
+final fun dev.chayaphon.journeyscope.core.model/diagnosticMetadata(kotlin/Function1<dev.chayaphon.journeyscope.core.model/DiagnosticMetadata.Builder, kotlin/Unit>): dev.chayaphon.journeyscope.core.model/DiagnosticMetadata // dev.chayaphon.journeyscope.core.model/diagnosticMetadata|diagnosticMetadata(kotlin.Function1<dev.chayaphon.journeyscope.core.model.DiagnosticMetadata.Builder,kotlin.Unit>){}[0]

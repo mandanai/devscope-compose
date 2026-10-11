@@ -1,0 +1,25 @@
+package dev.chayaphon.journeyscope.core.spi
+
+import dev.chayaphon.journeyscope.core.model.JourneyTrace
+import dev.chayaphon.journeyscope.core.model.TraceId
+
+/** Sends finished traces to an external sink. */
+
+public fun interface JourneyExporter {
+    public suspend fun export(trace: JourneyTrace)
+}
+
+/** Persistence for traces. */
+
+public interface JourneyStore {
+    public suspend fun save(trace: JourneyTrace)
+
+    public suspend fun load(id: TraceId): JourneyTrace?
+
+    public suspend fun loadAll(): List<JourneyTrace>
+}
+
+/** Post-processing hook for finished traces; returning null discards the trace from further pipelines. */
+public fun interface JourneyProcessor {
+    public suspend fun process(trace: JourneyTrace): JourneyTrace?
+}

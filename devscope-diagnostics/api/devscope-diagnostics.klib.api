@@ -1,0 +1,270 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <dev.chayaphon.journeyscope:devscope-diagnostics>
+final enum class dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity : kotlin/Enum<dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity> { // dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity|null[0]
+    enum entry Error // dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity.Error|null[0]
+    enum entry Info // dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity.Info|null[0]
+    enum entry Warning // dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity.Warning|null[0]
+
+    final val entries // dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity> // dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity // dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity> // dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity.values|values#static(){}[0]
+}
+
+abstract interface dev.chayaphon.journeyscope.diagnostics/DiagnosticRule { // dev.chayaphon.journeyscope.diagnostics/DiagnosticRule|null[0]
+    abstract val id // dev.chayaphon.journeyscope.diagnostics/DiagnosticRule.id|{}id[0]
+        abstract fun <get-id>(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticRule.id.<get-id>|<get-id>(){}[0]
+
+    abstract fun evaluate(dev.chayaphon.journeyscope.diagnostics/DiagnosticContext): kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding> // dev.chayaphon.journeyscope.diagnostics/DiagnosticRule.evaluate|evaluate(dev.chayaphon.journeyscope.diagnostics.DiagnosticContext){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/CategoryTiming { // dev.chayaphon.journeyscope.diagnostics/CategoryTiming|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.core.model/SpanCategory, kotlin.time/Duration, kotlin.time/Duration, kotlin/Long) // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.<init>|<init>(dev.chayaphon.journeyscope.core.model.SpanCategory;kotlin.time.Duration;kotlin.time.Duration;kotlin.Long){}[0]
+
+    final val attributed // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.attributed|{}attributed[0]
+        final fun <get-attributed>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.attributed.<get-attributed>|<get-attributed>(){}[0]
+    final val attributedNanos // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.attributedNanos|{}attributedNanos[0]
+        final fun <get-attributedNanos>(): kotlin/Long // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.attributedNanos.<get-attributedNanos>|<get-attributedNanos>(){}[0]
+    final val busy // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.busy|{}busy[0]
+        final fun <get-busy>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.busy.<get-busy>|<get-busy>(){}[0]
+    final val category // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.category|{}category[0]
+        final fun <get-category>(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.category.<get-category>|<get-category>(){}[0]
+
+    final fun component1(): dev.chayaphon.journeyscope.core.model/SpanCategory // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.component1|component1(){}[0]
+    final fun component2(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.component2|component2(){}[0]
+    final fun component3(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.component3|component3(){}[0]
+    final fun component4(): kotlin/Long // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.component4|component4(){}[0]
+    final fun copy(dev.chayaphon.journeyscope.core.model/SpanCategory = ..., kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin/Long = ...): dev.chayaphon.journeyscope.diagnostics/CategoryTiming // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.copy|copy(dev.chayaphon.journeyscope.core.model.SpanCategory;kotlin.time.Duration;kotlin.time.Duration;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/CategoryTiming.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/DiagnosticAnalyzer { // dev.chayaphon.journeyscope.diagnostics/DiagnosticAnalyzer|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig = ..., kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/DiagnosticRule> = ...) // dev.chayaphon.journeyscope.diagnostics/DiagnosticAnalyzer.<init>|<init>(dev.chayaphon.journeyscope.diagnostics.DiagnosticConfig;kotlin.collections.List<dev.chayaphon.journeyscope.diagnostics.DiagnosticRule>){}[0]
+
+    final val config // dev.chayaphon.journeyscope.diagnostics/DiagnosticAnalyzer.config|{}config[0]
+        final fun <get-config>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig // dev.chayaphon.journeyscope.diagnostics/DiagnosticAnalyzer.config.<get-config>|<get-config>(){}[0]
+
+    final fun analyze(dev.chayaphon.journeyscope.core.model/JourneyTrace, kotlin/Long = ...): dev.chayaphon.journeyscope.diagnostics/DiagnosticReport // dev.chayaphon.journeyscope.diagnostics/DiagnosticAnalyzer.analyze|analyze(dev.chayaphon.journeyscope.core.model.JourneyTrace;kotlin.Long){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig { // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig|null[0]
+    constructor <init>(kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin.time/Duration = ..., kotlin/Double = ..., kotlin/Double = ..., kotlin/Double = ..., kotlin.collections/List<dev.chayaphon.journeyscope.core.expectation/ExpectedSequence> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity> = ..., kotlin/Int = ...) // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.<init>|<init>(kotlin.time.Duration;kotlin.time.Duration;kotlin.time.Duration;kotlin.Int;kotlin.Int;kotlin.time.Duration;kotlin.Double;kotlin.Double;kotlin.Double;kotlin.collections.List<dev.chayaphon.journeyscope.core.expectation.ExpectedSequence>;kotlin.collections.Set<kotlin.String>;kotlin.collections.Map<kotlin.String,dev.chayaphon.journeyscope.diagnostics.DiagnosticSeverity>;kotlin.Int){}[0]
+
+    final val databaseSignificantShare // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.databaseSignificantShare|{}databaseSignificantShare[0]
+        final fun <get-databaseSignificantShare>(): kotlin/Double // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.databaseSignificantShare.<get-databaseSignificantShare>|<get-databaseSignificantShare>(){}[0]
+    final val disabledRules // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.disabledRules|{}disabledRules[0]
+        final fun <get-disabledRules>(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.disabledRules.<get-disabledRules>|<get-disabledRules>(){}[0]
+    final val dominantShare // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.dominantShare|{}dominantShare[0]
+        final fun <get-dominantShare>(): kotlin/Double // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.dominantShare.<get-dominantShare>|<get-dominantShare>(){}[0]
+    final val expectedSequences // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.expectedSequences|{}expectedSequences[0]
+        final fun <get-expectedSequences>(): kotlin.collections/List<dev.chayaphon.journeyscope.core.expectation/ExpectedSequence> // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.expectedSequences.<get-expectedSequences>|<get-expectedSequences>(){}[0]
+    final val gapFractionOfJourney // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.gapFractionOfJourney|{}gapFractionOfJourney[0]
+        final fun <get-gapFractionOfJourney>(): kotlin/Double // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.gapFractionOfJourney.<get-gapFractionOfJourney>|<get-gapFractionOfJourney>(){}[0]
+    final val maxRelatedSpans // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.maxRelatedSpans|{}maxRelatedSpans[0]
+        final fun <get-maxRelatedSpans>(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.maxRelatedSpans.<get-maxRelatedSpans>|<get-maxRelatedSpans>(){}[0]
+    final val minGap // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.minGap|{}minGap[0]
+        final fun <get-minGap>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.minGap.<get-minGap>|<get-minGap>(){}[0]
+    final val repeatedRequestMinCount // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.repeatedRequestMinCount|{}repeatedRequestMinCount[0]
+        final fun <get-repeatedRequestMinCount>(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.repeatedRequestMinCount.<get-repeatedRequestMinCount>|<get-repeatedRequestMinCount>(){}[0]
+    final val sequentialDatabaseMinCount // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.sequentialDatabaseMinCount|{}sequentialDatabaseMinCount[0]
+        final fun <get-sequentialDatabaseMinCount>(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.sequentialDatabaseMinCount.<get-sequentialDatabaseMinCount>|<get-sequentialDatabaseMinCount>(){}[0]
+    final val severityOverrides // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.severityOverrides|{}severityOverrides[0]
+        final fun <get-severityOverrides>(): kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity> // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.severityOverrides.<get-severityOverrides>|<get-severityOverrides>(){}[0]
+    final val slowDatabaseOperation // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.slowDatabaseOperation|{}slowDatabaseOperation[0]
+        final fun <get-slowDatabaseOperation>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.slowDatabaseOperation.<get-slowDatabaseOperation>|<get-slowDatabaseOperation>(){}[0]
+    final val slowJourney // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.slowJourney|{}slowJourney[0]
+        final fun <get-slowJourney>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.slowJourney.<get-slowJourney>|<get-slowJourney>(){}[0]
+    final val slowNetworkSpan // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.slowNetworkSpan|{}slowNetworkSpan[0]
+        final fun <get-slowNetworkSpan>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.slowNetworkSpan.<get-slowNetworkSpan>|<get-slowNetworkSpan>(){}[0]
+
+    final fun component1(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component1|component1(){}[0]
+    final fun component10(): kotlin.collections/List<dev.chayaphon.journeyscope.core.expectation/ExpectedSequence> // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component10|component10(){}[0]
+    final fun component11(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component11|component11(){}[0]
+    final fun component12(): kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity> // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component12|component12(){}[0]
+    final fun component13(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component13|component13(){}[0]
+    final fun component2(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component2|component2(){}[0]
+    final fun component3(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component3|component3(){}[0]
+    final fun component4(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component4|component4(){}[0]
+    final fun component5(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component5|component5(){}[0]
+    final fun component6(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component6|component6(){}[0]
+    final fun component7(): kotlin/Double // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component7|component7(){}[0]
+    final fun component8(): kotlin/Double // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component8|component8(){}[0]
+    final fun component9(): kotlin/Double // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.component9|component9(){}[0]
+    final fun copy(kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin.time/Duration = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin.time/Duration = ..., kotlin/Double = ..., kotlin/Double = ..., kotlin/Double = ..., kotlin.collections/List<dev.chayaphon.journeyscope.core.expectation/ExpectedSequence> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity> = ..., kotlin/Int = ...): dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.copy|copy(kotlin.time.Duration;kotlin.time.Duration;kotlin.time.Duration;kotlin.Int;kotlin.Int;kotlin.time.Duration;kotlin.Double;kotlin.Double;kotlin.Double;kotlin.collections.List<dev.chayaphon.journeyscope.core.expectation.ExpectedSequence>;kotlin.collections.Set<kotlin.String>;kotlin.collections.Map<kotlin.String,dev.chayaphon.journeyscope.diagnostics.DiagnosticSeverity>;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/DiagnosticContext { // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.core.model/JourneyTrace, dev.chayaphon.journeyscope.diagnostics/TimingAnalysis, dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig, kotlin/Long) // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.<init>|<init>(dev.chayaphon.journeyscope.core.model.JourneyTrace;dev.chayaphon.journeyscope.diagnostics.TimingAnalysis;dev.chayaphon.journeyscope.diagnostics.DiagnosticConfig;kotlin.Long){}[0]
+
+    final val config // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.config|{}config[0]
+        final fun <get-config>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticConfig // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.config.<get-config>|<get-config>(){}[0]
+    final val nowNanos // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.nowNanos|{}nowNanos[0]
+        final fun <get-nowNanos>(): kotlin/Long // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.nowNanos.<get-nowNanos>|<get-nowNanos>(){}[0]
+    final val timing // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.timing|{}timing[0]
+        final fun <get-timing>(): dev.chayaphon.journeyscope.diagnostics/TimingAnalysis // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.timing.<get-timing>|<get-timing>(){}[0]
+    final val trace // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.trace|{}trace[0]
+        final fun <get-trace>(): dev.chayaphon.journeyscope.core.model/JourneyTrace // dev.chayaphon.journeyscope.diagnostics/DiagnosticContext.trace.<get-trace>|<get-trace>(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding { // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding|null[0]
+    constructor <init>(kotlin/String, dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity, dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin/String? = ..., kotlin.collections/List<kotlin/String> = ..., kotlin.collections/List<dev.chayaphon.journeyscope.core.model/SpanId> = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.<init>|<init>(kotlin.String;dev.chayaphon.journeyscope.diagnostics.DiagnosticSeverity;dev.chayaphon.journeyscope.diagnostics.DiagnosticCategory;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.String?;kotlin.collections.List<kotlin.String>;kotlin.collections.List<dev.chayaphon.journeyscope.core.model.SpanId>;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+    final val category // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.category|{}category[0]
+        final fun <get-category>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.category.<get-category>|<get-category>(){}[0]
+    final val evidence // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.evidence|{}evidence[0]
+        final fun <get-evidence>(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.evidence.<get-evidence>|<get-evidence>(){}[0]
+    final val inference // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.inference|{}inference[0]
+        final fun <get-inference>(): kotlin/String? // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.inference.<get-inference>|<get-inference>(){}[0]
+    final val metrics // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.metrics|{}metrics[0]
+        final fun <get-metrics>(): kotlin.collections/Map<kotlin/String, kotlin/String> // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.metrics.<get-metrics>|<get-metrics>(){}[0]
+    final val nextSteps // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.nextSteps|{}nextSteps[0]
+        final fun <get-nextSteps>(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.nextSteps.<get-nextSteps>|<get-nextSteps>(){}[0]
+    final val relatedSpanIds // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.relatedSpanIds|{}relatedSpanIds[0]
+        final fun <get-relatedSpanIds>(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/SpanId> // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.relatedSpanIds.<get-relatedSpanIds>|<get-relatedSpanIds>(){}[0]
+    final val ruleId // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.ruleId|{}ruleId[0]
+        final fun <get-ruleId>(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.ruleId.<get-ruleId>|<get-ruleId>(){}[0]
+    final val severity // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.severity|{}severity[0]
+        final fun <get-severity>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.severity.<get-severity>|<get-severity>(){}[0]
+    final val title // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.title|{}title[0]
+        final fun <get-title>(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component1|component1(){}[0]
+    final fun component2(): dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component2|component2(){}[0]
+    final fun component3(): dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component3|component3(){}[0]
+    final fun component4(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component4|component4(){}[0]
+    final fun component5(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component5|component5(){}[0]
+    final fun component6(): kotlin/String? // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component6|component6(){}[0]
+    final fun component7(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component7|component7(){}[0]
+    final fun component8(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/SpanId> // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component8|component8(){}[0]
+    final fun component9(): kotlin.collections/Map<kotlin/String, kotlin/String> // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.component9|component9(){}[0]
+    final fun copy(kotlin/String = ..., dev.chayaphon.journeyscope.diagnostics/DiagnosticSeverity = ..., dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory = ..., kotlin/String = ..., kotlin.collections/List<kotlin/String> = ..., kotlin/String? = ..., kotlin.collections/List<kotlin/String> = ..., kotlin.collections/List<dev.chayaphon.journeyscope.core.model/SpanId> = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...): dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.copy|copy(kotlin.String;dev.chayaphon.journeyscope.diagnostics.DiagnosticSeverity;dev.chayaphon.journeyscope.diagnostics.DiagnosticCategory;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.String?;kotlin.collections.List<kotlin.String>;kotlin.collections.List<dev.chayaphon.journeyscope.core.model.SpanId>;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/DiagnosticReport { // dev.chayaphon.journeyscope.diagnostics/DiagnosticReport|null[0]
+    constructor <init>(kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding>, dev.chayaphon.journeyscope.diagnostics/TimingAnalysis, kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/RuleFailure> = ...) // dev.chayaphon.journeyscope.diagnostics/DiagnosticReport.<init>|<init>(kotlin.collections.List<dev.chayaphon.journeyscope.diagnostics.DiagnosticFinding>;dev.chayaphon.journeyscope.diagnostics.TimingAnalysis;kotlin.collections.List<dev.chayaphon.journeyscope.diagnostics.RuleFailure>){}[0]
+
+    final val findings // dev.chayaphon.journeyscope.diagnostics/DiagnosticReport.findings|{}findings[0]
+        final fun <get-findings>(): kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/DiagnosticFinding> // dev.chayaphon.journeyscope.diagnostics/DiagnosticReport.findings.<get-findings>|<get-findings>(){}[0]
+    final val ruleFailures // dev.chayaphon.journeyscope.diagnostics/DiagnosticReport.ruleFailures|{}ruleFailures[0]
+        final fun <get-ruleFailures>(): kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/RuleFailure> // dev.chayaphon.journeyscope.diagnostics/DiagnosticReport.ruleFailures.<get-ruleFailures>|<get-ruleFailures>(){}[0]
+    final val timing // dev.chayaphon.journeyscope.diagnostics/DiagnosticReport.timing|{}timing[0]
+        final fun <get-timing>(): dev.chayaphon.journeyscope.diagnostics/TimingAnalysis // dev.chayaphon.journeyscope.diagnostics/DiagnosticReport.timing.<get-timing>|<get-timing>(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/RuleFailure { // dev.chayaphon.journeyscope.diagnostics/RuleFailure|null[0]
+    constructor <init>(kotlin/String, kotlin/String) // dev.chayaphon.journeyscope.diagnostics/RuleFailure.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val errorType // dev.chayaphon.journeyscope.diagnostics/RuleFailure.errorType|{}errorType[0]
+        final fun <get-errorType>(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/RuleFailure.errorType.<get-errorType>|<get-errorType>(){}[0]
+    final val ruleId // dev.chayaphon.journeyscope.diagnostics/RuleFailure.ruleId|{}ruleId[0]
+        final fun <get-ruleId>(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/RuleFailure.ruleId.<get-ruleId>|<get-ruleId>(){}[0]
+
+    final fun component1(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/RuleFailure.component1|component1(){}[0]
+    final fun component2(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/RuleFailure.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ...): dev.chayaphon.journeyscope.diagnostics/RuleFailure // dev.chayaphon.journeyscope.diagnostics/RuleFailure.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.diagnostics/RuleFailure.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/RuleFailure.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/RuleFailure.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/SpanOverlap { // dev.chayaphon.journeyscope.diagnostics/SpanOverlap|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.core.model/SpanId, dev.chayaphon.journeyscope.core.model/SpanId, kotlin.time/Duration) // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.<init>|<init>(dev.chayaphon.journeyscope.core.model.SpanId;dev.chayaphon.journeyscope.core.model.SpanId;kotlin.time.Duration){}[0]
+
+    final val first // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.first|{}first[0]
+        final fun <get-first>(): dev.chayaphon.journeyscope.core.model/SpanId // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.first.<get-first>|<get-first>(){}[0]
+    final val overlap // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.overlap|{}overlap[0]
+        final fun <get-overlap>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.overlap.<get-overlap>|<get-overlap>(){}[0]
+    final val second // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.second|{}second[0]
+        final fun <get-second>(): dev.chayaphon.journeyscope.core.model/SpanId // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.second.<get-second>|<get-second>(){}[0]
+
+    final fun component1(): dev.chayaphon.journeyscope.core.model/SpanId // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.component1|component1(){}[0]
+    final fun component2(): dev.chayaphon.journeyscope.core.model/SpanId // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.component2|component2(){}[0]
+    final fun component3(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.component3|component3(){}[0]
+    final fun copy(dev.chayaphon.journeyscope.core.model/SpanId = ..., dev.chayaphon.journeyscope.core.model/SpanId = ..., kotlin.time/Duration = ...): dev.chayaphon.journeyscope.diagnostics/SpanOverlap // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.copy|copy(dev.chayaphon.journeyscope.core.model.SpanId;dev.chayaphon.journeyscope.core.model.SpanId;kotlin.time.Duration){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/SpanOverlap.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.diagnostics/TimingAnalysis { // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis|null[0]
+    final val categories // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.categories|{}categories[0]
+        final fun <get-categories>(): kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/CategoryTiming> // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.categories.<get-categories>|<get-categories>(){}[0]
+    final val criticalPath // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.criticalPath|{}criticalPath[0]
+        final fun <get-criticalPath>(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/SpanId>? // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.criticalPath.<get-criticalPath>|<get-criticalPath>(){}[0]
+    final val isComplete // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.isComplete|{}isComplete[0]
+        final fun <get-isComplete>(): kotlin/Boolean // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.isComplete.<get-isComplete>|<get-isComplete>(){}[0]
+    final val isSequential // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.isSequential|{}isSequential[0]
+        final fun <get-isSequential>(): kotlin/Boolean // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.isSequential.<get-isSequential>|<get-isSequential>(){}[0]
+    final val maxConcurrency // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.maxConcurrency|{}maxConcurrency[0]
+        final fun <get-maxConcurrency>(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.maxConcurrency.<get-maxConcurrency>|<get-maxConcurrency>(){}[0]
+    final val operations // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.operations|{}operations[0]
+        final fun <get-operations>(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/SpanId> // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.operations.<get-operations>|<get-operations>(){}[0]
+    final val overlaps // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.overlaps|{}overlaps[0]
+        final fun <get-overlaps>(): kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/SpanOverlap> // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.overlaps.<get-overlaps>|<get-overlaps>(){}[0]
+    final val slowestSpan // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.slowestSpan|{}slowestSpan[0]
+        final fun <get-slowestSpan>(): dev.chayaphon.journeyscope.core.model/SpanId? // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.slowestSpan.<get-slowestSpan>|<get-slowestSpan>(){}[0]
+    final val spans // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.spans|{}spans[0]
+        final fun <get-spans>(): kotlin.collections/List<dev.chayaphon.journeyscope.core.timing/SpanTiming> // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.spans.<get-spans>|<get-spans>(){}[0]
+    final val total // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.total|{}total[0]
+        final fun <get-total>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.total.<get-total>|<get-total>(){}[0]
+    final val totalNanos // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.totalNanos|{}totalNanos[0]
+        final fun <get-totalNanos>(): kotlin/Long // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.totalNanos.<get-totalNanos>|<get-totalNanos>(){}[0]
+    final val untracked // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.untracked|{}untracked[0]
+        final fun <get-untracked>(): kotlin.time/Duration // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.untracked.<get-untracked>|<get-untracked>(){}[0]
+    final val untrackedNanos // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.untrackedNanos|{}untrackedNanos[0]
+        final fun <get-untrackedNanos>(): kotlin/Long // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.untrackedNanos.<get-untrackedNanos>|<get-untrackedNanos>(){}[0]
+
+    final fun share(dev.chayaphon.journeyscope.core.model/SpanCategory): kotlin/Double // dev.chayaphon.journeyscope.diagnostics/TimingAnalysis.share|share(dev.chayaphon.journeyscope.core.model.SpanCategory){}[0]
+}
+
+final value class dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory { // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory|null[0]
+    constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.<init>|<init>(kotlin.String){}[0]
+
+    final val name // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.name|{}name[0]
+        final fun <get-name>(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.name.<get-name>|<get-name>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.toString|toString(){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion|null[0]
+        final val Business // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Business|{}Business[0]
+            final fun <get-Business>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Business.<get-Business>|<get-Business>(){}[0]
+        final val Database // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Database|{}Database[0]
+            final fun <get-Database>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Database.<get-Database>|<get-Database>(){}[0]
+        final val Instrumentation // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Instrumentation|{}Instrumentation[0]
+            final fun <get-Instrumentation>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Instrumentation.<get-Instrumentation>|<get-Instrumentation>(){}[0]
+        final val Network // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Network|{}Network[0]
+            final fun <get-Network>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Network.<get-Network>|<get-Network>(){}[0]
+        final val Performance // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Performance|{}Performance[0]
+            final fun <get-Performance>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Performance.<get-Performance>|<get-Performance>(){}[0]
+        final val Reliability // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Reliability|{}Reliability[0]
+            final fun <get-Reliability>(): dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory // dev.chayaphon.journeyscope.diagnostics/DiagnosticCategory.Companion.Reliability.<get-Reliability>|<get-Reliability>(){}[0]
+    }
+}
+
+final object dev.chayaphon.journeyscope.diagnostics/DiagnosticRules { // dev.chayaphon.journeyscope.diagnostics/DiagnosticRules|null[0]
+    final fun default(): kotlin.collections/List<dev.chayaphon.journeyscope.diagnostics/DiagnosticRule> // dev.chayaphon.journeyscope.diagnostics/DiagnosticRules.default|default(){}[0]
+}
+
+final object dev.chayaphon.journeyscope.diagnostics/Percentages { // dev.chayaphon.journeyscope.diagnostics/Percentages|null[0]
+    final fun distribute(kotlin.collections/List<kotlin/Long>, kotlin/Long): kotlin.collections/List<kotlin/Int> // dev.chayaphon.journeyscope.diagnostics/Percentages.distribute|distribute(kotlin.collections.List<kotlin.Long>;kotlin.Long){}[0]
+    final fun format(kotlin/Long, kotlin/Long): kotlin/String // dev.chayaphon.journeyscope.diagnostics/Percentages.format|format(kotlin.Long;kotlin.Long){}[0]
+}
+
+final fun dev.chayaphon.journeyscope.diagnostics/analyzeTiming(dev.chayaphon.journeyscope.core.model/JourneyTrace, kotlin/Long = ...): dev.chayaphon.journeyscope.diagnostics/TimingAnalysis // dev.chayaphon.journeyscope.diagnostics/analyzeTiming|analyzeTiming(dev.chayaphon.journeyscope.core.model.JourneyTrace;kotlin.Long){}[0]

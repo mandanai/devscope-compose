@@ -10,7 +10,7 @@ class SampleLibraryConventionPlugin : Plugin<Project> {
         pluginManager.apply("journeyscope.compose")
 
         extensions.configure<KotlinMultiplatformExtension> {
-            configureKotlinMultiplatform(this, androidNamespace("dev.journeyscope.sample"))
+            configureKotlinMultiplatform(this, androidNamespace("dev.chayaphon.journeyscope.sample"))
         }
     }
 }

@@ -4,7 +4,7 @@ import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal fun Project.configureKotlinMultiplatform(kotlin: KotlinMultiplatformExtension, namespace: String) {
+internal fun Project.configureKotlinMultiplatform(kotlin: KotlinMultiplatformExtension, namespace: String, ios: Boolean = true) {
     val jdk = libs.version("jdk").toInt()
     kotlin.jvmToolchain(jdk)
     kotlin.compilerOptions.allWarningsAsErrors.set(true)
@@ -17,8 +17,10 @@ internal fun Project.configureKotlinMultiplatform(kotlin: KotlinMultiplatformExt
         withHostTest { }
     }
 
-    kotlin.iosArm64()
-    kotlin.iosSimulatorArm64()
+    if (ios) {
+        kotlin.iosArm64()
+        kotlin.iosSimulatorArm64()
+    }
 
     kotlin.sourceSets.getByName("commonTest").dependencies {
         implementation(libs.findLibrary("kotlin-test").get())

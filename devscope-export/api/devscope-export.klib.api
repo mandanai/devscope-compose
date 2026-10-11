@@ -1,0 +1,686 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <dev.chayaphon.journeyscope:devscope-export>
+final enum class dev.chayaphon.journeyscope.export.storage/SaveOutcome : kotlin/Enum<dev.chayaphon.journeyscope.export.storage/SaveOutcome> { // dev.chayaphon.journeyscope.export.storage/SaveOutcome|null[0]
+    enum entry FAILED // dev.chayaphon.journeyscope.export.storage/SaveOutcome.FAILED|null[0]
+    enum entry INVALID_ID // dev.chayaphon.journeyscope.export.storage/SaveOutcome.INVALID_ID|null[0]
+    enum entry SAVED // dev.chayaphon.journeyscope.export.storage/SaveOutcome.SAVED|null[0]
+    enum entry SUSPENDED // dev.chayaphon.journeyscope.export.storage/SaveOutcome.SUSPENDED|null[0]
+    enum entry TOO_LARGE // dev.chayaphon.journeyscope.export.storage/SaveOutcome.TOO_LARGE|null[0]
+
+    final val entries // dev.chayaphon.journeyscope.export.storage/SaveOutcome.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<dev.chayaphon.journeyscope.export.storage/SaveOutcome> // dev.chayaphon.journeyscope.export.storage/SaveOutcome.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): dev.chayaphon.journeyscope.export.storage/SaveOutcome // dev.chayaphon.journeyscope.export.storage/SaveOutcome.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<dev.chayaphon.journeyscope.export.storage/SaveOutcome> // dev.chayaphon.journeyscope.export.storage/SaveOutcome.values|values#static(){}[0]
+}
+
+abstract fun interface dev.chayaphon.journeyscope.export.share/ShareSink { // dev.chayaphon.journeyscope.export.share/ShareSink|null[0]
+    abstract suspend fun share(dev.chayaphon.journeyscope.export.share/ExportedReport): kotlin/Boolean // dev.chayaphon.journeyscope.export.share/ShareSink.share|share(dev.chayaphon.journeyscope.export.share.ExportedReport){}[0]
+}
+
+abstract fun interface dev.chayaphon.journeyscope.export.storage/StorageListener { // dev.chayaphon.journeyscope.export.storage/StorageListener|null[0]
+    abstract fun onEvent(dev.chayaphon.journeyscope.export.storage/StorageEvent) // dev.chayaphon.journeyscope.export.storage/StorageListener.onEvent|onEvent(dev.chayaphon.journeyscope.export.storage.StorageEvent){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.export.storage/StorageListener.Companion|null[0]
+        final val None // dev.chayaphon.journeyscope.export.storage/StorageListener.Companion.None|{}None[0]
+            final fun <get-None>(): dev.chayaphon.journeyscope.export.storage/StorageListener // dev.chayaphon.journeyscope.export.storage/StorageListener.Companion.None.<get-None>|<get-None>(){}[0]
+    }
+}
+
+abstract interface dev.chayaphon.journeyscope.export.storage/TraceFileSystem { // dev.chayaphon.journeyscope.export.storage/TraceFileSystem|null[0]
+    abstract fun delete(kotlin/String): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/TraceFileSystem.delete|delete(kotlin.String){}[0]
+    abstract fun list(): kotlin.collections/List<dev.chayaphon.journeyscope.export.storage/StoredFile> // dev.chayaphon.journeyscope.export.storage/TraceFileSystem.list|list(){}[0]
+    abstract fun read(kotlin/String): kotlin/String? // dev.chayaphon.journeyscope.export.storage/TraceFileSystem.read|read(kotlin.String){}[0]
+    abstract fun writeAtomically(kotlin/String, kotlin/String) // dev.chayaphon.journeyscope.export.storage/TraceFileSystem.writeAtomically|writeAtomically(kotlin.String;kotlin.String){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.importing/ImportLimits { // dev.chayaphon.journeyscope.export.importing/ImportLimits|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Boolean = ...) // dev.chayaphon.journeyscope.export.importing/ImportLimits.<init>|<init>(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Boolean){}[0]
+
+    final val maxBytes // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxBytes|{}maxBytes[0]
+        final fun <get-maxBytes>(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxBytes.<get-maxBytes>|<get-maxBytes>(){}[0]
+    final val maxDepth // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxDepth|{}maxDepth[0]
+        final fun <get-maxDepth>(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxDepth.<get-maxDepth>|<get-maxDepth>(){}[0]
+    final val maxEventsPerTrace // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxEventsPerTrace|{}maxEventsPerTrace[0]
+        final fun <get-maxEventsPerTrace>(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxEventsPerTrace.<get-maxEventsPerTrace>|<get-maxEventsPerTrace>(){}[0]
+    final val maxIssues // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxIssues|{}maxIssues[0]
+        final fun <get-maxIssues>(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxIssues.<get-maxIssues>|<get-maxIssues>(){}[0]
+    final val maxMetadataEntries // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxMetadataEntries|{}maxMetadataEntries[0]
+        final fun <get-maxMetadataEntries>(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxMetadataEntries.<get-maxMetadataEntries>|<get-maxMetadataEntries>(){}[0]
+    final val maxSpansPerTrace // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxSpansPerTrace|{}maxSpansPerTrace[0]
+        final fun <get-maxSpansPerTrace>(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxSpansPerTrace.<get-maxSpansPerTrace>|<get-maxSpansPerTrace>(){}[0]
+    final val maxStringLength // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxStringLength|{}maxStringLength[0]
+        final fun <get-maxStringLength>(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxStringLength.<get-maxStringLength>|<get-maxStringLength>(){}[0]
+    final val maxTraces // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxTraces|{}maxTraces[0]
+        final fun <get-maxTraces>(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.maxTraces.<get-maxTraces>|<get-maxTraces>(){}[0]
+    final val strict // dev.chayaphon.journeyscope.export.importing/ImportLimits.strict|{}strict[0]
+        final fun <get-strict>(): kotlin/Boolean // dev.chayaphon.journeyscope.export.importing/ImportLimits.strict.<get-strict>|<get-strict>(){}[0]
+
+    final fun component1(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.component3|component3(){}[0]
+    final fun component4(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.component4|component4(){}[0]
+    final fun component5(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.component5|component5(){}[0]
+    final fun component6(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.component6|component6(){}[0]
+    final fun component7(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.component7|component7(){}[0]
+    final fun component8(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.component8|component8(){}[0]
+    final fun component9(): kotlin/Boolean // dev.chayaphon.journeyscope.export.importing/ImportLimits.component9|component9(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Boolean = ...): dev.chayaphon.journeyscope.export.importing/ImportLimits // dev.chayaphon.journeyscope.export.importing/ImportLimits.copy|copy(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.importing/ImportLimits.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportLimits.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.importing/ImportLimits.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.importing/TraceImporter { // dev.chayaphon.journeyscope.export.importing/TraceImporter|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.export.importing/ImportLimits = ..., dev.chayaphon.journeyscope.export.redaction/RedactionPipeline = ..., dev.chayaphon.journeyscope.export.schema/SchemaMigrator = ...) // dev.chayaphon.journeyscope.export.importing/TraceImporter.<init>|<init>(dev.chayaphon.journeyscope.export.importing.ImportLimits;dev.chayaphon.journeyscope.export.redaction.RedactionPipeline;dev.chayaphon.journeyscope.export.schema.SchemaMigrator){}[0]
+
+    final fun import(kotlin/String): dev.chayaphon.journeyscope.export.importing/ImportResult // dev.chayaphon.journeyscope.export.importing/TraceImporter.import|import(kotlin.String){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.json/JsonException : kotlin/Exception { // dev.chayaphon.journeyscope.export.json/JsonException|null[0]
+    constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.export.json/JsonException.<init>|<init>(kotlin.String){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.json/JsonLimits { // dev.chayaphon.journeyscope.export.json/JsonLimits|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ...) // dev.chayaphon.journeyscope.export.json/JsonLimits.<init>|<init>(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+
+    final val maxBytes // dev.chayaphon.journeyscope.export.json/JsonLimits.maxBytes|{}maxBytes[0]
+        final fun <get-maxBytes>(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.maxBytes.<get-maxBytes>|<get-maxBytes>(){}[0]
+    final val maxDepth // dev.chayaphon.journeyscope.export.json/JsonLimits.maxDepth|{}maxDepth[0]
+        final fun <get-maxDepth>(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.maxDepth.<get-maxDepth>|<get-maxDepth>(){}[0]
+    final val maxNodes // dev.chayaphon.journeyscope.export.json/JsonLimits.maxNodes|{}maxNodes[0]
+        final fun <get-maxNodes>(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.maxNodes.<get-maxNodes>|<get-maxNodes>(){}[0]
+    final val maxStringLength // dev.chayaphon.journeyscope.export.json/JsonLimits.maxStringLength|{}maxStringLength[0]
+        final fun <get-maxStringLength>(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.maxStringLength.<get-maxStringLength>|<get-maxStringLength>(){}[0]
+
+    final fun component1(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.component3|component3(){}[0]
+    final fun component4(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.component4|component4(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ...): dev.chayaphon.journeyscope.export.json/JsonLimits // dev.chayaphon.journeyscope.export.json/JsonLimits.copy|copy(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonLimits.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonLimits.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonLimits.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.persistence/JourneyPersistence { // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence|null[0]
+    final val isPersisting // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.isPersisting|{}isPersisting[0]
+        final fun <get-isPersisting>(): kotlin/Boolean // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.isPersisting.<get-isPersisting>|<get-isPersisting>(){}[0]
+    final val recorder // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.recorder|{}recorder[0]
+        final fun <get-recorder>(): dev.chayaphon.journeyscope.core.recorder/JourneyRecorder // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.recorder.<get-recorder>|<get-recorder>(){}[0]
+    final val store // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.store|{}store[0]
+        final fun <get-store>(): dev.chayaphon.journeyscope.export.storage/TraceStore? // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.store.<get-store>|<get-store>(){}[0]
+
+    final fun close() // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.close|close(){}[0]
+    final suspend fun flush() // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.flush|flush(){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.Companion|null[0]
+        final fun install(dev.chayaphon.journeyscope.core/JourneyScopeConfig, dev.chayaphon.journeyscope.export.policy/ExportPolicy, kotlin/Function0<dev.chayaphon.journeyscope.export.storage/TraceFileSystem>, dev.chayaphon.journeyscope.export.storage/StorageListener = ..., kotlin/Function0<kotlin/Boolean> = ..., dev.chayaphon.journeyscope.core.timing/JourneyClock = ...): dev.chayaphon.journeyscope.export.persistence/JourneyPersistence // dev.chayaphon.journeyscope.export.persistence/JourneyPersistence.Companion.install|install(dev.chayaphon.journeyscope.core.JourneyScopeConfig;dev.chayaphon.journeyscope.export.policy.ExportPolicy;kotlin.Function0<dev.chayaphon.journeyscope.export.storage.TraceFileSystem>;dev.chayaphon.journeyscope.export.storage.StorageListener;kotlin.Function0<kotlin.Boolean>;dev.chayaphon.journeyscope.core.timing.JourneyClock){}[0]
+    }
+}
+
+final class dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder : dev.chayaphon.journeyscope.core.recorder/JourneyRecorder { // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.core.recorder/JourneyRecorder, dev.chayaphon.journeyscope.export.storage/TraceStore, kotlin/Int, dev.chayaphon.journeyscope.export.storage/StorageListener = ..., kotlinx.coroutines/CoroutineDispatcher = ..., kotlin/Function0<kotlin/Boolean> = ...) // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.<init>|<init>(dev.chayaphon.journeyscope.core.recorder.JourneyRecorder;dev.chayaphon.journeyscope.export.storage.TraceStore;kotlin.Int;dev.chayaphon.journeyscope.export.storage.StorageListener;kotlinx.coroutines.CoroutineDispatcher;kotlin.Function0<kotlin.Boolean>){}[0]
+
+    final val events // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.events|{}events[0]
+        final fun <get-events>(): kotlinx.coroutines.flow/SharedFlow<dev.chayaphon.journeyscope.core.recorder/RecorderEvent> // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.events.<get-events>|<get-events>(){}[0]
+
+    final fun attach(dev.chayaphon.journeyscope.core.recorder/RecordedTrace) // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.attach|attach(dev.chayaphon.journeyscope.core.recorder.RecordedTrace){}[0]
+    final fun clear() // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.clear|clear(){}[0]
+    final fun close() // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.close|close(){}[0]
+    final fun find(dev.chayaphon.journeyscope.core.model/TraceId): dev.chayaphon.journeyscope.core.model/JourneyTrace? // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.find|find(dev.chayaphon.journeyscope.core.model.TraceId){}[0]
+    final fun liveTraces(): kotlin.collections/List<dev.chayaphon.journeyscope.core.recorder/RecordedTrace> // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.liveTraces|liveTraces(){}[0]
+    final fun notifyChanged(dev.chayaphon.journeyscope.core.model/TraceId) // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.notifyChanged|notifyChanged(dev.chayaphon.journeyscope.core.model.TraceId){}[0]
+    final fun notifyFinished(dev.chayaphon.journeyscope.core.model/JourneyTrace) // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.notifyFinished|notifyFinished(dev.chayaphon.journeyscope.core.model.JourneyTrace){}[0]
+    final fun snapshot(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace> // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.snapshot|snapshot(){}[0]
+    final suspend fun flush() // dev.chayaphon.journeyscope.export.persistence/PersistingJourneyRecorder.flush|flush(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.policy/ExportPolicy { // dev.chayaphon.journeyscope.export.policy/ExportPolicy|null[0]
+    constructor <init>(kotlin/Boolean = ..., kotlin/Boolean = ..., dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist = ..., kotlin.time/Duration = ..., kotlin/Int = ..., kotlin/Long = ..., kotlin/Long = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Long = ..., kotlin/String? = ...) // dev.chayaphon.journeyscope.export.policy/ExportPolicy.<init>|<init>(kotlin.Boolean;kotlin.Boolean;dev.chayaphon.journeyscope.export.redaction.MetadataAllowlist;kotlin.time.Duration;kotlin.Int;kotlin.Long;kotlin.Long;kotlin.Int;kotlin.Int;kotlin.Long;kotlin.String?){}[0]
+
+    final val allowBodies // dev.chayaphon.journeyscope.export.policy/ExportPolicy.allowBodies|{}allowBodies[0]
+        final fun <get-allowBodies>(): kotlin/Boolean // dev.chayaphon.journeyscope.export.policy/ExportPolicy.allowBodies.<get-allowBodies>|<get-allowBodies>(){}[0]
+    final val allowlist // dev.chayaphon.journeyscope.export.policy/ExportPolicy.allowlist|{}allowlist[0]
+        final fun <get-allowlist>(): dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist // dev.chayaphon.journeyscope.export.policy/ExportPolicy.allowlist.<get-allowlist>|<get-allowlist>(){}[0]
+    final val appVersion // dev.chayaphon.journeyscope.export.policy/ExportPolicy.appVersion|{}appVersion[0]
+        final fun <get-appVersion>(): kotlin/String? // dev.chayaphon.journeyscope.export.policy/ExportPolicy.appVersion.<get-appVersion>|<get-appVersion>(){}[0]
+    final val maxExportBytes // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxExportBytes|{}maxExportBytes[0]
+        final fun <get-maxExportBytes>(): kotlin/Long // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxExportBytes.<get-maxExportBytes>|<get-maxExportBytes>(){}[0]
+    final val maxExportTraces // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxExportTraces|{}maxExportTraces[0]
+        final fun <get-maxExportTraces>(): kotlin/Int // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxExportTraces.<get-maxExportTraces>|<get-maxExportTraces>(){}[0]
+    final val maxStoredTraces // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxStoredTraces|{}maxStoredTraces[0]
+        final fun <get-maxStoredTraces>(): kotlin/Int // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxStoredTraces.<get-maxStoredTraces>|<get-maxStoredTraces>(){}[0]
+    final val maxTotalBytes // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxTotalBytes|{}maxTotalBytes[0]
+        final fun <get-maxTotalBytes>(): kotlin/Long // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxTotalBytes.<get-maxTotalBytes>|<get-maxTotalBytes>(){}[0]
+    final val maxTraceBytes // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxTraceBytes|{}maxTraceBytes[0]
+        final fun <get-maxTraceBytes>(): kotlin/Long // dev.chayaphon.journeyscope.export.policy/ExportPolicy.maxTraceBytes.<get-maxTraceBytes>|<get-maxTraceBytes>(){}[0]
+    final val persistenceEnabled // dev.chayaphon.journeyscope.export.policy/ExportPolicy.persistenceEnabled|{}persistenceEnabled[0]
+        final fun <get-persistenceEnabled>(): kotlin/Boolean // dev.chayaphon.journeyscope.export.policy/ExportPolicy.persistenceEnabled.<get-persistenceEnabled>|<get-persistenceEnabled>(){}[0]
+    final val queueCapacity // dev.chayaphon.journeyscope.export.policy/ExportPolicy.queueCapacity|{}queueCapacity[0]
+        final fun <get-queueCapacity>(): kotlin/Int // dev.chayaphon.journeyscope.export.policy/ExportPolicy.queueCapacity.<get-queueCapacity>|<get-queueCapacity>(){}[0]
+    final val retention // dev.chayaphon.journeyscope.export.policy/ExportPolicy.retention|{}retention[0]
+        final fun <get-retention>(): kotlin.time/Duration // dev.chayaphon.journeyscope.export.policy/ExportPolicy.retention.<get-retention>|<get-retention>(){}[0]
+
+    final fun component1(): kotlin/Boolean // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component1|component1(){}[0]
+    final fun component10(): kotlin/Long // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component10|component10(){}[0]
+    final fun component11(): kotlin/String? // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component11|component11(){}[0]
+    final fun component2(): kotlin/Boolean // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component2|component2(){}[0]
+    final fun component3(): dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component3|component3(){}[0]
+    final fun component4(): kotlin.time/Duration // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component4|component4(){}[0]
+    final fun component5(): kotlin/Int // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component5|component5(){}[0]
+    final fun component6(): kotlin/Long // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component6|component6(){}[0]
+    final fun component7(): kotlin/Long // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component7|component7(){}[0]
+    final fun component8(): kotlin/Int // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component8|component8(){}[0]
+    final fun component9(): kotlin/Int // dev.chayaphon.journeyscope.export.policy/ExportPolicy.component9|component9(){}[0]
+    final fun copy(kotlin/Boolean = ..., kotlin/Boolean = ..., dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist = ..., kotlin.time/Duration = ..., kotlin/Int = ..., kotlin/Long = ..., kotlin/Long = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Long = ..., kotlin/String? = ...): dev.chayaphon.journeyscope.export.policy/ExportPolicy // dev.chayaphon.journeyscope.export.policy/ExportPolicy.copy|copy(kotlin.Boolean;kotlin.Boolean;dev.chayaphon.journeyscope.export.redaction.MetadataAllowlist;kotlin.time.Duration;kotlin.Int;kotlin.Long;kotlin.Long;kotlin.Int;kotlin.Int;kotlin.Long;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.policy/ExportPolicy.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.policy/ExportPolicy.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.policy/ExportPolicy.toString|toString(){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.export.policy/ExportPolicy.Companion|null[0]
+        final val Default // dev.chayaphon.journeyscope.export.policy/ExportPolicy.Companion.Default|{}Default[0]
+            final fun <get-Default>(): dev.chayaphon.journeyscope.export.policy/ExportPolicy // dev.chayaphon.journeyscope.export.policy/ExportPolicy.Companion.Default.<get-Default>|<get-Default>(){}[0]
+    }
+}
+
+final class dev.chayaphon.journeyscope.export.preview/ExportPreview { // dev.chayaphon.journeyscope.export.preview/ExportPreview|null[0]
+    constructor <init>(kotlin/Int, kotlin/Int, kotlin/Int, kotlin/Int, kotlin.collections/List<kotlin/String>, dev.chayaphon.journeyscope.export.redaction/RedactionReport, kotlin/String, kotlin/Boolean) // dev.chayaphon.journeyscope.export.preview/ExportPreview.<init>|<init>(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.export.redaction.RedactionReport;kotlin.String;kotlin.Boolean){}[0]
+
+    final val eventCount // dev.chayaphon.journeyscope.export.preview/ExportPreview.eventCount|{}eventCount[0]
+        final fun <get-eventCount>(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.eventCount.<get-eventCount>|<get-eventCount>(){}[0]
+    final val exceedsLimits // dev.chayaphon.journeyscope.export.preview/ExportPreview.exceedsLimits|{}exceedsLimits[0]
+        final fun <get-exceedsLimits>(): kotlin/Boolean // dev.chayaphon.journeyscope.export.preview/ExportPreview.exceedsLimits.<get-exceedsLimits>|<get-exceedsLimits>(){}[0]
+    final val includedMetadataKeys // dev.chayaphon.journeyscope.export.preview/ExportPreview.includedMetadataKeys|{}includedMetadataKeys[0]
+        final fun <get-includedMetadataKeys>(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.export.preview/ExportPreview.includedMetadataKeys.<get-includedMetadataKeys>|<get-includedMetadataKeys>(){}[0]
+    final val json // dev.chayaphon.journeyscope.export.preview/ExportPreview.json|{}json[0]
+        final fun <get-json>(): kotlin/String // dev.chayaphon.journeyscope.export.preview/ExportPreview.json.<get-json>|<get-json>(){}[0]
+    final val redaction // dev.chayaphon.journeyscope.export.preview/ExportPreview.redaction|{}redaction[0]
+        final fun <get-redaction>(): dev.chayaphon.journeyscope.export.redaction/RedactionReport // dev.chayaphon.journeyscope.export.preview/ExportPreview.redaction.<get-redaction>|<get-redaction>(){}[0]
+    final val sizeBytes // dev.chayaphon.journeyscope.export.preview/ExportPreview.sizeBytes|{}sizeBytes[0]
+        final fun <get-sizeBytes>(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.sizeBytes.<get-sizeBytes>|<get-sizeBytes>(){}[0]
+    final val spanCount // dev.chayaphon.journeyscope.export.preview/ExportPreview.spanCount|{}spanCount[0]
+        final fun <get-spanCount>(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.spanCount.<get-spanCount>|<get-spanCount>(){}[0]
+    final val traceCount // dev.chayaphon.journeyscope.export.preview/ExportPreview.traceCount|{}traceCount[0]
+        final fun <get-traceCount>(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.traceCount.<get-traceCount>|<get-traceCount>(){}[0]
+
+    final fun component1(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.component3|component3(){}[0]
+    final fun component4(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.component4|component4(){}[0]
+    final fun component5(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.export.preview/ExportPreview.component5|component5(){}[0]
+    final fun component6(): dev.chayaphon.journeyscope.export.redaction/RedactionReport // dev.chayaphon.journeyscope.export.preview/ExportPreview.component6|component6(){}[0]
+    final fun component7(): kotlin/String // dev.chayaphon.journeyscope.export.preview/ExportPreview.component7|component7(){}[0]
+    final fun component8(): kotlin/Boolean // dev.chayaphon.journeyscope.export.preview/ExportPreview.component8|component8(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin.collections/List<kotlin/String> = ..., dev.chayaphon.journeyscope.export.redaction/RedactionReport = ..., kotlin/String = ..., kotlin/Boolean = ...): dev.chayaphon.journeyscope.export.preview/ExportPreview // dev.chayaphon.journeyscope.export.preview/ExportPreview.copy|copy(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.collections.List<kotlin.String>;dev.chayaphon.journeyscope.export.redaction.RedactionReport;kotlin.String;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.preview/ExportPreview.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportPreview.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.preview/ExportPreview.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist { // dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist|null[0]
+    constructor <init>(kotlin.collections/Set<kotlin/String>) // dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist.<init>|<init>(kotlin.collections.Set<kotlin.String>){}[0]
+
+    final fun allows(kotlin/String): kotlin/Boolean // dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist.allows|allows(kotlin.String){}[0]
+    final fun plus(dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist): dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist // dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist.plus|plus(dev.chayaphon.journeyscope.export.redaction.MetadataAllowlist){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist.Companion|null[0]
+        final val Default // dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist.Companion.Default|{}Default[0]
+            final fun <get-Default>(): dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist // dev.chayaphon.journeyscope.export.redaction/MetadataAllowlist.Companion.Default.<get-Default>|<get-Default>(){}[0]
+    }
+}
+
+final class dev.chayaphon.journeyscope.export.redaction/RedactedTrace { // dev.chayaphon.journeyscope.export.redaction/RedactedTrace|null[0]
+    final val report // dev.chayaphon.journeyscope.export.redaction/RedactedTrace.report|{}report[0]
+        final fun <get-report>(): dev.chayaphon.journeyscope.export.redaction/RedactionReport // dev.chayaphon.journeyscope.export.redaction/RedactedTrace.report.<get-report>|<get-report>(){}[0]
+    final val trace // dev.chayaphon.journeyscope.export.redaction/RedactedTrace.trace|{}trace[0]
+        final fun <get-trace>(): dev.chayaphon.journeyscope.core.model/JourneyTrace // dev.chayaphon.journeyscope.export.redaction/RedactedTrace.trace.<get-trace>|<get-trace>(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.redaction/RedactionPipeline { // dev.chayaphon.journeyscope.export.redaction/RedactionPipeline|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.export.policy/ExportPolicy = ..., dev.chayaphon.journeyscope.core/RedactionPolicy = ...) // dev.chayaphon.journeyscope.export.redaction/RedactionPipeline.<init>|<init>(dev.chayaphon.journeyscope.export.policy.ExportPolicy;dev.chayaphon.journeyscope.core.RedactionPolicy){}[0]
+
+    final fun redact(dev.chayaphon.journeyscope.core.model/JourneyTrace): dev.chayaphon.journeyscope.export.redaction/RedactedTrace // dev.chayaphon.journeyscope.export.redaction/RedactionPipeline.redact|redact(dev.chayaphon.journeyscope.core.model.JourneyTrace){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.redaction/RedactionReport { // dev.chayaphon.journeyscope.export.redaction/RedactionReport|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin.collections/Set<kotlin/String> = ...) // dev.chayaphon.journeyscope.export.redaction/RedactionReport.<init>|<init>(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.collections.Set<kotlin.String>){}[0]
+
+    final val droppedBodies // dev.chayaphon.journeyscope.export.redaction/RedactionReport.droppedBodies|{}droppedBodies[0]
+        final fun <get-droppedBodies>(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.droppedBodies.<get-droppedBodies>|<get-droppedBodies>(){}[0]
+    final val droppedKeys // dev.chayaphon.journeyscope.export.redaction/RedactionReport.droppedKeys|{}droppedKeys[0]
+        final fun <get-droppedKeys>(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.droppedKeys.<get-droppedKeys>|<get-droppedKeys>(){}[0]
+    final val includedKeys // dev.chayaphon.journeyscope.export.redaction/RedactionReport.includedKeys|{}includedKeys[0]
+        final fun <get-includedKeys>(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.export.redaction/RedactionReport.includedKeys.<get-includedKeys>|<get-includedKeys>(){}[0]
+    final val maskedKeys // dev.chayaphon.journeyscope.export.redaction/RedactionReport.maskedKeys|{}maskedKeys[0]
+        final fun <get-maskedKeys>(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.maskedKeys.<get-maskedKeys>|<get-maskedKeys>(){}[0]
+    final val scrubbedValues // dev.chayaphon.journeyscope.export.redaction/RedactionReport.scrubbedValues|{}scrubbedValues[0]
+        final fun <get-scrubbedValues>(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.scrubbedValues.<get-scrubbedValues>|<get-scrubbedValues>(){}[0]
+    final val strippedFailureDetails // dev.chayaphon.journeyscope.export.redaction/RedactionReport.strippedFailureDetails|{}strippedFailureDetails[0]
+        final fun <get-strippedFailureDetails>(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.strippedFailureDetails.<get-strippedFailureDetails>|<get-strippedFailureDetails>(){}[0]
+    final val totalRedactions // dev.chayaphon.journeyscope.export.redaction/RedactionReport.totalRedactions|{}totalRedactions[0]
+        final fun <get-totalRedactions>(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.totalRedactions.<get-totalRedactions>|<get-totalRedactions>(){}[0]
+
+    final fun component1(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.component3|component3(){}[0]
+    final fun component4(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.component4|component4(){}[0]
+    final fun component5(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.component5|component5(){}[0]
+    final fun component6(): kotlin.collections/Set<kotlin/String> // dev.chayaphon.journeyscope.export.redaction/RedactionReport.component6|component6(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin.collections/Set<kotlin/String> = ...): dev.chayaphon.journeyscope.export.redaction/RedactionReport // dev.chayaphon.journeyscope.export.redaction/RedactionReport.copy|copy(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.collections.Set<kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.redaction/RedactionReport.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.redaction/RedactionReport.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.redaction/RedactionReport.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.schema/ExportedFinding { // dev.chayaphon.journeyscope.export.schema/ExportedFinding|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String, kotlin/String? = ...) // dev.chayaphon.journeyscope.export.schema/ExportedFinding.<init>|<init>(kotlin.String;kotlin.String;kotlin.String;kotlin.String?){}[0]
+
+    final val ruleId // dev.chayaphon.journeyscope.export.schema/ExportedFinding.ruleId|{}ruleId[0]
+        final fun <get-ruleId>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ExportedFinding.ruleId.<get-ruleId>|<get-ruleId>(){}[0]
+    final val severity // dev.chayaphon.journeyscope.export.schema/ExportedFinding.severity|{}severity[0]
+        final fun <get-severity>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ExportedFinding.severity.<get-severity>|<get-severity>(){}[0]
+    final val spanId // dev.chayaphon.journeyscope.export.schema/ExportedFinding.spanId|{}spanId[0]
+        final fun <get-spanId>(): kotlin/String? // dev.chayaphon.journeyscope.export.schema/ExportedFinding.spanId.<get-spanId>|<get-spanId>(){}[0]
+    final val title // dev.chayaphon.journeyscope.export.schema/ExportedFinding.title|{}title[0]
+        final fun <get-title>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ExportedFinding.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ExportedFinding.component1|component1(){}[0]
+    final fun component2(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ExportedFinding.component2|component2(){}[0]
+    final fun component3(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ExportedFinding.component3|component3(){}[0]
+    final fun component4(): kotlin/String? // dev.chayaphon.journeyscope.export.schema/ExportedFinding.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String? = ...): dev.chayaphon.journeyscope.export.schema/ExportedFinding // dev.chayaphon.journeyscope.export.schema/ExportedFinding.copy|copy(kotlin.String;kotlin.String;kotlin.String;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.schema/ExportedFinding.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.schema/ExportedFinding.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ExportedFinding.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.schema/ReportContext { // dev.chayaphon.journeyscope.export.schema/ReportContext|null[0]
+    constructor <init>(kotlin/String = ..., kotlin/String? = ..., kotlin/String = ..., kotlin/Long = ..., dev.chayaphon.journeyscope.core/JourneyScopeConfig? = ..., kotlin.collections/Map<kotlin/String, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>> = ...) // dev.chayaphon.journeyscope.export.schema/ReportContext.<init>|<init>(kotlin.String;kotlin.String?;kotlin.String;kotlin.Long;dev.chayaphon.journeyscope.core.JourneyScopeConfig?;kotlin.collections.Map<kotlin.String,kotlin.collections.List<dev.chayaphon.journeyscope.export.schema.ExportedFinding>>){}[0]
+
+    final val appVersion // dev.chayaphon.journeyscope.export.schema/ReportContext.appVersion|{}appVersion[0]
+        final fun <get-appVersion>(): kotlin/String? // dev.chayaphon.journeyscope.export.schema/ReportContext.appVersion.<get-appVersion>|<get-appVersion>(){}[0]
+    final val config // dev.chayaphon.journeyscope.export.schema/ReportContext.config|{}config[0]
+        final fun <get-config>(): dev.chayaphon.journeyscope.core/JourneyScopeConfig? // dev.chayaphon.journeyscope.export.schema/ReportContext.config.<get-config>|<get-config>(){}[0]
+    final val exportedAtWallMillis // dev.chayaphon.journeyscope.export.schema/ReportContext.exportedAtWallMillis|{}exportedAtWallMillis[0]
+        final fun <get-exportedAtWallMillis>(): kotlin/Long // dev.chayaphon.journeyscope.export.schema/ReportContext.exportedAtWallMillis.<get-exportedAtWallMillis>|<get-exportedAtWallMillis>(){}[0]
+    final val findings // dev.chayaphon.journeyscope.export.schema/ReportContext.findings|{}findings[0]
+        final fun <get-findings>(): kotlin.collections/Map<kotlin/String, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>> // dev.chayaphon.journeyscope.export.schema/ReportContext.findings.<get-findings>|<get-findings>(){}[0]
+    final val platform // dev.chayaphon.journeyscope.export.schema/ReportContext.platform|{}platform[0]
+        final fun <get-platform>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ReportContext.platform.<get-platform>|<get-platform>(){}[0]
+    final val sdkVersion // dev.chayaphon.journeyscope.export.schema/ReportContext.sdkVersion|{}sdkVersion[0]
+        final fun <get-sdkVersion>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ReportContext.sdkVersion.<get-sdkVersion>|<get-sdkVersion>(){}[0]
+
+    final fun component1(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ReportContext.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // dev.chayaphon.journeyscope.export.schema/ReportContext.component2|component2(){}[0]
+    final fun component3(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ReportContext.component3|component3(){}[0]
+    final fun component4(): kotlin/Long // dev.chayaphon.journeyscope.export.schema/ReportContext.component4|component4(){}[0]
+    final fun component5(): dev.chayaphon.journeyscope.core/JourneyScopeConfig? // dev.chayaphon.journeyscope.export.schema/ReportContext.component5|component5(){}[0]
+    final fun component6(): kotlin.collections/Map<kotlin/String, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>> // dev.chayaphon.journeyscope.export.schema/ReportContext.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String? = ..., kotlin/String = ..., kotlin/Long = ..., dev.chayaphon.journeyscope.core/JourneyScopeConfig? = ..., kotlin.collections/Map<kotlin/String, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>> = ...): dev.chayaphon.journeyscope.export.schema/ReportContext // dev.chayaphon.journeyscope.export.schema/ReportContext.copy|copy(kotlin.String;kotlin.String?;kotlin.String;kotlin.Long;dev.chayaphon.journeyscope.core.JourneyScopeConfig?;kotlin.collections.Map<kotlin.String,kotlin.collections.List<dev.chayaphon.journeyscope.export.schema.ExportedFinding>>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.schema/ReportContext.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.schema/ReportContext.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.schema/ReportContext.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.schema/SchemaMigrator { // dev.chayaphon.journeyscope.export.schema/SchemaMigrator|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin.collections/Map<kotlin/Int, kotlin/Function1<dev.chayaphon.journeyscope.export.json/JsonValue.Obj, dev.chayaphon.journeyscope.export.json/JsonValue.Obj>> = ...) // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.<init>|<init>(kotlin.Int;kotlin.collections.Map<kotlin.Int,kotlin.Function1<dev.chayaphon.journeyscope.export.json.JsonValue.Obj,dev.chayaphon.journeyscope.export.json.JsonValue.Obj>>){}[0]
+
+    final fun migrate(dev.chayaphon.journeyscope.export.json/JsonValue.Obj): dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.migrate|migrate(dev.chayaphon.journeyscope.export.json.JsonValue.Obj){}[0]
+
+    sealed class Outcome { // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome|null[0]
+        final class Ready : dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome { // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready|null[0]
+            constructor <init>(dev.chayaphon.journeyscope.export.json/JsonValue.Obj) // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready.<init>|<init>(dev.chayaphon.journeyscope.export.json.JsonValue.Obj){}[0]
+
+            final val document // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready.document|{}document[0]
+                final fun <get-document>(): dev.chayaphon.journeyscope.export.json/JsonValue.Obj // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready.document.<get-document>|<get-document>(){}[0]
+
+            final fun component1(): dev.chayaphon.journeyscope.export.json/JsonValue.Obj // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready.component1|component1(){}[0]
+            final fun copy(dev.chayaphon.journeyscope.export.json/JsonValue.Obj = ...): dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready.copy|copy(dev.chayaphon.journeyscope.export.json.JsonValue.Obj){}[0]
+            final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready.equals|equals(kotlin.Any?){}[0]
+            final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready.hashCode|hashCode(){}[0]
+            final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Ready.toString|toString(){}[0]
+        }
+
+        final class Unsupported : dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome { // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported|null[0]
+            constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported.<init>|<init>(kotlin.String){}[0]
+
+            final val reason // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported.reason|{}reason[0]
+                final fun <get-reason>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported.reason.<get-reason>|<get-reason>(){}[0]
+
+            final fun component1(): kotlin/String // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported.component1|component1(){}[0]
+            final fun copy(kotlin/String = ...): dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported.copy|copy(kotlin.String){}[0]
+            final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported.equals|equals(kotlin.Any?){}[0]
+            final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported.hashCode|hashCode(){}[0]
+            final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.schema/SchemaMigrator.Outcome.Unsupported.toString|toString(){}[0]
+        }
+    }
+}
+
+final class dev.chayaphon.journeyscope.export.share/ExportedReport { // dev.chayaphon.journeyscope.export.share/ExportedReport|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/Int) // dev.chayaphon.journeyscope.export.share/ExportedReport.<init>|<init>(kotlin.String;kotlin.String;kotlin.Int){}[0]
+
+    final val fileName // dev.chayaphon.journeyscope.export.share/ExportedReport.fileName|{}fileName[0]
+        final fun <get-fileName>(): kotlin/String // dev.chayaphon.journeyscope.export.share/ExportedReport.fileName.<get-fileName>|<get-fileName>(){}[0]
+    final val json // dev.chayaphon.journeyscope.export.share/ExportedReport.json|{}json[0]
+        final fun <get-json>(): kotlin/String // dev.chayaphon.journeyscope.export.share/ExportedReport.json.<get-json>|<get-json>(){}[0]
+    final val sizeBytes // dev.chayaphon.journeyscope.export.share/ExportedReport.sizeBytes|{}sizeBytes[0]
+        final fun <get-sizeBytes>(): kotlin/Int // dev.chayaphon.journeyscope.export.share/ExportedReport.sizeBytes.<get-sizeBytes>|<get-sizeBytes>(){}[0]
+    final val traceCount // dev.chayaphon.journeyscope.export.share/ExportedReport.traceCount|{}traceCount[0]
+        final fun <get-traceCount>(): kotlin/Int // dev.chayaphon.journeyscope.export.share/ExportedReport.traceCount.<get-traceCount>|<get-traceCount>(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.share/IosShareSink : dev.chayaphon.journeyscope.export.share/ShareSink { // dev.chayaphon.journeyscope.export.share/IosShareSink|null[0]
+    constructor <init>() // dev.chayaphon.journeyscope.export.share/IosShareSink.<init>|<init>(){}[0]
+
+    final suspend fun share(dev.chayaphon.journeyscope.export.share/ExportedReport): kotlin/Boolean // dev.chayaphon.journeyscope.export.share/IosShareSink.share|share(dev.chayaphon.journeyscope.export.share.ExportedReport){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.storage/StoredFile { // dev.chayaphon.journeyscope.export.storage/StoredFile|null[0]
+    constructor <init>(kotlin/String, kotlin/Long, kotlin/Long) // dev.chayaphon.journeyscope.export.storage/StoredFile.<init>|<init>(kotlin.String;kotlin.Long;kotlin.Long){}[0]
+
+    final val modifiedMillis // dev.chayaphon.journeyscope.export.storage/StoredFile.modifiedMillis|{}modifiedMillis[0]
+        final fun <get-modifiedMillis>(): kotlin/Long // dev.chayaphon.journeyscope.export.storage/StoredFile.modifiedMillis.<get-modifiedMillis>|<get-modifiedMillis>(){}[0]
+    final val name // dev.chayaphon.journeyscope.export.storage/StoredFile.name|{}name[0]
+        final fun <get-name>(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StoredFile.name.<get-name>|<get-name>(){}[0]
+    final val sizeBytes // dev.chayaphon.journeyscope.export.storage/StoredFile.sizeBytes|{}sizeBytes[0]
+        final fun <get-sizeBytes>(): kotlin/Long // dev.chayaphon.journeyscope.export.storage/StoredFile.sizeBytes.<get-sizeBytes>|<get-sizeBytes>(){}[0]
+
+    final fun component1(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StoredFile.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // dev.chayaphon.journeyscope.export.storage/StoredFile.component2|component2(){}[0]
+    final fun component3(): kotlin/Long // dev.chayaphon.journeyscope.export.storage/StoredFile.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/Long = ..., kotlin/Long = ...): dev.chayaphon.journeyscope.export.storage/StoredFile // dev.chayaphon.journeyscope.export.storage/StoredFile.copy|copy(kotlin.String;kotlin.Long;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/StoredFile.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/StoredFile.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StoredFile.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.storage/TraceQuery { // dev.chayaphon.journeyscope.export.storage/TraceQuery|null[0]
+    constructor <init>(kotlin.collections/Set<dev.chayaphon.journeyscope.core.model/TraceStatus>? = ..., kotlin/String? = ..., kotlin/Long? = ..., kotlin/Int = ...) // dev.chayaphon.journeyscope.export.storage/TraceQuery.<init>|<init>(kotlin.collections.Set<dev.chayaphon.journeyscope.core.model.TraceStatus>?;kotlin.String?;kotlin.Long?;kotlin.Int){}[0]
+
+    final val limit // dev.chayaphon.journeyscope.export.storage/TraceQuery.limit|{}limit[0]
+        final fun <get-limit>(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/TraceQuery.limit.<get-limit>|<get-limit>(){}[0]
+    final val nameContains // dev.chayaphon.journeyscope.export.storage/TraceQuery.nameContains|{}nameContains[0]
+        final fun <get-nameContains>(): kotlin/String? // dev.chayaphon.journeyscope.export.storage/TraceQuery.nameContains.<get-nameContains>|<get-nameContains>(){}[0]
+    final val sinceWallMillis // dev.chayaphon.journeyscope.export.storage/TraceQuery.sinceWallMillis|{}sinceWallMillis[0]
+        final fun <get-sinceWallMillis>(): kotlin/Long? // dev.chayaphon.journeyscope.export.storage/TraceQuery.sinceWallMillis.<get-sinceWallMillis>|<get-sinceWallMillis>(){}[0]
+    final val statuses // dev.chayaphon.journeyscope.export.storage/TraceQuery.statuses|{}statuses[0]
+        final fun <get-statuses>(): kotlin.collections/Set<dev.chayaphon.journeyscope.core.model/TraceStatus>? // dev.chayaphon.journeyscope.export.storage/TraceQuery.statuses.<get-statuses>|<get-statuses>(){}[0]
+
+    final fun component1(): kotlin.collections/Set<dev.chayaphon.journeyscope.core.model/TraceStatus>? // dev.chayaphon.journeyscope.export.storage/TraceQuery.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // dev.chayaphon.journeyscope.export.storage/TraceQuery.component2|component2(){}[0]
+    final fun component3(): kotlin/Long? // dev.chayaphon.journeyscope.export.storage/TraceQuery.component3|component3(){}[0]
+    final fun component4(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/TraceQuery.component4|component4(){}[0]
+    final fun copy(kotlin.collections/Set<dev.chayaphon.journeyscope.core.model/TraceStatus>? = ..., kotlin/String? = ..., kotlin/Long? = ..., kotlin/Int = ...): dev.chayaphon.journeyscope.export.storage/TraceQuery // dev.chayaphon.journeyscope.export.storage/TraceQuery.copy|copy(kotlin.collections.Set<dev.chayaphon.journeyscope.core.model.TraceStatus>?;kotlin.String?;kotlin.Long?;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/TraceQuery.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/TraceQuery.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.storage/TraceQuery.toString|toString(){}[0]
+}
+
+final class dev.chayaphon.journeyscope.export.storage/TraceStore : dev.chayaphon.journeyscope.core.spi/JourneyStore { // dev.chayaphon.journeyscope.export.storage/TraceStore|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.export.storage/TraceFileSystem, dev.chayaphon.journeyscope.export.policy/ExportPolicy = ..., dev.chayaphon.journeyscope.core.timing/JourneyClock = ..., dev.chayaphon.journeyscope.export.storage/StorageListener = ..., kotlinx.coroutines/CoroutineDispatcher = ..., kotlin/Int = ...) // dev.chayaphon.journeyscope.export.storage/TraceStore.<init>|<init>(dev.chayaphon.journeyscope.export.storage.TraceFileSystem;dev.chayaphon.journeyscope.export.policy.ExportPolicy;dev.chayaphon.journeyscope.core.timing.JourneyClock;dev.chayaphon.journeyscope.export.storage.StorageListener;kotlinx.coroutines.CoroutineDispatcher;kotlin.Int){}[0]
+
+    final val isSuspended // dev.chayaphon.journeyscope.export.storage/TraceStore.isSuspended|{}isSuspended[0]
+        final fun <get-isSuspended>(): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/TraceStore.isSuspended.<get-isSuspended>|<get-isSuspended>(){}[0]
+
+    final fun resume() // dev.chayaphon.journeyscope.export.storage/TraceStore.resume|resume(){}[0]
+    final suspend fun clearAll() // dev.chayaphon.journeyscope.export.storage/TraceStore.clearAll|clearAll(){}[0]
+    final suspend fun delete(dev.chayaphon.journeyscope.core.model/TraceId): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/TraceStore.delete|delete(dev.chayaphon.journeyscope.core.model.TraceId){}[0]
+    final suspend fun load(dev.chayaphon.journeyscope.core.model/TraceId): dev.chayaphon.journeyscope.core.model/JourneyTrace? // dev.chayaphon.journeyscope.export.storage/TraceStore.load|load(dev.chayaphon.journeyscope.core.model.TraceId){}[0]
+    final suspend fun loadAll(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace> // dev.chayaphon.journeyscope.export.storage/TraceStore.loadAll|loadAll(){}[0]
+    final suspend fun query(dev.chayaphon.journeyscope.export.storage/TraceQuery): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace> // dev.chayaphon.journeyscope.export.storage/TraceStore.query|query(dev.chayaphon.journeyscope.export.storage.TraceQuery){}[0]
+    final suspend fun save(dev.chayaphon.journeyscope.core.model/JourneyTrace) // dev.chayaphon.journeyscope.export.storage/TraceStore.save|save(dev.chayaphon.journeyscope.core.model.JourneyTrace){}[0]
+    final suspend fun saveTrace(dev.chayaphon.journeyscope.core.model/JourneyTrace): dev.chayaphon.journeyscope.export.storage/SaveOutcome // dev.chayaphon.journeyscope.export.storage/TraceStore.saveTrace|saveTrace(dev.chayaphon.journeyscope.core.model.JourneyTrace){}[0]
+    final suspend fun storedBytes(): kotlin/Long // dev.chayaphon.journeyscope.export.storage/TraceStore.storedBytes|storedBytes(){}[0]
+
+    final object Companion { // dev.chayaphon.journeyscope.export.storage/TraceStore.Companion|null[0]
+        final const val DEFAULT_FAILURE_THRESHOLD // dev.chayaphon.journeyscope.export.storage/TraceStore.Companion.DEFAULT_FAILURE_THRESHOLD|{}DEFAULT_FAILURE_THRESHOLD[0]
+            final fun <get-DEFAULT_FAILURE_THRESHOLD>(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/TraceStore.Companion.DEFAULT_FAILURE_THRESHOLD.<get-DEFAULT_FAILURE_THRESHOLD>|<get-DEFAULT_FAILURE_THRESHOLD>(){}[0]
+    }
+}
+
+final class dev.chayaphon.journeyscope.export/JourneyExportController { // dev.chayaphon.journeyscope.export/JourneyExportController|null[0]
+    constructor <init>(dev.chayaphon.journeyscope.core.recorder/JourneyRecorder, dev.chayaphon.journeyscope.export.storage/TraceStore? = ..., dev.chayaphon.journeyscope.export.policy/ExportPolicy = ..., dev.chayaphon.journeyscope.export.share/ShareSink? = ..., dev.chayaphon.journeyscope.core.timing/JourneyClock = ..., kotlin/Function1<dev.chayaphon.journeyscope.core.model/JourneyTrace, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>> = ..., dev.chayaphon.journeyscope.export.importing/ImportLimits = ...) // dev.chayaphon.journeyscope.export/JourneyExportController.<init>|<init>(dev.chayaphon.journeyscope.core.recorder.JourneyRecorder;dev.chayaphon.journeyscope.export.storage.TraceStore?;dev.chayaphon.journeyscope.export.policy.ExportPolicy;dev.chayaphon.journeyscope.export.share.ShareSink?;dev.chayaphon.journeyscope.core.timing.JourneyClock;kotlin.Function1<dev.chayaphon.journeyscope.core.model.JourneyTrace,kotlin.collections.List<dev.chayaphon.journeyscope.export.schema.ExportedFinding>>;dev.chayaphon.journeyscope.export.importing.ImportLimits){}[0]
+
+    final val canShare // dev.chayaphon.journeyscope.export/JourneyExportController.canShare|{}canShare[0]
+        final fun <get-canShare>(): kotlin/Boolean // dev.chayaphon.journeyscope.export/JourneyExportController.canShare.<get-canShare>|<get-canShare>(){}[0]
+    final val historyChanges // dev.chayaphon.journeyscope.export/JourneyExportController.historyChanges|{}historyChanges[0]
+        final fun <get-historyChanges>(): kotlinx.coroutines.flow/StateFlow<kotlin/Int> // dev.chayaphon.journeyscope.export/JourneyExportController.historyChanges.<get-historyChanges>|<get-historyChanges>(){}[0]
+    final val importedTraces // dev.chayaphon.journeyscope.export/JourneyExportController.importedTraces|{}importedTraces[0]
+        final fun <get-importedTraces>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace>> // dev.chayaphon.journeyscope.export/JourneyExportController.importedTraces.<get-importedTraces>|<get-importedTraces>(){}[0]
+
+    final fun clearImported() // dev.chayaphon.journeyscope.export/JourneyExportController.clearImported|clearImported(){}[0]
+    final fun importReport(kotlin/String): dev.chayaphon.journeyscope.export.importing/ImportResult // dev.chayaphon.journeyscope.export/JourneyExportController.importReport|importReport(kotlin.String){}[0]
+    final suspend fun clearHistory() // dev.chayaphon.journeyscope.export/JourneyExportController.clearHistory|clearHistory(){}[0]
+    final suspend fun export(kotlin.collections/Set<kotlin/String>): dev.chayaphon.journeyscope.export.preview/ExportOutcome // dev.chayaphon.journeyscope.export/JourneyExportController.export|export(kotlin.collections.Set<kotlin.String>){}[0]
+    final suspend fun history(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace> // dev.chayaphon.journeyscope.export/JourneyExportController.history|history(){}[0]
+    final suspend fun preview(kotlin.collections/Set<kotlin/String>): dev.chayaphon.journeyscope.export.preview/ExportPreview? // dev.chayaphon.journeyscope.export/JourneyExportController.preview|preview(kotlin.collections.Set<kotlin.String>){}[0]
+    final suspend fun share(dev.chayaphon.journeyscope.export.share/ExportedReport): kotlin/Boolean // dev.chayaphon.journeyscope.export/JourneyExportController.share|share(dev.chayaphon.journeyscope.export.share.ExportedReport){}[0]
+}
+
+sealed class dev.chayaphon.journeyscope.export.importing/ImportResult { // dev.chayaphon.journeyscope.export.importing/ImportResult|null[0]
+    final class Accepted : dev.chayaphon.journeyscope.export.importing/ImportResult { // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted|null[0]
+        constructor <init>(kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace>, kotlin.collections/Map<kotlin/String, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>>, kotlin.collections/List<kotlin/String>) // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.<init>|<init>(kotlin.collections.List<dev.chayaphon.journeyscope.core.model.JourneyTrace>;kotlin.collections.Map<kotlin.String,kotlin.collections.List<dev.chayaphon.journeyscope.export.schema.ExportedFinding>>;kotlin.collections.List<kotlin.String>){}[0]
+
+        final val findings // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.findings|{}findings[0]
+            final fun <get-findings>(): kotlin.collections/Map<kotlin/String, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>> // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.findings.<get-findings>|<get-findings>(){}[0]
+        final val traces // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.traces|{}traces[0]
+            final fun <get-traces>(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace> // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.traces.<get-traces>|<get-traces>(){}[0]
+        final val warnings // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.warnings|{}warnings[0]
+            final fun <get-warnings>(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.warnings.<get-warnings>|<get-warnings>(){}[0]
+
+        final fun component1(): kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace> // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.component1|component1(){}[0]
+        final fun component2(): kotlin.collections/Map<kotlin/String, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>> // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.component2|component2(){}[0]
+        final fun component3(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.component3|component3(){}[0]
+        final fun copy(kotlin.collections/List<dev.chayaphon.journeyscope.core.model/JourneyTrace> = ..., kotlin.collections/Map<kotlin/String, kotlin.collections/List<dev.chayaphon.journeyscope.export.schema/ExportedFinding>> = ..., kotlin.collections/List<kotlin/String> = ...): dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.copy|copy(kotlin.collections.List<dev.chayaphon.journeyscope.core.model.JourneyTrace>;kotlin.collections.Map<kotlin.String,kotlin.collections.List<dev.chayaphon.journeyscope.export.schema.ExportedFinding>>;kotlin.collections.List<kotlin.String>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.importing/ImportResult.Accepted.toString|toString(){}[0]
+    }
+
+    final class Rejected : dev.chayaphon.journeyscope.export.importing/ImportResult { // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected|null[0]
+        constructor <init>(kotlin.collections/List<kotlin/String>) // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected.<init>|<init>(kotlin.collections.List<kotlin.String>){}[0]
+
+        final val issues // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected.issues|{}issues[0]
+            final fun <get-issues>(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected.issues.<get-issues>|<get-issues>(){}[0]
+
+        final fun component1(): kotlin.collections/List<kotlin/String> // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<kotlin/String> = ...): dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected.copy|copy(kotlin.collections.List<kotlin.String>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.importing/ImportResult.Rejected.toString|toString(){}[0]
+    }
+}
+
+sealed class dev.chayaphon.journeyscope.export.json/JsonValue { // dev.chayaphon.journeyscope.export.json/JsonValue|null[0]
+    final class Array : dev.chayaphon.journeyscope.export.json/JsonValue { // dev.chayaphon.journeyscope.export.json/JsonValue.Array|null[0]
+        constructor <init>(kotlin.collections/List<dev.chayaphon.journeyscope.export.json/JsonValue>) // dev.chayaphon.journeyscope.export.json/JsonValue.Array.<init>|<init>(kotlin.collections.List<dev.chayaphon.journeyscope.export.json.JsonValue>){}[0]
+
+        final val items // dev.chayaphon.journeyscope.export.json/JsonValue.Array.items|{}items[0]
+            final fun <get-items>(): kotlin.collections/List<dev.chayaphon.journeyscope.export.json/JsonValue> // dev.chayaphon.journeyscope.export.json/JsonValue.Array.items.<get-items>|<get-items>(){}[0]
+
+        final fun component1(): kotlin.collections/List<dev.chayaphon.journeyscope.export.json/JsonValue> // dev.chayaphon.journeyscope.export.json/JsonValue.Array.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<dev.chayaphon.journeyscope.export.json/JsonValue> = ...): dev.chayaphon.journeyscope.export.json/JsonValue.Array // dev.chayaphon.journeyscope.export.json/JsonValue.Array.copy|copy(kotlin.collections.List<dev.chayaphon.journeyscope.export.json.JsonValue>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Array.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonValue.Array.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Array.toString|toString(){}[0]
+    }
+
+    final class Bool : dev.chayaphon.journeyscope.export.json/JsonValue { // dev.chayaphon.journeyscope.export.json/JsonValue.Bool|null[0]
+        constructor <init>(kotlin/Boolean) // dev.chayaphon.journeyscope.export.json/JsonValue.Bool.<init>|<init>(kotlin.Boolean){}[0]
+
+        final val value // dev.chayaphon.journeyscope.export.json/JsonValue.Bool.value|{}value[0]
+            final fun <get-value>(): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Bool.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Bool.component1|component1(){}[0]
+        final fun copy(kotlin/Boolean = ...): dev.chayaphon.journeyscope.export.json/JsonValue.Bool // dev.chayaphon.journeyscope.export.json/JsonValue.Bool.copy|copy(kotlin.Boolean){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Bool.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonValue.Bool.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Bool.toString|toString(){}[0]
+    }
+
+    final class Decimal : dev.chayaphon.journeyscope.export.json/JsonValue { // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal|null[0]
+        constructor <init>(kotlin/Double) // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal.<init>|<init>(kotlin.Double){}[0]
+
+        final val value // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal.value|{}value[0]
+            final fun <get-value>(): kotlin/Double // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Double // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal.component1|component1(){}[0]
+        final fun copy(kotlin/Double = ...): dev.chayaphon.journeyscope.export.json/JsonValue.Decimal // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal.copy|copy(kotlin.Double){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Decimal.toString|toString(){}[0]
+    }
+
+    final class Integer : dev.chayaphon.journeyscope.export.json/JsonValue { // dev.chayaphon.journeyscope.export.json/JsonValue.Integer|null[0]
+        constructor <init>(kotlin/Long) // dev.chayaphon.journeyscope.export.json/JsonValue.Integer.<init>|<init>(kotlin.Long){}[0]
+
+        final val value // dev.chayaphon.journeyscope.export.json/JsonValue.Integer.value|{}value[0]
+            final fun <get-value>(): kotlin/Long // dev.chayaphon.journeyscope.export.json/JsonValue.Integer.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Long // dev.chayaphon.journeyscope.export.json/JsonValue.Integer.component1|component1(){}[0]
+        final fun copy(kotlin/Long = ...): dev.chayaphon.journeyscope.export.json/JsonValue.Integer // dev.chayaphon.journeyscope.export.json/JsonValue.Integer.copy|copy(kotlin.Long){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Integer.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonValue.Integer.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Integer.toString|toString(){}[0]
+    }
+
+    final class Obj : dev.chayaphon.journeyscope.export.json/JsonValue { // dev.chayaphon.journeyscope.export.json/JsonValue.Obj|null[0]
+        constructor <init>(kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.export.json/JsonValue>) // dev.chayaphon.journeyscope.export.json/JsonValue.Obj.<init>|<init>(kotlin.collections.Map<kotlin.String,dev.chayaphon.journeyscope.export.json.JsonValue>){}[0]
+
+        final val fields // dev.chayaphon.journeyscope.export.json/JsonValue.Obj.fields|{}fields[0]
+            final fun <get-fields>(): kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.export.json/JsonValue> // dev.chayaphon.journeyscope.export.json/JsonValue.Obj.fields.<get-fields>|<get-fields>(){}[0]
+
+        final fun component1(): kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.export.json/JsonValue> // dev.chayaphon.journeyscope.export.json/JsonValue.Obj.component1|component1(){}[0]
+        final fun copy(kotlin.collections/Map<kotlin/String, dev.chayaphon.journeyscope.export.json/JsonValue> = ...): dev.chayaphon.journeyscope.export.json/JsonValue.Obj // dev.chayaphon.journeyscope.export.json/JsonValue.Obj.copy|copy(kotlin.collections.Map<kotlin.String,dev.chayaphon.journeyscope.export.json.JsonValue>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Obj.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonValue.Obj.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Obj.toString|toString(){}[0]
+    }
+
+    final class Text : dev.chayaphon.journeyscope.export.json/JsonValue { // dev.chayaphon.journeyscope.export.json/JsonValue.Text|null[0]
+        constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.export.json/JsonValue.Text.<init>|<init>(kotlin.String){}[0]
+
+        final val value // dev.chayaphon.journeyscope.export.json/JsonValue.Text.value|{}value[0]
+            final fun <get-value>(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Text.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Text.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): dev.chayaphon.journeyscope.export.json/JsonValue.Text // dev.chayaphon.journeyscope.export.json/JsonValue.Text.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Text.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonValue.Text.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Text.toString|toString(){}[0]
+    }
+
+    final object Null : dev.chayaphon.journeyscope.export.json/JsonValue { // dev.chayaphon.journeyscope.export.json/JsonValue.Null|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.json/JsonValue.Null.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.json/JsonValue.Null.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.json/JsonValue.Null.toString|toString(){}[0]
+    }
+}
+
+sealed class dev.chayaphon.journeyscope.export.preview/ExportOutcome { // dev.chayaphon.journeyscope.export.preview/ExportOutcome|null[0]
+    final class Ready : dev.chayaphon.journeyscope.export.preview/ExportOutcome { // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready|null[0]
+        constructor <init>(dev.chayaphon.journeyscope.export.share/ExportedReport) // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready.<init>|<init>(dev.chayaphon.journeyscope.export.share.ExportedReport){}[0]
+
+        final val report // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready.report|{}report[0]
+            final fun <get-report>(): dev.chayaphon.journeyscope.export.share/ExportedReport // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready.report.<get-report>|<get-report>(){}[0]
+
+        final fun component1(): dev.chayaphon.journeyscope.export.share/ExportedReport // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready.component1|component1(){}[0]
+        final fun copy(dev.chayaphon.journeyscope.export.share/ExportedReport = ...): dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready.copy|copy(dev.chayaphon.journeyscope.export.share.ExportedReport){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.preview/ExportOutcome.Ready.toString|toString(){}[0]
+    }
+
+    final object NothingSelected : dev.chayaphon.journeyscope.export.preview/ExportOutcome { // dev.chayaphon.journeyscope.export.preview/ExportOutcome.NothingSelected|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.preview/ExportOutcome.NothingSelected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportOutcome.NothingSelected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.preview/ExportOutcome.NothingSelected.toString|toString(){}[0]
+    }
+
+    final object TooLarge : dev.chayaphon.journeyscope.export.preview/ExportOutcome { // dev.chayaphon.journeyscope.export.preview/ExportOutcome.TooLarge|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.preview/ExportOutcome.TooLarge.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.preview/ExportOutcome.TooLarge.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.preview/ExportOutcome.TooLarge.toString|toString(){}[0]
+    }
+}
+
+sealed class dev.chayaphon.journeyscope.export.storage/StorageEvent { // dev.chayaphon.journeyscope.export.storage/StorageEvent|null[0]
+    final class CorruptFile : dev.chayaphon.journeyscope.export.storage/StorageEvent { // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile|null[0]
+        constructor <init>(kotlin/String) // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile.<init>|<init>(kotlin.String){}[0]
+
+        final val name // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile.name|{}name[0]
+            final fun <get-name>(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile.name.<get-name>|<get-name>(){}[0]
+
+        final fun component1(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.CorruptFile.toString|toString(){}[0]
+    }
+
+    final class Evicted : dev.chayaphon.journeyscope.export.storage/StorageEvent { // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted|null[0]
+        constructor <init>(kotlin/Int) // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted.<init>|<init>(kotlin.Int){}[0]
+
+        final val count // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted.count|{}count[0]
+            final fun <get-count>(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted.count.<get-count>|<get-count>(){}[0]
+
+        final fun component1(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted.component1|component1(){}[0]
+        final fun copy(kotlin/Int = ...): dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted.copy|copy(kotlin.Int){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.Evicted.toString|toString(){}[0]
+    }
+
+    final class Failure : dev.chayaphon.journeyscope.export.storage/StorageEvent { // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure|null[0]
+        constructor <init>(kotlin/String, kotlin/String) // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+        final val errorType // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.errorType|{}errorType[0]
+            final fun <get-errorType>(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.errorType.<get-errorType>|<get-errorType>(){}[0]
+        final val operation // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.operation|{}operation[0]
+            final fun <get-operation>(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.operation.<get-operation>|<get-operation>(){}[0]
+
+        final fun component1(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.component1|component1(){}[0]
+        final fun component2(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.component2|component2(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/String = ...): dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.copy|copy(kotlin.String;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.Failure.toString|toString(){}[0]
+    }
+
+    final object CircuitOpened : dev.chayaphon.journeyscope.export.storage/StorageEvent { // dev.chayaphon.journeyscope.export.storage/StorageEvent.CircuitOpened|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/StorageEvent.CircuitOpened.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/StorageEvent.CircuitOpened.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.CircuitOpened.toString|toString(){}[0]
+    }
+
+    final object QueueOverflow : dev.chayaphon.journeyscope.export.storage/StorageEvent { // dev.chayaphon.journeyscope.export.storage/StorageEvent.QueueOverflow|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // dev.chayaphon.journeyscope.export.storage/StorageEvent.QueueOverflow.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // dev.chayaphon.journeyscope.export.storage/StorageEvent.QueueOverflow.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // dev.chayaphon.journeyscope.export.storage/StorageEvent.QueueOverflow.toString|toString(){}[0]
+    }
+}
+
+final object dev.chayaphon.journeyscope.export.schema/TraceReportWriter { // dev.chayaphon.journeyscope.export.schema/TraceReportWriter|null[0]
+    final fun write(kotlin.collections/List<dev.chayaphon.journeyscope.export.redaction/RedactedTrace>, dev.chayaphon.journeyscope.export.schema/ReportContext = ...): kotlin/String // dev.chayaphon.journeyscope.export.schema/TraceReportWriter.write|write(kotlin.collections.List<dev.chayaphon.journeyscope.export.redaction.RedactedTrace>;dev.chayaphon.journeyscope.export.schema.ReportContext){}[0]
+}
+
+final object dev.chayaphon.journeyscope.export.schema/TraceSchema { // dev.chayaphon.journeyscope.export.schema/TraceSchema|null[0]
+    final const val FILE_EXTENSION // dev.chayaphon.journeyscope.export.schema/TraceSchema.FILE_EXTENSION|{}FILE_EXTENSION[0]
+        final fun <get-FILE_EXTENSION>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/TraceSchema.FILE_EXTENSION.<get-FILE_EXTENSION>|<get-FILE_EXTENSION>(){}[0]
+    final const val MIME_TYPE // dev.chayaphon.journeyscope.export.schema/TraceSchema.MIME_TYPE|{}MIME_TYPE[0]
+        final fun <get-MIME_TYPE>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/TraceSchema.MIME_TYPE.<get-MIME_TYPE>|<get-MIME_TYPE>(){}[0]
+    final const val NAME // dev.chayaphon.journeyscope.export.schema/TraceSchema.NAME|{}NAME[0]
+        final fun <get-NAME>(): kotlin/String // dev.chayaphon.journeyscope.export.schema/TraceSchema.NAME.<get-NAME>|<get-NAME>(){}[0]
+    final const val VERSION // dev.chayaphon.journeyscope.export.schema/TraceSchema.VERSION|{}VERSION[0]
+        final fun <get-VERSION>(): kotlin/Int // dev.chayaphon.journeyscope.export.schema/TraceSchema.VERSION.<get-VERSION>|<get-VERSION>(){}[0]
+}
+
+final fun dev.chayaphon.journeyscope.export.storage/createTraceFileSystem(kotlin/String): dev.chayaphon.journeyscope.export.storage/TraceFileSystem // dev.chayaphon.journeyscope.export.storage/createTraceFileSystem|createTraceFileSystem(kotlin.String){}[0]
+final fun dev.chayaphon.journeyscope.export.storage/iosTraceDirectory(): kotlin/String // dev.chayaphon.journeyscope.export.storage/iosTraceDirectory|iosTraceDirectory(){}[0]

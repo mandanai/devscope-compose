@@ -1,0 +1,36 @@
+# JourneyScope
+
+> Runtime debugging SDK for Kotlin Multiplatform apps (Android, iOS). Records the whole journey of an operation (UI → ViewModel → UseCase → Repository → Network → Database → UI state), shows it in an in-app Compose inspector, and exports redacted reports. Pre-release (0.1.0); publish locally with `./gradlew publishToMavenLocal`.
+
+Instructions for AI agents installing and instrumenting JourneyScope in a host app. Read the playbook first.
+
+## Start here
+
+- [Setup playbook](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/setup-playbook.md): end-to-end install, configure, instrument, verify procedure
+- [Decision tree](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/decision-tree.md): project signals to modules and scenarios
+- [Guardrails](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/guardrails.md): privacy, release-safety and API-misuse rules
+- [Verification](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/verification.md): how to prove the integration works
+
+## Scenarios
+
+- [Trace a UI-to-repository flow](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/trace-usecase-flow.md): journeys and spans
+- [Ktor](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/network-ktor.md): network tracing plugin
+- [OkHttp / Retrofit](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/network-okhttp.md): interceptor and request tagging
+- [Flow and StateFlow](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/flow-state.md): state and coroutine tracing
+- [Navigation](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/navigation.md): NavigationTracer
+- [SQLDelight](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/database-sqldelight.md): database spans
+- [Expected sequences](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/expected-sequence.md): declared step checks
+- [Export and history](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/export-history.md): redacted persistence and sharing
+- [Release safety](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/scenarios/release-safety.md): keep debug tooling out of release
+
+## Skill (Claude Code, Codex CLI, Gemini CLI)
+
+- [Skill](https://raw.githubusercontent.com/mandanai/devscope-compose/main/skills/journeyscope/SKILL.md): Agent Skills entry point with bundled references
+- [Install script](https://raw.githubusercontent.com/mandanai/devscope-compose/main/scripts/install-skill.sh): installs the skill into the right directory per agent
+
+## Reference
+
+- [API cheatsheet](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/api-cheatsheet.md): the only APIs agents may use
+- [Troubleshooting](https://raw.githubusercontent.com/mandanai/devscope-compose/main/ai/troubleshooting.md): symptom to fix
+- [Getting started (human)](https://raw.githubusercontent.com/mandanai/devscope-compose/main/docs/getting-started.md)
+- [Privacy and security](https://raw.githubusercontent.com/mandanai/devscope-compose/main/docs/privacy-security.md)

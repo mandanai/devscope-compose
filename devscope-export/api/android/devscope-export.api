@@ -1,0 +1,589 @@
+public final class dev/chayaphon/journeyscope/export/JourneyExportController {
+	public fun <init> (Ldev/chayaphon/journeyscope/core/recorder/JourneyRecorder;Ldev/chayaphon/journeyscope/export/storage/TraceStore;Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;Ldev/chayaphon/journeyscope/export/share/ShareSink;Ldev/chayaphon/journeyscope/core/timing/JourneyClock;Lkotlin/jvm/functions/Function1;Ldev/chayaphon/journeyscope/export/importing/ImportLimits;)V
+	public synthetic fun <init> (Ldev/chayaphon/journeyscope/core/recorder/JourneyRecorder;Ldev/chayaphon/journeyscope/export/storage/TraceStore;Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;Ldev/chayaphon/journeyscope/export/share/ShareSink;Ldev/chayaphon/journeyscope/core/timing/JourneyClock;Lkotlin/jvm/functions/Function1;Ldev/chayaphon/journeyscope/export/importing/ImportLimits;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clearHistory (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun clearImported ()V
+	public final fun export (Ljava/util/Set;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getCanShare ()Z
+	public final fun getHistoryChanges ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getImportedTraces ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun history (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun importReport (Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/importing/ImportResult;
+	public final fun preview (Ljava/util/Set;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun share (Ldev/chayaphon/journeyscope/export/share/ExportedReport;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class dev/chayaphon/journeyscope/export/importing/ImportLimits {
+	public fun <init> ()V
+	public fun <init> (IIIIIIIIZ)V
+	public synthetic fun <init> (IIIIIIIIZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun component5 ()I
+	public final fun component6 ()I
+	public final fun component7 ()I
+	public final fun component8 ()I
+	public final fun component9 ()Z
+	public final fun copy (IIIIIIIIZ)Ldev/chayaphon/journeyscope/export/importing/ImportLimits;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/importing/ImportLimits;IIIIIIIIZILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/importing/ImportLimits;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMaxBytes ()I
+	public final fun getMaxDepth ()I
+	public final fun getMaxEventsPerTrace ()I
+	public final fun getMaxIssues ()I
+	public final fun getMaxMetadataEntries ()I
+	public final fun getMaxSpansPerTrace ()I
+	public final fun getMaxStringLength ()I
+	public final fun getMaxTraces ()I
+	public final fun getStrict ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class dev/chayaphon/journeyscope/export/importing/ImportResult {
+}
+
+public final class dev/chayaphon/journeyscope/export/importing/ImportResult$Accepted : dev/chayaphon/journeyscope/export/importing/ImportResult {
+	public fun <init> (Ljava/util/List;Ljava/util/Map;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Ljava/util/Map;Ljava/util/List;)Ldev/chayaphon/journeyscope/export/importing/ImportResult$Accepted;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/importing/ImportResult$Accepted;Ljava/util/List;Ljava/util/Map;Ljava/util/List;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/importing/ImportResult$Accepted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFindings ()Ljava/util/Map;
+	public final fun getTraces ()Ljava/util/List;
+	public final fun getWarnings ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/importing/ImportResult$Rejected : dev/chayaphon/journeyscope/export/importing/ImportResult {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Ldev/chayaphon/journeyscope/export/importing/ImportResult$Rejected;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/importing/ImportResult$Rejected;Ljava/util/List;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/importing/ImportResult$Rejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIssues ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/importing/TraceImporter {
+	public fun <init> ()V
+	public fun <init> (Ldev/chayaphon/journeyscope/export/importing/ImportLimits;Ldev/chayaphon/journeyscope/export/redaction/RedactionPipeline;Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator;)V
+	public synthetic fun <init> (Ldev/chayaphon/journeyscope/export/importing/ImportLimits;Ldev/chayaphon/journeyscope/export/redaction/RedactionPipeline;Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun import (Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/importing/ImportResult;
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonException : java/lang/Exception {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonLimits {
+	public fun <init> ()V
+	public fun <init> (IIII)V
+	public synthetic fun <init> (IIIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun copy (IIII)Ldev/chayaphon/journeyscope/export/json/JsonLimits;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/json/JsonLimits;IIIIILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/json/JsonLimits;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMaxBytes ()I
+	public final fun getMaxDepth ()I
+	public final fun getMaxNodes ()I
+	public final fun getMaxStringLength ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class dev/chayaphon/journeyscope/export/json/JsonValue {
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonValue$Array : dev/chayaphon/journeyscope/export/json/JsonValue {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Array;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/json/JsonValue$Array;Ljava/util/List;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Array;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getItems ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonValue$Bool : dev/chayaphon/journeyscope/export/json/JsonValue {
+	public fun <init> (Z)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Ldev/chayaphon/journeyscope/export/json/JsonValue$Bool;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/json/JsonValue$Bool;ZILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Bool;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonValue$Decimal : dev/chayaphon/journeyscope/export/json/JsonValue {
+	public fun <init> (D)V
+	public final fun component1 ()D
+	public final fun copy (D)Ldev/chayaphon/journeyscope/export/json/JsonValue$Decimal;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/json/JsonValue$Decimal;DILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Decimal;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonValue$Integer : dev/chayaphon/journeyscope/export/json/JsonValue {
+	public fun <init> (J)V
+	public final fun component1 ()J
+	public final fun copy (J)Ldev/chayaphon/journeyscope/export/json/JsonValue$Integer;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/json/JsonValue$Integer;JILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Integer;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonValue$Null : dev/chayaphon/journeyscope/export/json/JsonValue {
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/export/json/JsonValue$Null;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonValue$Obj : dev/chayaphon/journeyscope/export/json/JsonValue {
+	public fun <init> (Ljava/util/Map;)V
+	public final fun component1 ()Ljava/util/Map;
+	public final fun copy (Ljava/util/Map;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;Ljava/util/Map;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFields ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/json/JsonValue$Text : dev/chayaphon/journeyscope/export/json/JsonValue {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Text;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/json/JsonValue$Text;Ljava/lang/String;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/json/JsonValue$Text;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/persistence/JourneyPersistence {
+	public static final field Companion Ldev/chayaphon/journeyscope/export/persistence/JourneyPersistence$Companion;
+	public final fun close ()V
+	public final fun flush (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getRecorder ()Ldev/chayaphon/journeyscope/core/recorder/JourneyRecorder;
+	public final fun getStore ()Ldev/chayaphon/journeyscope/export/storage/TraceStore;
+	public final fun isPersisting ()Z
+}
+
+public final class dev/chayaphon/journeyscope/export/persistence/JourneyPersistence$Companion {
+	public final fun install (Ldev/chayaphon/journeyscope/core/JourneyScopeConfig;Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;Lkotlin/jvm/functions/Function0;Ldev/chayaphon/journeyscope/export/storage/StorageListener;Lkotlin/jvm/functions/Function0;Ldev/chayaphon/journeyscope/core/timing/JourneyClock;)Ldev/chayaphon/journeyscope/export/persistence/JourneyPersistence;
+	public static synthetic fun install$default (Ldev/chayaphon/journeyscope/export/persistence/JourneyPersistence$Companion;Ldev/chayaphon/journeyscope/core/JourneyScopeConfig;Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;Lkotlin/jvm/functions/Function0;Ldev/chayaphon/journeyscope/export/storage/StorageListener;Lkotlin/jvm/functions/Function0;Ldev/chayaphon/journeyscope/core/timing/JourneyClock;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/persistence/JourneyPersistence;
+}
+
+public final class dev/chayaphon/journeyscope/export/persistence/PersistingJourneyRecorder : dev/chayaphon/journeyscope/core/recorder/JourneyRecorder {
+	public fun <init> (Ldev/chayaphon/journeyscope/core/recorder/JourneyRecorder;Ldev/chayaphon/journeyscope/export/storage/TraceStore;ILdev/chayaphon/journeyscope/export/storage/StorageListener;Lkotlinx/coroutines/CoroutineDispatcher;Lkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Ldev/chayaphon/journeyscope/core/recorder/JourneyRecorder;Ldev/chayaphon/journeyscope/export/storage/TraceStore;ILdev/chayaphon/journeyscope/export/storage/StorageListener;Lkotlinx/coroutines/CoroutineDispatcher;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun attach (Ldev/chayaphon/journeyscope/core/recorder/RecordedTrace;)V
+	public fun clear ()V
+	public final fun close ()V
+	public fun find-ABaf8SE (Ljava/lang/String;)Ldev/chayaphon/journeyscope/core/model/JourneyTrace;
+	public final fun flush (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public fun liveTraces ()Ljava/util/List;
+	public fun notifyChanged-ABaf8SE (Ljava/lang/String;)V
+	public fun notifyFinished (Ldev/chayaphon/journeyscope/core/model/JourneyTrace;)V
+	public fun snapshot ()Ljava/util/List;
+}
+
+public final class dev/chayaphon/journeyscope/export/policy/ExportPolicy {
+	public static final field Companion Ldev/chayaphon/journeyscope/export/policy/ExportPolicy$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ZZLdev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;JIJJIIJLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ZZLdev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;JIJJIIJLjava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component10 ()J
+	public final fun component11 ()Ljava/lang/String;
+	public final fun component2 ()Z
+	public final fun component3 ()Ldev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;
+	public final fun component4-UwyO8pc ()J
+	public final fun component5 ()I
+	public final fun component6 ()J
+	public final fun component7 ()J
+	public final fun component8 ()I
+	public final fun component9 ()I
+	public final fun copy-Tp8oMn4 (ZZLdev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;JIJJIIJLjava/lang/String;)Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;
+	public static synthetic fun copy-Tp8oMn4$default (Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;ZZLdev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;JIJJIIJLjava/lang/String;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAllowBodies ()Z
+	public final fun getAllowlist ()Ldev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getMaxExportBytes ()J
+	public final fun getMaxExportTraces ()I
+	public final fun getMaxStoredTraces ()I
+	public final fun getMaxTotalBytes ()J
+	public final fun getMaxTraceBytes ()J
+	public final fun getPersistenceEnabled ()Z
+	public final fun getQueueCapacity ()I
+	public final fun getRetention-UwyO8pc ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/policy/ExportPolicy$Companion {
+	public final fun getDefault ()Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;
+}
+
+public abstract class dev/chayaphon/journeyscope/export/preview/ExportOutcome {
+}
+
+public final class dev/chayaphon/journeyscope/export/preview/ExportOutcome$NothingSelected : dev/chayaphon/journeyscope/export/preview/ExportOutcome {
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/export/preview/ExportOutcome$NothingSelected;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/preview/ExportOutcome$Ready : dev/chayaphon/journeyscope/export/preview/ExportOutcome {
+	public fun <init> (Ldev/chayaphon/journeyscope/export/share/ExportedReport;)V
+	public final fun component1 ()Ldev/chayaphon/journeyscope/export/share/ExportedReport;
+	public final fun copy (Ldev/chayaphon/journeyscope/export/share/ExportedReport;)Ldev/chayaphon/journeyscope/export/preview/ExportOutcome$Ready;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/preview/ExportOutcome$Ready;Ldev/chayaphon/journeyscope/export/share/ExportedReport;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/preview/ExportOutcome$Ready;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReport ()Ldev/chayaphon/journeyscope/export/share/ExportedReport;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/preview/ExportOutcome$TooLarge : dev/chayaphon/journeyscope/export/preview/ExportOutcome {
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/export/preview/ExportOutcome$TooLarge;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/preview/ExportPreview {
+	public fun <init> (IIIILjava/util/List;Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;Ljava/lang/String;Z)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Z
+	public final fun copy (IIIILjava/util/List;Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;Ljava/lang/String;Z)Ldev/chayaphon/journeyscope/export/preview/ExportPreview;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/preview/ExportPreview;IIIILjava/util/List;Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;Ljava/lang/String;ZILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/preview/ExportPreview;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEventCount ()I
+	public final fun getExceedsLimits ()Z
+	public final fun getIncludedMetadataKeys ()Ljava/util/List;
+	public final fun getJson ()Ljava/lang/String;
+	public final fun getRedaction ()Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;
+	public final fun getSizeBytes ()I
+	public final fun getSpanCount ()I
+	public final fun getTraceCount ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/redaction/MetadataAllowlist {
+	public static final field Companion Ldev/chayaphon/journeyscope/export/redaction/MetadataAllowlist$Companion;
+	public fun <init> (Ljava/util/Set;)V
+	public final fun allows (Ljava/lang/String;)Z
+	public final fun plus (Ldev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;)Ldev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;
+}
+
+public final class dev/chayaphon/journeyscope/export/redaction/MetadataAllowlist$Companion {
+	public final fun getDefault ()Ldev/chayaphon/journeyscope/export/redaction/MetadataAllowlist;
+}
+
+public final class dev/chayaphon/journeyscope/export/redaction/RedactedTrace {
+	public final fun getReport ()Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;
+	public final fun getTrace ()Ldev/chayaphon/journeyscope/core/model/JourneyTrace;
+}
+
+public final class dev/chayaphon/journeyscope/export/redaction/RedactionPipeline {
+	public fun <init> ()V
+	public fun <init> (Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;Ldev/chayaphon/journeyscope/core/RedactionPolicy;)V
+	public synthetic fun <init> (Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;Ldev/chayaphon/journeyscope/core/RedactionPolicy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun redact (Ldev/chayaphon/journeyscope/core/model/JourneyTrace;)Ldev/chayaphon/journeyscope/export/redaction/RedactedTrace;
+}
+
+public final class dev/chayaphon/journeyscope/export/redaction/RedactionReport {
+	public fun <init> ()V
+	public fun <init> (IIIIILjava/util/Set;)V
+	public synthetic fun <init> (IIIIILjava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun component5 ()I
+	public final fun component6 ()Ljava/util/Set;
+	public final fun copy (IIIIILjava/util/Set;)Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;IIIIILjava/util/Set;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/redaction/RedactionReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDroppedBodies ()I
+	public final fun getDroppedKeys ()I
+	public final fun getIncludedKeys ()Ljava/util/Set;
+	public final fun getMaskedKeys ()I
+	public final fun getScrubbedValues ()I
+	public final fun getStrippedFailureDetails ()I
+	public final fun getTotalRedactions ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/schema/ExportedFinding {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/schema/ExportedFinding;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/schema/ExportedFinding;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/schema/ExportedFinding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRuleId ()Ljava/lang/String;
+	public final fun getSeverity ()Ljava/lang/String;
+	public final fun getSpanId ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/schema/ReportContext {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLdev/chayaphon/journeyscope/core/JourneyScopeConfig;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLdev/chayaphon/journeyscope/core/JourneyScopeConfig;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()J
+	public final fun component5 ()Ldev/chayaphon/journeyscope/core/JourneyScopeConfig;
+	public final fun component6 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLdev/chayaphon/journeyscope/core/JourneyScopeConfig;Ljava/util/Map;)Ldev/chayaphon/journeyscope/export/schema/ReportContext;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/schema/ReportContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLdev/chayaphon/journeyscope/core/JourneyScopeConfig;Ljava/util/Map;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/schema/ReportContext;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getConfig ()Ldev/chayaphon/journeyscope/core/JourneyScopeConfig;
+	public final fun getExportedAtWallMillis ()J
+	public final fun getFindings ()Ljava/util/Map;
+	public final fun getPlatform ()Ljava/lang/String;
+	public final fun getSdkVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/schema/SchemaMigrator {
+	public fun <init> ()V
+	public fun <init> (ILjava/util/Map;)V
+	public synthetic fun <init> (ILjava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun migrate (Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;)Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome;
+}
+
+public abstract class dev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome {
+}
+
+public final class dev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome$Ready : dev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome {
+	public fun <init> (Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;)V
+	public final fun component1 ()Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;
+	public final fun copy (Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;)Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome$Ready;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome$Ready;Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome$Ready;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocument ()Ldev/chayaphon/journeyscope/export/json/JsonValue$Obj;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome$Unsupported : dev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome$Unsupported;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome$Unsupported;Ljava/lang/String;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/schema/SchemaMigrator$Outcome$Unsupported;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/schema/TraceReportWriter {
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/export/schema/TraceReportWriter;
+	public final fun write (Ljava/util/List;Ldev/chayaphon/journeyscope/export/schema/ReportContext;)Ljava/lang/String;
+	public static synthetic fun write$default (Ldev/chayaphon/journeyscope/export/schema/TraceReportWriter;Ljava/util/List;Ldev/chayaphon/journeyscope/export/schema/ReportContext;ILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/schema/TraceSchema {
+	public static final field FILE_EXTENSION Ljava/lang/String;
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/export/schema/TraceSchema;
+	public static final field MIME_TYPE Ljava/lang/String;
+	public static final field NAME Ljava/lang/String;
+	public static final field VERSION I
+}
+
+public final class dev/chayaphon/journeyscope/export/share/AndroidShareSink : dev/chayaphon/journeyscope/export/share/ShareSink {
+	public fun <init> (Landroid/content/Context;Lkotlin/jvm/functions/Function1;I)V
+	public synthetic fun <init> (Landroid/content/Context;Lkotlin/jvm/functions/Function1;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun share (Ldev/chayaphon/journeyscope/export/share/ExportedReport;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class dev/chayaphon/journeyscope/export/share/ExportedReport {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;I)V
+	public final fun getFileName ()Ljava/lang/String;
+	public final fun getJson ()Ljava/lang/String;
+	public final fun getSizeBytes ()I
+	public final fun getTraceCount ()I
+}
+
+public abstract interface class dev/chayaphon/journeyscope/export/share/ShareSink {
+	public abstract fun share (Ldev/chayaphon/journeyscope/export/share/ExportedReport;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/AndroidTraceFileSystemKt {
+	public static final fun androidTraceDirectory (Landroid/content/Context;)Ljava/lang/String;
+	public static final fun createTraceFileSystem (Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/storage/TraceFileSystem;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/SaveOutcome : java/lang/Enum {
+	public static final field FAILED Ldev/chayaphon/journeyscope/export/storage/SaveOutcome;
+	public static final field INVALID_ID Ldev/chayaphon/journeyscope/export/storage/SaveOutcome;
+	public static final field SAVED Ldev/chayaphon/journeyscope/export/storage/SaveOutcome;
+	public static final field SUSPENDED Ldev/chayaphon/journeyscope/export/storage/SaveOutcome;
+	public static final field TOO_LARGE Ldev/chayaphon/journeyscope/export/storage/SaveOutcome;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/storage/SaveOutcome;
+	public static fun values ()[Ldev/chayaphon/journeyscope/export/storage/SaveOutcome;
+}
+
+public abstract class dev/chayaphon/journeyscope/export/storage/StorageEvent {
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/StorageEvent$CircuitOpened : dev/chayaphon/journeyscope/export/storage/StorageEvent {
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/export/storage/StorageEvent$CircuitOpened;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/StorageEvent$CorruptFile : dev/chayaphon/journeyscope/export/storage/StorageEvent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/storage/StorageEvent$CorruptFile;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/storage/StorageEvent$CorruptFile;Ljava/lang/String;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/storage/StorageEvent$CorruptFile;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/StorageEvent$Evicted : dev/chayaphon/journeyscope/export/storage/StorageEvent {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Ldev/chayaphon/journeyscope/export/storage/StorageEvent$Evicted;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/storage/StorageEvent$Evicted;IILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/storage/StorageEvent$Evicted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCount ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/StorageEvent$Failure : dev/chayaphon/journeyscope/export/storage/StorageEvent {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ldev/chayaphon/journeyscope/export/storage/StorageEvent$Failure;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/storage/StorageEvent$Failure;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/storage/StorageEvent$Failure;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getErrorType ()Ljava/lang/String;
+	public final fun getOperation ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/StorageEvent$QueueOverflow : dev/chayaphon/journeyscope/export/storage/StorageEvent {
+	public static final field INSTANCE Ldev/chayaphon/journeyscope/export/storage/StorageEvent$QueueOverflow;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class dev/chayaphon/journeyscope/export/storage/StorageListener {
+	public static final field Companion Ldev/chayaphon/journeyscope/export/storage/StorageListener$Companion;
+	public abstract fun onEvent (Ldev/chayaphon/journeyscope/export/storage/StorageEvent;)V
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/StorageListener$Companion {
+	public final fun getNone ()Ldev/chayaphon/journeyscope/export/storage/StorageListener;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/StoredFile {
+	public fun <init> (Ljava/lang/String;JJ)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()J
+	public final fun component3 ()J
+	public final fun copy (Ljava/lang/String;JJ)Ldev/chayaphon/journeyscope/export/storage/StoredFile;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/storage/StoredFile;Ljava/lang/String;JJILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/storage/StoredFile;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getModifiedMillis ()J
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSizeBytes ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class dev/chayaphon/journeyscope/export/storage/TraceFileSystem {
+	public abstract fun delete (Ljava/lang/String;)Z
+	public abstract fun list ()Ljava/util/List;
+	public abstract fun read (Ljava/lang/String;)Ljava/lang/String;
+	public abstract fun writeAtomically (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/TraceQuery {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Set;Ljava/lang/String;Ljava/lang/Long;I)V
+	public synthetic fun <init> (Ljava/util/Set;Ljava/lang/String;Ljava/lang/Long;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/Set;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/Long;
+	public final fun component4 ()I
+	public final fun copy (Ljava/util/Set;Ljava/lang/String;Ljava/lang/Long;I)Ldev/chayaphon/journeyscope/export/storage/TraceQuery;
+	public static synthetic fun copy$default (Ldev/chayaphon/journeyscope/export/storage/TraceQuery;Ljava/util/Set;Ljava/lang/String;Ljava/lang/Long;IILjava/lang/Object;)Ldev/chayaphon/journeyscope/export/storage/TraceQuery;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLimit ()I
+	public final fun getNameContains ()Ljava/lang/String;
+	public final fun getSinceWallMillis ()Ljava/lang/Long;
+	public final fun getStatuses ()Ljava/util/Set;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/TraceStore : dev/chayaphon/journeyscope/core/spi/JourneyStore {
+	public static final field Companion Ldev/chayaphon/journeyscope/export/storage/TraceStore$Companion;
+	public static final field DEFAULT_FAILURE_THRESHOLD I
+	public fun <init> (Ldev/chayaphon/journeyscope/export/storage/TraceFileSystem;Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;Ldev/chayaphon/journeyscope/core/timing/JourneyClock;Ldev/chayaphon/journeyscope/export/storage/StorageListener;Lkotlinx/coroutines/CoroutineDispatcher;I)V
+	public synthetic fun <init> (Ldev/chayaphon/journeyscope/export/storage/TraceFileSystem;Ldev/chayaphon/journeyscope/export/policy/ExportPolicy;Ldev/chayaphon/journeyscope/core/timing/JourneyClock;Ldev/chayaphon/journeyscope/export/storage/StorageListener;Lkotlinx/coroutines/CoroutineDispatcher;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clearAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun delete-8lNGxuQ (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun isSuspended ()Z
+	public fun load-8lNGxuQ (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun loadAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun query (Ldev/chayaphon/journeyscope/export/storage/TraceQuery;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun resume ()V
+	public fun save (Ldev/chayaphon/journeyscope/core/model/JourneyTrace;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun saveTrace (Ldev/chayaphon/journeyscope/core/model/JourneyTrace;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun storedBytes (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class dev/chayaphon/journeyscope/export/storage/TraceStore$Companion {
+}
+
