@@ -19,4 +19,4 @@ Imported reports are validated for schema version, size and structure; imported 
 Keep the Inspector and export modules out of release (`debugImplementation`), or leave the SDK disabled. See [release](release.md).
 
 ## Reporting a vulnerability
-Open a private security advisory on the repository. (TODO: confirm contact before the first public release.)
+Report privately through a GitHub security advisory; see [SECURITY.md](../SECURITY.md).

@@ -1,0 +1,70 @@
+name: Bug report
+description: Something in JourneyScope is not working as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Remove API keys, tokens, URLs and personal data from logs and screenshots first.
+        Security issues do not belong here; see [SECURITY.md](https://github.com/mandanai/devscope-compose/blob/main/SECURITY.md).
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: JourneyScope version
+      placeholder: 0.2.0
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options: [Android, iOS, Both]
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS version and device
+      placeholder: Android 15 / Pixel 8, iOS 18 / iPhone 15 simulator
+    validations:
+      required: true
+  - type: input
+    id: toolchain
+    attributes:
+      label: Kotlin, Compose Multiplatform and AGP/Xcode versions
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      render: shell
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
