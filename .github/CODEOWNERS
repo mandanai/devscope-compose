@@ -1,0 +1,22 @@
+# Review enforcement needs a branch ruleset with "Require review from Code Owners"
+* @mandanai
+
+/.github/ @mandanai
+/.github/workflows/ @mandanai
+/gradle/ @mandanai
+/gradle/libs.versions.toml @mandanai
+/gradlew @mandanai
+/gradlew.bat @mandanai
+*.gradle.kts @mandanai
+/gradle.properties @mandanai
+/build-logic/ @mandanai
+/config/ @mandanai
+/scripts/ @mandanai
+
+/build-logic/convention/src/main/kotlin/PublishingConventionPlugin.kt @mandanai
+
+/SECURITY.md @mandanai
+/LICENSE @mandanai
+
+/ai/ @mandanai
+/skills/ @mandanai
