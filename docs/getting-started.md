@@ -2,6 +2,18 @@
 
 The mandatory integration is two calls: configure once, then open a journey around the operation you want to see.
 
+```mermaid
+flowchart LR
+    A[1. Add core] --> B[2. Configure<br/>debug only]
+    B --> C[3. Wrap an<br/>operation]
+    C --> D[4. Add adapters<br/>optional]
+    D --> E[5. Open the<br/>Inspector]
+    E --> F[6. Export a<br/>safe report]
+```
+
+!!! info "Prerequisites"
+    Android minSdk 26, JDK 17, and Xcode 26+ for iOS.
+
 ## 1. Add the core
 
 ```kotlin
@@ -45,19 +57,26 @@ See [instrumentation](instrumentation.md).
 
 ## 5. Open the Inspector
 
-**Android:** add `debugImplementation(devscope-android)`. A notification opens the Inspector; no button, no export wiring (see [Android integration](android-integration.md)).
+=== "Android"
 
-**iOS or custom placement:** embed the composable yourself:
+    Add `debugImplementation(devscope-android)`. A notification opens the Inspector; no button, no export wiring (see [Android integration](android-integration.md)).
 
-```kotlin
-JourneyScopeInspector(onClose = { showInspector = false })
-```
+=== "iOS or custom placement"
 
-It reads the global recorder by default. Pass `exportController` to enable history, import and sharing.
+    Embed the composable yourself (see [iOS integration](ios-integration.md)):
+
+    ```kotlin
+    JourneyScopeInspector(onClose = { showInspector = false })
+    ```
+
+    It reads the global recorder by default. Pass `exportController` to enable history, import and sharing.
 
 ## 6. Export a safe report
 
 Create `JourneyPersistence` and `JourneyExportController` (see [export](export.md)), pass the controller to the Inspector, and use Export. Reports go through a second redaction pass and are reviewed on screen before they are shared. Details in [privacy and security](privacy-security.md).
+
+!!! success "You're done when"
+    Tapping the JourneyScope notification (Android) or opening `JourneyScopeInspector` (iOS) shows your journey with its spans in the timeline.
 
 ## Platform guides
 - [Android](android-integration.md)

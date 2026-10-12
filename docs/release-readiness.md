@@ -1,4 +1,4 @@
-# Release readiness report: Phase 8
+# Release readiness report
 
 Version `0.2.0`. Nothing has been published to any remote repository.
 
@@ -54,7 +54,7 @@ Acyclic: `core` at the root; `diagnostics`, `export`, `flow`, `navigation`, `net
 5. `samples/iosApp` enables the SDK unconditionally (no `#if DEBUG`).
 6. `maxLineLength` is not enforced; detekt baseline contains pre-existing findings.
 7. Placeholder POM URL, developer id and security contact (`mandanai/devscope-compose`).
-8. `ui-compose` ships the `ui-tooling-preview` artifact as an `implementation` dependency of `commonMain`; not changed this phase.
+8. `ui-compose` ships the `ui-tooling-preview` artifact as an `implementation` dependency of `commonMain`; not changed in this release.
 9. `JourneyScope.VERSION` is a literal checked by a test, not generated.
 10. Performance numbers are host-JVM only.
 11. `detekt` is `2.0.0-alpha.6`, a pre-release tool, in the quality gate; pin or move to a stable release when available.

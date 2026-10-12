@@ -40,11 +40,7 @@ JourneyScope records what happens between a tap and the resulting UI state: **UI
 
 ## Installation
 
-JourneyScope is pre-release (`0.2.0`) and is not on Maven Central yet. Publish it locally:
-
-```bash
-./gradlew publishToMavenLocal
-```
+JourneyScope is release (`0.2.0`)
 
 Then add the modules you need:
 
@@ -139,6 +135,8 @@ An "Add to Cart" app exercises every module.
 For iOS, open `samples/iosApp/iosApp.xcodeproj` in Xcode 26+ and run. See [development](docs/development.md) and the [sample walkthrough](docs/sample-walkthrough.md).
 
 ## Documentation
+
+Browse the [documentation site](https://journeyscope.chayaphon.dev/) or the files below.
 
 **Guides**
 [Getting started](docs/getting-started.md) ·

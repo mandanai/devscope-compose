@@ -19,6 +19,14 @@ Create the inspector, `JourneyPersistence` and `JourneyExportController` from `s
 iOS: build the Kotlin framework in two variants. The release framework exports only the app code (and core or core-noop); the debug framework also links the UI and export modules. Reference the inspector entry point from Swift under `#if DEBUG`.
 
 ## Two supported release setups
+
+```mermaid
+flowchart TD
+    Q{Does app code call APIs with no noop twin?<br/>diagnostics, export, Inspector}
+    Q -->|No| A[Setup A: swap to -noop twins in release]
+    Q -->|Yes| B[Setup B: real core, disabled in release<br/>debugOnly isDebuggable]
+```
+
 - **A. Chucker style: same app code, noop in release.** Swap every module the app code touches for its `-noop` twin by build type. Working example: `samples/androidApp` (identical UI in both builds).
 - **B. Real core, disabled in release.** Keep `devscope-core` and adapters in every variant and use `JourneyScopeConfig.debugOnly(isDebuggable)` so release stays off. Choose this when app code uses APIs that have no noop twin (diagnostics, export, the Inspector).
 
@@ -47,5 +55,6 @@ That library is compiled against the real modules, so a twin must stay binary co
 Twins keep behaviour, not tracing: `observeWithJourneyScope` still collects, `DatabaseTracing.transaction` still runs its transaction, the Ktor plugin installs but intercepts nothing. Keep application behaviour independent of whether a journey is recording.
 
 Limits:
+
 - `devscope-ui-compose`, `devscope-export` and `devscope-diagnostics` have no twin; keep them out of shared code (`debugImplementation`, a debug source set, or an iOS-only source set).
 - `JourneyScope.configure(config, recorder)` in the core twin ignores both arguments; recorder and persistence wiring belongs in debug code.
