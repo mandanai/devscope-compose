@@ -2,7 +2,7 @@ package dev.chayaphon.journeyscope.sample.shop.ui
 
 enum class CartOutcome { None, Added, Failed, Cancelled }
 
-enum class CartPhase { Idle, Adding, Added, Failed, Cancelled }
+enum class CartStatus { Idle, Adding, Added, Failed, Cancelled }
 
 data class CartUiState(
     val cartCount: Int = 0,
@@ -11,14 +11,14 @@ data class CartUiState(
     val message: String? = null,
     val renderToken: Long = 0,
 ) {
-    val phase: CartPhase
+    val status: CartStatus
         get() =
             when {
-                pending > 0 -> CartPhase.Adding
-                outcome == CartOutcome.Added -> CartPhase.Added
-                outcome == CartOutcome.Failed -> CartPhase.Failed
-                outcome == CartOutcome.Cancelled -> CartPhase.Cancelled
-                else -> CartPhase.Idle
+                pending > 0 -> CartStatus.Adding
+                outcome == CartOutcome.Added -> CartStatus.Added
+                outcome == CartOutcome.Failed -> CartStatus.Failed
+                outcome == CartOutcome.Cancelled -> CartStatus.Cancelled
+                else -> CartStatus.Idle
             }
 
     fun adding(): CartUiState = copy(pending = pending + 1)

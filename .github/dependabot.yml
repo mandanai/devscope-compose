@@ -46,3 +46,10 @@ updates:
     groups:
       actions:
         patterns: ["*"]
+
+  - package-ecosystem: pip
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2

@@ -1,13 +1,23 @@
 # Architecture
 
 ## Dependency direction
+```mermaid
+graph LR
+    diagnostics[devscope-diagnostics] --> core[devscope-core]
+    export[devscope-export] --> core
+    ui[devscope-ui-compose] --> core
+    ui --> diagnostics
+    ui --> export
+    flow[devscope-flow] --> core
+    nav[devscope-navigation] --> core
+    ktor[devscope-network-ktor] --> core
+    okhttp[devscope-network-okhttp] --> core
+    sqld[devscope-database-sqldelight] --> core
+    noop["devscope-core-noop<br/>(no project dependency;<br/>compiles four shared core source files)"]
+    composeApp[samples/composeApp] --> core & diagnostics & export & ui & flow & nav & ktor & sqld
+    androidApp[samples/androidApp] --> composeApp
 ```
-devscope-core  <-  devscope-diagnostics  <-+
-devscope-core  <-  devscope-export       <-+- devscope-ui-compose
-devscope-core  <-  devscope-flow / -navigation / -network-ktor / -network-okhttp / -database-sqldelight
-devscope-core-noop   (no project dependency; compiles four shared core source files)
-samples/composeApp  ->  all of the above;  samples/androidApp -> composeApp
-```
+
 - `devscope-core` depends on nothing but Kotlin stdlib and kotlinx-coroutines. No Compose, Android or UIKit.
 - Adapters depend only on core, never on each other or on the UI. `devscope-ui-compose` depends on core, diagnostics and export.
 - The graph is acyclic (Gradle rejects project cycles) and no `commonMain` imports `android.*`.

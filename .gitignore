@@ -58,3 +58,7 @@ graphify-out/
 
 # OS
 .DS_Store
+
+# Docs
+.venv-docs/
+site/

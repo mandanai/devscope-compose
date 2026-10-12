@@ -15,6 +15,6 @@
 | Navigation events missing | Nothing is automatic | Call `NavigationTracer` from the navigator |
 | DB spans missing | SQL not wrapped | Wrap with `DatabaseTracing`; run inside `withContext(io)` |
 | Journey stuck `RUNNING` | Manual `startJourney` never finished | Use `withJourney`, or `finish/fail/cancel/interrupt`; call `interruptActive` when app backgrounds |
-| iOS build can't find the framework | Xcode build phase missing | Run `./gradlew :<module>:embedAndSignAppleFrameworkForXcode` as in `samples/iosApp` |
+| iOS build can't find the framework | Xcode build step missing | Run `./gradlew :<module>:embedAndSignAppleFrameworkForXcode` as in `samples/iosApp` |
 
 Still failing: read the matching human doc in [docs/](../docs/getting-started.md) and report the exact error to the user instead of guessing.
