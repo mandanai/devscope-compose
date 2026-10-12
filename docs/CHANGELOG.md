@@ -16,8 +16,8 @@ All notable changes are recorded here. The format follows [Keep a Changelog](htt
 - Adapters: Ktor and OkHttp network tracing, Flow/StateFlow, navigation, SQLDelight.
 - Evidence-based diagnostics (`devscope-diagnostics`).
 - Secure export, import and persistence (`devscope-export`), and a no-op core twin (`devscope-core-noop`).
-- Phase 8: Maven publication via `com.vanniktech.maven.publish` (local-only unless credentials are supplied), Kotlin ABI baselines, Spotless + ktlint, detekt, concurrency and version-consistency tests, performance measurements, CI hardening and complete documentation.
+- Maven publication via `com.vanniktech.maven.publish` (local-only unless credentials are supplied), Kotlin ABI baselines, Spotless + ktlint, detekt, concurrency and version-consistency tests, performance measurements, CI hardening and complete documentation.
 - AI-agent knowledge base (`ai/`, `llms.txt`, `skills/journeyscope`, `scripts/install-skill.sh`) so Claude Code, Codex CLI and Gemini CLI agents can install, configure and instrument JourneyScope in a host app.
 
 ### Known limitations
-See [release readiness](docs/release-readiness.md).
+See [release readiness](release-readiness.md).

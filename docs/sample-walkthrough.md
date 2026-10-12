@@ -2,7 +2,7 @@
 
 The sample (`samples/composeApp`, hosted by both the Android and iOS apps) is a small shopping feature whose every layer is instrumented with the public tracing API. Tapping **Add to Cart** records a real `JourneyTrace` that the Inspector reads from the same recorder (`JourneyScope.tracer.recorder`).
 
-## State, lifecycle and navigation (Phase 5)
+## State, lifecycle and navigation
 The product and cart screens collect `CartUiState` through `observeWithJourneyScope`, with the journey provider `ProductViewModel.observedJourney`. "Add & open cart" keeps the journey open, navigates to `CartScreen` via `SampleNavigator` (which feeds `NavigationTracer`), and `CartScreen` calls `markCompleted` after its first frame. The Android host passes `asLifecycleSource()` so collector lifecycle events appear; iOS passes none. The new events are events, not spans, so the existing span assertions are unchanged.
 
 ## Layers and instrumentation points

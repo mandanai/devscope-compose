@@ -11,7 +11,7 @@ import dev.chayaphon.journeyscope.diagnostics.DiagnosticConfig
 import dev.chayaphon.journeyscope.diagnostics.DiagnosticSeverity
 import dev.chayaphon.journeyscope.sample.shop.data.CartApiResponse
 import dev.chayaphon.journeyscope.sample.shop.data.CartRemoteDataSource
-import dev.chayaphon.journeyscope.sample.shop.ui.CartPhase
+import dev.chayaphon.journeyscope.sample.shop.ui.CartStatus
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -144,7 +144,7 @@ class AddToCartJourneyTest {
             advanceUntilIdle()
 
             val state = shop.viewModel.state.value
-            assertEquals(CartPhase.Added, state.phase)
+            assertEquals(CartStatus.Added, state.status)
             assertEquals(1, state.cartCount)
             assertEquals(0, state.pending)
         }
@@ -195,7 +195,7 @@ class AddToCartJourneyTest {
             assertNull(validation.failure?.stackTrace)
             assertTrue(trace.spans(SpanCategory.DATABASE).isEmpty())
             val state = shop.viewModel.state.value
-            assertEquals(CartPhase.Failed, state.phase)
+            assertEquals(CartStatus.Failed, state.status)
             assertEquals("Out of stock", state.message)
             assertEquals(0, state.cartCount)
         }
@@ -233,7 +233,7 @@ class AddToCartJourneyTest {
             assertTrue(network.failure?.type?.endsWith("SimulatedNetworkException") == true)
             assertNull(network.failure?.message)
             assertTrue(trace.spans(SpanCategory.BUSINESS_VALIDATION).isEmpty())
-            assertEquals(CartPhase.Failed, shop.viewModel.state.value.phase)
+            assertEquals(CartStatus.Failed, shop.viewModel.state.value.status)
         }
 
     @Test
@@ -252,7 +252,7 @@ class AddToCartJourneyTest {
             assertTrue(trace.spans.none { it.status == SpanStatus.RUNNING })
             assertTrue(trace.spans(SpanCategory.BUSINESS_VALIDATION).isEmpty())
             val state = shop.viewModel.state.value
-            assertEquals(CartPhase.Cancelled, state.phase)
+            assertEquals(CartStatus.Cancelled, state.status)
             assertEquals(0, state.pending)
         }
 
@@ -267,7 +267,7 @@ class AddToCartJourneyTest {
             advanceUntilIdle()
 
             assertEquals(TraceStatus.CANCELLED, shop.onlyTrace().status)
-            assertEquals(CartPhase.Cancelled, shop.viewModel.state.value.phase)
+            assertEquals(CartStatus.Cancelled, shop.viewModel.state.value.status)
         }
 
     @Test
@@ -295,19 +295,19 @@ class AddToCartJourneyTest {
         }
 
     @Test
-    fun phaseStaysAddingUntilTheLastConcurrentAddFinishes() =
+    fun statusStaysAddingUntilTheLastConcurrentAddFinishes() =
         runTest {
             val shop = VirtualShop(this).also { it.autoRender(this) }
 
             shop.viewModel.addToCart()
             shop.viewModel.addToCart(SampleScenario.SlowApi)
             advanceTimeBy(shop.latency.normal + 1.milliseconds)
-            assertEquals(CartPhase.Adding, shop.viewModel.state.value.phase)
+            assertEquals(CartStatus.Adding, shop.viewModel.state.value.status)
             assertEquals(1, shop.viewModel.state.value.pending)
             advanceUntilIdle()
 
             val state = shop.viewModel.state.value
-            assertEquals(CartPhase.Added, state.phase)
+            assertEquals(CartStatus.Added, state.status)
             assertEquals(2, state.cartCount)
             assertTrue(shop.traces().all { it.status == TraceStatus.COMPLETED })
         }

@@ -19,7 +19,7 @@ kotlin {
 }
 ```
 
-2. Embed the framework in the Xcode project with a build phase that runs `./gradlew :<module>:embedAndSignAppleFrameworkForXcode`, as `samples/iosApp` does.
+2. Embed the framework in the Xcode project with a build step that runs `./gradlew :<module>:embedAndSignAppleFrameworkForXcode`, as `samples/iosApp` does.
 
 ## Shared Compose UI
 

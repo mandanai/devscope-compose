@@ -3,8 +3,13 @@
 Everything here is opt-in. `JourneyScopeConfig.enabled = false` and `ExportPolicy.persistenceEnabled = false` are the defaults; with either off no file is created, no directory is touched and no queue exists.
 
 ## Data flow
-```
-finished JourneyTrace -> RedactionPipeline -> RedactedTrace -> TraceStore (disk) / TraceReportWriter (export)
+```mermaid
+flowchart LR
+    T[finished JourneyTrace] --> R[RedactionPipeline] --> RT[RedactedTrace]
+    RT --> S[(TraceStore<br/>disk)]
+    RT --> W[TraceReportWriter<br/>export]
+    W --> D{Review dialog}
+    D -->|user confirms| SS[ShareSink]
 ```
 `RedactedTrace` has an internal constructor and `TraceStore`/`TraceReportWriter` accept nothing else, so unredacted data cannot be stored or exported by accident. Redaction runs before storage and export, not only in the inspector.
 
@@ -23,6 +28,7 @@ val policy = ExportPolicy(persistenceEnabled = true, retention = 7.days, maxStor
 val persistence = JourneyPersistence.install(config, policy, fileSystem = { createTraceFileSystem(androidTraceDirectory(context)) })
 JourneyScope.configure(config, persistence.recorder)
 ```
+
 - Storage is one JSON file per trace (`<wallStart>-<id>.jtrace.json`) in a platform-protected directory: `noBackupFilesDir` on Android; Application Support, excluded from backup, `CompleteUntilFirstUserAuthentication` protection on iOS. File names never contain untrusted text (invalid ids are rejected).
 - Writes are atomic (temp file + rename) and happen on a single background consumer fed by a bounded queue (`queueCapacity`, drop-oldest). Journey code never blocks on disk.
 - Bounds: `retention`, `maxStoredTraces`, `maxTotalBytes`, `maxTraceBytes` (oversized traces are rejected, not truncated). Eviction removes the oldest first and runs on open and after each save.

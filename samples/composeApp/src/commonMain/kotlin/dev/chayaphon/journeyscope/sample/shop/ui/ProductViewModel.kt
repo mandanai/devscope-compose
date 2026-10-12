@@ -101,7 +101,7 @@ class ProductViewModel(
 
     fun traceOptions(lifecycle: LifecycleSource? = null): FlowTraceOptions<CartUiState> =
         FlowTraceOptions(
-            formatter = { "${it.phase.name} · ${it.cartCount}" },
+            formatter = { "${it.status.name} · ${it.cartCount}" },
             journey = ::observedJourney,
             lifecycle = lifecycle,
         )
@@ -176,7 +176,7 @@ class ProductViewModel(
             "CartUiState emitted",
             SpanCategory.STATE_EMISSION,
             diagnosticMetadata {
-                put("phase", next.phase.name)
+                put("status", next.status.name)
                 put("cartCount", next.cartCount)
                 put("renderToken", next.renderToken)
             },

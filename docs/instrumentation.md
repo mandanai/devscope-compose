@@ -12,6 +12,21 @@ JourneyScope.withJourney("Checkout") {
 Cancellation is recorded as `CANCELLED` and rethrown. A throwable ends the span `FAILED` and is rethrown. Failure messages are not stored unless `RedactionPolicy.includeFailureMessages` is set.
 
 ## Coroutine propagation
+
+```mermaid
+sequenceDiagram
+    participant UI
+    participant UC as UseCase
+    participant Repo as Repository
+    participant Net as Ktor plugin
+    UI->>UC: withJourney("Checkout") installs TraceContext
+    UC->>Repo: traceSuspend (parent from context)
+    Repo->>Net: request (reads currentTraceContext)
+    Net-->>Repo: NETWORK span joins the journey
+    Repo-->>UC: result
+    UC-->>UI: journey ends, recorder emits event
+```
+
 Journeys travel in the coroutine context. `launchTraced` / `asyncTraced` (flow module) and the Ktor plugin read it; `currentTraceContext()` gives any suspend code the active journey. Dispatcher hops and `withContext` keep the context. Threads that are not coroutines (OkHttp) use an explicit tag instead.
 
 ## Network

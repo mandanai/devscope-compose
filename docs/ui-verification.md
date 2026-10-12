@@ -18,4 +18,4 @@ Unit tests (`./gradlew :devscope-ui-compose:testAndroidHostTest`) cover mapping,
 
 Captured Android screenshots: `docs/screenshots/`. iOS was not verified (no full Xcode on the build machine).
 
-Note: `docs/screenshots/android-detail-insight-dark.png` predates the Phase 6 diagnostics UI and still shows the old single-insight card; recapture before publishing.
+Note: `docs/screenshots/android-detail-insight-dark.png` predates the diagnostics UI and still shows the old single-insight card; recapture before publishing.

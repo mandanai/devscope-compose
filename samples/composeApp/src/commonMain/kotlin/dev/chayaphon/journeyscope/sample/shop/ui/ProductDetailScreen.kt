@@ -85,7 +85,7 @@ fun ProductDetailScreen(
             ProductHero(viewModel.product)
             StatusCard(state)
             ActionButtons(
-                adding = state.phase == CartPhase.Adding,
+                adding = state.status == CartStatus.Adding,
                 onAdd = { viewModel.addToCart(scenario) },
                 onAddAndOpen = { viewModel.addToCart(scenario, openCartOnSuccess = true) },
                 onOpenCart = onOpenCart,
@@ -151,7 +151,7 @@ private fun ProductHero(product: Product) {
 
 @Composable
 private fun StatusCard(state: CartUiState) {
-    val accent = phaseColor(state.phase)
+    val accent = statusColor(state.status)
     Row(
         modifier =
             Modifier
@@ -249,18 +249,18 @@ private val Green = Color(0xFF1FA971)
 private val Amber = Color(0xFFE59A0B)
 private val Red = Color(0xFFD64545)
 
-private fun phaseColor(phase: CartPhase): Color =
-    when (phase) {
-        CartPhase.Idle -> Violet
-        CartPhase.Adding -> Amber
-        CartPhase.Added -> Green
-        CartPhase.Failed, CartPhase.Cancelled -> Red
+private fun statusColor(status: CartStatus): Color =
+    when (status) {
+        CartStatus.Idle -> Violet
+        CartStatus.Adding -> Amber
+        CartStatus.Added -> Green
+        CartStatus.Failed, CartStatus.Cancelled -> Red
     }
 
 private fun statusLine(state: CartUiState): String =
-    when (state.phase) {
-        CartPhase.Idle -> "Ready"
-        CartPhase.Adding -> "Adding… (${state.pending} in flight)"
-        CartPhase.Added -> "Added to cart"
-        CartPhase.Failed, CartPhase.Cancelled -> state.message ?: "Failed"
+    when (state.status) {
+        CartStatus.Idle -> "Ready"
+        CartStatus.Adding -> "Adding… (${state.pending} in flight)"
+        CartStatus.Added -> "Added to cart"
+        CartStatus.Failed, CartStatus.Cancelled -> state.message ?: "Failed"
     }
