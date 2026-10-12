@@ -163,7 +163,18 @@ For iOS, open `samples/iosApp/iosApp.xcodeproj` in Xcode 26+ and run. See [devel
 
 ## Contributing
 
-Contributions are welcome. Read [CONTRIBUTING.md](docs/CONTRIBUTING.md) first, and see [privacy and security](docs/privacy-security.md) before reporting a vulnerability.
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) first.
+
+Build and verify locally:
+
+```bash
+./gradlew spotlessCheck detekt checkKotlinAbi
+./gradlew testAndroidHostTest
+```
+
+## Security
+
+Report vulnerabilities privately; see [SECURITY.md](SECURITY.md) and [privacy and security](docs/privacy-security.md). Do not open public issues for them.
 
 ## License
 

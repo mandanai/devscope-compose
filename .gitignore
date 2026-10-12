@@ -29,7 +29,13 @@ Pods/
 
 # Secrets
 .env
+.env.*
+!.env.example
 *.pem
+*.p12
+*.asc
+*.gpg
+google-services.json
 
 # AI tooling
 .claude/
