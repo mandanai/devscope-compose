@@ -17,7 +17,7 @@ ktor = "3.6.0"
 okhttp = "5.5.0"
 sqldelight = "2.4.1"
 vanniktechPublish = "0.37.0"
-spotless = "8.10.4"
+spotless = "8.11.0"
 ktlint = "1.8.0"
 detekt = "2.0.0-alpha.6"
 
